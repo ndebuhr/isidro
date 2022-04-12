@@ -1,0 +1,18 @@
+apiVersion: v1
+name: isidro
+version: 0.1.0
+dependencies:
+- name: rabbitmq
+  version: 8.30.2
+  repository: https://charts.bitnami.com/bitnami
+- name: mongodb
+  version: 11.1.1
+  repository: https://charts.bitnami.com/bitnami
+- name: mattermost-team-edition
+  alias: "mattermost"
+  version: 6.5.0
+  repository: https://helm.mattermost.com
+  condition: mattermost.enabled
+- name: redis
+  version: 16.2.0
+  repository: https://charts.bitnami.com/bitnami

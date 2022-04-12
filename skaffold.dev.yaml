@@ -1,0 +1,84 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: dev
+requires:
+  - configs: ["nlp-dev"]
+build:
+  artifacts:
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+    context: deployer/github
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+    context: gatekeeper
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+    context: orchestration
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+    context: responder
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+    context: tasks
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  googleCloudBuild:
+    timeout: 3600s
+deploy:
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      namespace: default
+      setValues:
+        certbot.enabled: false
+        certbot.domain: isidro.example.com
+        certbot.email: admin@example.com
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: nlp-dev
+build:
+  artifacts:
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+    context: keywords
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  googleCloudBuild:
+    timeout: 3600s
+    machineType: E2_HIGHCPU_32

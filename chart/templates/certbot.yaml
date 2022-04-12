@@ -1,0 +1,159 @@
+{{ if eq .Values.certbot.enabled true }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: certbot
+spec:
+  template:
+    metadata:
+      labels:
+        app: certbot
+    spec:
+      serviceAccountName: certbot
+      initContainers:
+      - name: certbot
+        image: {{ .Values.certbot.image }}:{{ .Values.certbot.tag }}
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/google.json \
+              -d '{{ .Values.certbot.domain }}' --non-interactive --agree-tos -m {{ .Values.certbot.email }} && \
+            cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+            cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/privkey.pem > /etc/ssl/privkey.pem
+        volumeMounts:
+        - name: google-json
+          mountPath: /home/certbot/.secrets/certbot/
+          readOnly: true
+        - name: ssl
+          mountPath: /etc/ssl
+      containers:
+      - name: tls-secret
+        image: {{ .Values.certbot.secretCreation.image }}:{{ .Values.certbot.secretCreation.tag }}
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            kubectl create secret tls ingress-tls \
+              --namespace istio-ingressgateway \
+              --dry-run -o yaml \
+              --cert=/etc/ssl/fullchain.pem \
+              --key=/etc/ssl/privkey.pem | kubectl apply -n istio-ingressgateway -f -
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - name: ssl
+          mountPath: /etc/ssl
+      volumes:
+      - name: google-json
+        secret:
+          secretName: google-json
+          defaultMode: 0400
+      - name: ssl
+        emptyDir: {}
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: certbot
+spec:
+  # generate a new ssl certificate every 60 days
+  schedule: "0 11 12 */2 *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: certbot
+        spec:
+          serviceAccountName: certbot
+          initContainers:
+          - name: certbot
+            image: {{ .Values.certbot.image }}:{{ .Values.certbot.tag }}
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/google.json \
+                  -d '{{ .Values.certbot.domain }}' --non-interactive --agree-tos -m {{ .Values.certbot.email }} && \
+                cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+                cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/privkey.pem > /etc/ssl/privkey.pem
+            volumeMounts:
+            - name: google-json
+              mountPath: /home/certbot/.secrets/certbot/
+              readOnly: true
+            - name: ssl
+              mountPath: /etc/ssl
+          containers:
+          - name: ssl-secret-creation
+            image: {{ .Values.certbot.secretCreation.image }}:{{ .Values.certbot.secretCreation.tag }}
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                kubectl create secret tls ingress-tls \
+                  --namespace istio-ingressgateway \
+                  --dry-run -o yaml \
+                  --cert=/etc/ssl/fullchain.pem \
+                  --key=/etc/ssl/privkey.pem | kubectl apply -n istio-ingressgateway -f -
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+            volumeMounts:
+            - name: ssl
+              mountPath: /etc/ssl
+          volumes:
+          - name: google-json
+            secret:
+              secretName: google-json
+              defaultMode: 0400
+          - name: ssl
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: certbot
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: istio-ingressgateway
+subjects:
+- kind: ServiceAccount
+  name: certbot
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: certbot
+  apiGroup: ""
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: istio-ingressgateway
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - create
+  - apply
+  - patch
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: certbot
+spec:
+  podSelector:
+    matchLabels:
+      app: certbot
+  policyTypes:
+  - Egress
+  egress:
+  - {}
+{{ end }}

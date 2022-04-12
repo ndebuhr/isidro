@@ -1,0 +1,16 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: isidro-storage
+provisioner: pd.csi.storage.gke.io
+parameters:
+  type: pd-ssd
+  replication-type: regional-pd
+volumeBindingMode: WaitForFirstConsumer
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.gke.io/zone
+    values:
+    - us-central1-a
+    - us-central1-b
+    - us-central1-f

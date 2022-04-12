@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestration
+  labels:
+    app: orchestration
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: orchestration
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestration
+  labels:
+    app: orchestration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestration
+  template:
+    metadata:
+      labels:
+        app: orchestration
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: orchestration
+        image: {{ .Values.orchestration.image.repository }}:{{ .Values.orchestration.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: MONGODB_HOST
+          value: isidro-mongodb
+        - name: MONGODB_USERNAME
+          value: root
+        - name: MONGODB_PASSWORD
+          value: "1234567890"
+        - name: MONGODB_DATABASE
+          value: "isidro"
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: orchestration
+spec:
+  podSelector:
+    matchLabels:
+      app: orchestration
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: gatekeeper
+  - from:
+    - podSelector: {}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gmp-system
+  egress:
+  - {}

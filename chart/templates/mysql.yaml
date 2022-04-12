@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mysql
+spec:
+  podSelector:
+    matchLabels:
+      app: isidro-mysql
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mattermost

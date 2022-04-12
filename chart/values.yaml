@@ -1,0 +1,128 @@
+certbot:
+  enabled: false
+  image: certbot/dns-google
+  tag: v1.19.0
+  domain: example.com
+  email: admin@example.com
+  secretCreation:
+    image: docker.io/bitnami/kubectl
+    tag: "1.20"
+
+gatekeeper:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/gatekeeper
+    tag: latest
+
+responder:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/responder
+    tag: latest
+
+deployer:
+  github:
+    image:
+      repository: us.gcr.io/PROJECT/isidro/deployer/github
+      tag: latest
+    token: "1234567890"
+
+orchestration:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/orchestration
+    tag: latest
+
+keywords:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/keywords
+    tag: latest
+
+tasks:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/tasks
+    tag: latest
+
+rabbitmq:
+  global:
+    storageClass: isidro-storage
+  auth:
+    password: "1234567890"
+    erlangCookie: "1234567890"
+  podLabels:
+    app: rabbitmq
+    sidecar.istio.io/inject: "true"
+    istio.io/rev: "asm-managed"
+  persistence:
+    storageClass: isidro-storage
+  extraSecrets:
+    load-definition:
+      load_definition.json: |
+        {
+          "users": [
+            {
+              "name": "isidro",
+              "password": "isidro",
+              "tags": "administrator"
+            }
+          ],
+          "vhosts": [
+            {
+              "name": "/"
+            }
+          ]
+        }
+  loadDefinition:
+    enabled: true
+    existingSecret: load-definition
+  extraConfiguration: |
+    load_definitions = /app/load_definition.json
+    loopback_users.isidro = false
+
+redis:
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    podLabels:
+      app: redis-master
+      sidecar.istio.io/inject: "true"
+      istio.io/rev: "asm-managed"
+    resources: {}
+
+mongodb:
+  global:
+    storageClass: isidro-storage
+  podLabels:
+    app: mongodb
+    sidecar.istio.io/inject: "true"
+    istio.io/rev: "asm-managed"
+  auth:
+    rootPassword: "1234567890"
+    usernames:
+    - "isidro"
+    passwords:
+    - "1234567890"
+    databases:
+    - "isidro"
+
+mattermost:
+  enabled: true
+  accessToken: "1234567890"
+  verificationToken: "1234567890"
+  deploymentStrategy:
+    type: Recreate
+  securityContext:
+    fsGroup: 2000
+  mysql:
+    mysqlUser: isidro
+    mysqlPassword: "1234567890"
+    persistence:
+      storageClass: isidro-storage
+  persistence:
+    data:
+      storageClass: isidro-storage
+    plugins:
+      storageClass: isidro-storage
+
+slack:
+  enabled: false
+  verificationToken: "1234567890"
+  oauthToken: "1234567890"

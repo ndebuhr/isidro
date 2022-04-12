@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gatekeeper
+  labels:
+    app: gatekeeper
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: gatekeeper
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatekeeper
+  labels:
+    app: gatekeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gatekeeper
+  template:
+    metadata:
+      labels:
+        app: gatekeeper
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: gatekeeper
+        image: {{ .Values.gatekeeper.image.repository }}:{{ .Values.gatekeeper.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: SLACK_VERIFICATION_TOKEN
+          value: "{{ .Values.slack.verificationToken }}"
+        - name: MATTERMOST_ACCESS_TOKEN
+          value: "{{ .Values.mattermost.accessToken }}"
+        - name: MATTERMOST_VERIFICATION_TOKEN
+          value: "{{ .Values.mattermost.verificationToken }}"
+        - name: ISIDRO_DOMAIN
+          value: "{{ .Values.certbot.domain }}"
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gatekeeper
+spec:
+  podSelector:
+    matchLabels:
+      app: gatekeeper
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          istio: ingressgateway
+    - namespaceSelector: {}
+  egress:
+  - {}

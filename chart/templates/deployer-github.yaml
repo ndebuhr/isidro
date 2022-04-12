@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployer-github
+  labels:
+    app: deployer-github
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: deployer-github
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployer-github
+  labels:
+    app: deployer-github
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployer-github
+  template:
+    metadata:
+      labels:
+        app: deployer-github
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: deployer-github
+        image: {{ .Values.deployer.github.image.repository }}:{{ .Values.deployer.github.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: GITHUB_TOKEN
+          value: "{{ .Values.deployer.github.token }}"
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployer-github-workers
+  labels:
+    app: deployer-github-workers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployer-github-workers
+  template:
+    metadata:
+      labels:
+        app: deployer-github-workers
+        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/rewriteAppHTTPProbers: "false"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: deployer-github-worker
+        image: {{ .Values.deployer.github.image.repository }}:{{ .Values.deployer.github.image.tag }}
+        imagePullPolicy: Always
+        command: ["tini", "--", "./worker.sh"]
+        env:
+        - name: GITHUB_TOKEN
+          value: "{{ .Values.deployer.github.token }}"
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deployer-github
+spec:
+  podSelector:
+    matchLabels:
+      app: deployer-github
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: tasks
+  egress:
+  - {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deployer-github-workers
+spec:
+  podSelector:
+    matchLabels:
+      app: deployer-github-workers
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - {}
+  egress:
+  - {}

@@ -1,0 +1,24 @@
+# Dev and lock files
+.idea/
+*.lock
+
+# Chart dependencies
+**/charts/*.tgz
+
+# Local .terraform directories
+**/.terraform/*
+
+# Terrform files
+*.tfstate
+*.tfstate.*
+**/.terraform.lock.hcl
+provisioning/install_asm_1.9
+
+# Key files
+google.json
+
+# Anthos service mesh output directory
+**/.asm-outdir
+
+# Skaffold files
+skaffold.yaml

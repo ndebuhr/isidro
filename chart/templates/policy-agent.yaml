@@ -1,0 +1,260 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: policy-agent
+spec:
+  hosts:
+  - "policy-agent"
+  http:
+  - route:
+    - destination:
+        host: policy-agent
+        subset: sympathetic
+      weight: 50
+    - destination:
+        host: policy-agent
+        subset: succinct
+      weight: 50
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: policy-agent
+spec:
+  host: policy-agent
+  subsets:
+  - name: sympathetic
+    labels:
+      version: sympathetic
+  - name: succinct
+    labels:
+      version: succinct
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-agent
+  labels:
+    app: policy-agent
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8181
+  selector:
+    app: policy-agent
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-agent-sympathetic
+  labels:
+    app: policy-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policy-agent
+      version: sympathetic
+  template:
+    metadata:
+      labels:
+        app: policy-agent
+        version: sympathetic
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: policy-agent
+        image: openpolicyagent/opa:0.33.1
+        ports:
+        - name: http
+          containerPort: 8181
+        args:
+        - "run"
+        - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
+        - "--server"
+        - "/etc/opa/policies"
+        volumeMounts:
+        - name: actions-rego
+          mountPath: /etc/opa/policies/routing.rego
+          subPath: routing.rego
+      volumes:
+      - name: actions-rego
+        configMap:
+          name: policy-agent-sympathetic-actions-rego-v2
+          defaultMode: 0444
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: policy-agent-sympathetic-actions-rego-v2
+data:
+  routing.rego: |
+    package isidro.routing
+
+    options := [
+      {
+        "action": {
+          "confirmation message": "Sorry, but I didn't understand that.  Would you like to see documentation, to understand what I can help with?  Please respond by sending a threaded message reply, which includes an @isidro mention.",
+          "async": false,
+          "category": "link",
+          "href": "https://github.com/ndebuhr/isidro",
+          "completion message": "My documentation can be viewed here.",
+          "tie break priority": 0,
+        },
+        "keywords": []
+      },
+      {
+        "action": {
+          "confirmation message": "Would my documentation be helpful to you?.  Please respond by sending a threaded message reply, which includes an @isidro mention.",
+          "async": false,
+          "category": "link",
+          "href": "https://github.com/ndebuhr/isidro",
+          "completion message": "My documentation can be viewed here.",
+          "tie break priority": 1,
+        },
+        "keywords": ["help"]
+      },
+      {
+        "action": {
+          "confirmation message": "Would you like me to run unit tests for you?",
+          "async": true,
+          "category": "github actions",
+          "repository": "ndebuhr/isidro",
+          "workflow": "unit-tests.yml",
+          "ref": "refs/heads/master",
+          "initialization message": "Unit tests are now running.  Results will be posted soon.",
+          "completion message": "The unit tests run is complete.  Test results are attached.",
+          "artifacts": ["results.json"],
+          "tie break priority": 2,
+        },
+        "keywords": [
+          "test", "testing", "unit", "quality", "verify", "check", "run"
+        ]
+      }
+    ]
+
+    keywords := [options[i].keywords | options[i]]
+    keyword_matches := [[keywords[j][k] | keywords[j][k] == input.keywords[l]] | keywords[j]]
+    keyword_match_counts := [count(keyword_matches[m]) | keyword_matches[m]]
+    action := [options[i].action | keyword_match_counts[i] == max(keyword_match_counts)]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-agent-succinct
+  labels:
+    app: policy-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policy-agent
+      version: succinct
+  template:
+    metadata:
+      labels:
+        app: policy-agent
+        version: succinct
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: policy-agent
+        image: openpolicyagent/opa:0.33.1
+        ports:
+        - name: http
+          containerPort: 8181
+        args:
+        - "run"
+        - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
+        - "--server"
+        - "/etc/opa/policies"
+        volumeMounts:
+        - name: actions-rego
+          mountPath: /etc/opa/policies/routing.rego
+          subPath: routing.rego
+      volumes:
+      - name: actions-rego
+        configMap:
+          name: policy-agent-succinct-actions-rego-v2
+          defaultMode: 0444
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: policy-agent-succinct-actions-rego-v2
+data:
+  routing.rego: |
+    package isidro.routing
+
+    options := [
+      {
+        "action": {
+          "confirmation message": "I didn't understand that.  Would you like to see my documentation?",
+          "async": false,
+          "category": "link",
+          "href": "https://github.com/ndebuhr/isidro",
+          "completion message": "Here's the documentation.",
+          "tie break priority": 0,
+        },
+        "keywords": []
+      },
+      {
+        "action": {
+          "confirmation message": "Would you like to see my documentation?",
+          "async": false,
+          "category": "link",
+          "href": "https://github.com/ndebuhr/isidro",
+          "completion message": "Here's the documentation.",
+          "tie break priority": 1,
+        },
+        "keywords": ["help"]
+      },
+      {
+        "action": {
+          "confirmation message": "Would you like me to run unit tests?",
+          "async": true,
+          "category": "github actions",
+          "repository": "ndebuhr/isidro",
+          "workflow": "unit-tests.yml",
+          "ref": "refs/heads/master",
+          "initialization message": "Running unit tests...",
+          "completion message": "The unit tests run is complete.",
+          "artifacts": ["results.json"],
+          "tie break priority": 2,
+        },
+        "keywords": [
+          "test", "testing", "unit", "quality", "verify", "check", "run"
+        ]
+      }
+    ]
+
+    keywords := [options[i].keywords | options[i]]
+    keyword_matches := [[keywords[j][k] | keywords[j][k] == input.keywords[l]] | keywords[j]]
+    keyword_match_counts := [count(keyword_matches[m]) | keyword_matches[m]]
+    action := [options[i].action | keyword_match_counts[i] == max(keyword_match_counts)]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: policy-agent
+spec:
+  podSelector:
+    matchLabels:
+      app: policy-agent
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: orchestration
+  egress:
+  - {}
