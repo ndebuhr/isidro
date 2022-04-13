@@ -16,12 +16,12 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - |
-            certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/google.json \
+            certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/isidro-certbot.json \
               -d '{{ .Values.certbot.domain }}' --non-interactive --agree-tos -m {{ .Values.certbot.email }} && \
             cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
             cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/privkey.pem > /etc/ssl/privkey.pem
         volumeMounts:
-        - name: google-json
+        - name: isidro-certbot-key
           mountPath: /home/certbot/.secrets/certbot/
           readOnly: true
         - name: ssl
@@ -44,9 +44,9 @@ spec:
         - name: ssl
           mountPath: /etc/ssl
       volumes:
-      - name: google-json
+      - name: isidro-certbot-key
         secret:
-          secretName: google-json
+          secretName: isidro-certbot-key
           defaultMode: 0400
       - name: ssl
         emptyDir: {}
@@ -73,12 +73,12 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
             - |
-                certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/google.json \
+                certbot certonly --dns-google --dns-google-credentials /home/certbot/.secrets/certbot/isidro-certbot.json \
                   -d '{{ .Values.certbot.domain }}' --non-interactive --agree-tos -m {{ .Values.certbot.email }} && \
                 cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
                 cat /etc/letsencrypt/live/{{ .Values.certbot.domain }}/privkey.pem > /etc/ssl/privkey.pem
             volumeMounts:
-            - name: google-json
+            - name: isidro-certbot-key
               mountPath: /home/certbot/.secrets/certbot/
               readOnly: true
             - name: ssl
@@ -101,9 +101,9 @@ spec:
             - name: ssl
               mountPath: /etc/ssl
           volumes:
-          - name: google-json
+          - name: isidro-certbot-key
             secret:
-              secretName: google-json
+              secretName: isidro-certbot-key
               defaultMode: 0400
           - name: ssl
             emptyDir: {}

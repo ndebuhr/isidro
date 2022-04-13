@@ -6,68 +6,40 @@ Isidro includes:
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
 
+## Prerequisites
+1. Willingness and ability to run the system on Google Cloud Platform (other cloud providers are possible, but would require some hacking)
+1. A domain or subdomain managed through Google Cloud DNS
+
 ## System installation
+_While installation is possible using non-Linux clients, it's not a well-established or documented process_
 
 ### Provision with Terraform
 
-The following IAM permissions are required for provisioning.  Consider creating a custom Isidro Provisioner role:
-1. binaryauthorization.attestors.create
-1. binaryauthorization.attestors.delete
-1. binaryauthorization.attestors.get
-1. binaryauthorization.attestors.update
-1. binaryauthorization.policy.get
-1. binaryauthorization.policy.update
-1. cloudkms.cryptoKeyVersions.create
-1. cloudkms.cryptoKeyVersions.destroy
-1. cloudkms.cryptoKeyVersions.get
-1. cloudkms.cryptoKeyVersions.list
-1. cloudkms.cryptoKeyVersions.restore
-1. cloudkms.cryptoKeyVersions.update
-1. cloudkms.cryptoKeyVersions.viewPublicKey
-1. cloudkms.cryptoKeys.create
-1. cloudkms.cryptoKeys.get
-1. cloudkms.cryptoKeys.list
-1. cloudkms.cryptoKeys.update
-1. cloudkms.keyRings.create
-1. cloudkms.keyRings.get
-1. compute.instanceGroupManagers.get
-1. compute.zones.list
-1. container.clusters.create
-1. container.clusters.delete
-1. container.clusters.get
-1. container.clusters.update
-1. container.configMaps.create
-1. container.configMaps.delete
-1. container.configMaps.get
-1. container.namespaces.create
-1. container.namespaces.delete
-1. container.namespaces.get
-1. container.operations.get
-1. containeranalysis.notes.create
-1. containeranalysis.notes.delete
-1. containeranalysis.notes.get
-1. gkehub.memberships.create
-1. gkehub.memberships.delete
-1. gkehub.memberships.get
-1. gkehub.operations.get
-1. iam.serviceAccountKeys.create
-1. iam.serviceAccountKeys.get
-1. iam.serviceAccounts.create
-1. iam.serviceAccounts.delete
-1. iam.serviceAccounts.actAs
-1. iam.serviceAccounts.get
-1. iam.serviceAccounts.list
-1. serviceusage.services.disable
-1. serviceusage.services.enable
-1. serviceusage.services.get
-1. serviceusage.services.list
-1. resourcemanager.projects.get
-1. resourcemanager.projects.getIamPolicy
-1. resourcemanager.projects.setIamPolicy
+Set the `GOOGLE_PROJECT` environment variable, with something like:
+```bash
+export GOOGLE_PROJECT=example
+```
 
-Bind the required permissions to an Isidro Provisioner service account, and export a service account key.  Set `GOOGLE_PROJECT` and `GOOGLE_APPLICATION_CREDENTIALS` environment variables.
+Create a service account for provisioning the required resources:
+```bash
+gcloud iam roles create isidro_provisioner \
+    --project=$GOOGLE_PROJECT \
+    --file=roles/provisioner.yaml
+gcloud iam service-accounts create isidro-provisioner \
+    --display-name="Isidro Provisioner"
+gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
+    --member="serviceAccount:isidro-provisioner@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
+    --role="projects/$GOOGLE_PROJECT/roles/isidro_provisioner"
+gcloud iam service-accounts keys create isidro-provisioner.json \
+    --iam-account="isidro-provisioner@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+```
 
-Setup secondary IP ranges in the desired region (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/)
+Navigate to the [provisioning/](provisioning/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
+```
+
+Setup secondary IP ranges in the desired region and subnet (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
 terraform init
 terraform apply
@@ -81,21 +53,23 @@ Configure kubectl to use the new cluster.  Create a namespace, if a non-default 
 
 ### Certbot (for TLS) preparation
 
-1. In Google Cloud Platform, create a Cloud DNS zone for your domain
-1. In your domain name registrar, ensure the domain nameservers are set to the values from Google
-1. In Google Cloud Platform, create a role with the following permissions:
-    1. dns.changes.create
-    1. dns.changes.get
-    1. dns.managedZones.list
-    1. dns.resourceRecordSets.create
-    1. dns.resourceRecordSets.delete
-    1. dns.resourceRecordSets.list
-    1. dns.resourceRecordSets.update
-1. Create a new Isidro Certbot service account and assign the newly-recreated role
-
-Generate a json key file for the service account.  Rename the file to `google.json`, then add it to Kubernetes as a secret:
+Create a service account for provisioning the required resources:
 ```bash
-kubectl create secret generic google-json --from-file google.json
+gcloud iam roles create isidro_certbot \
+    --project=$GOOGLE_PROJECT \
+    --file=roles/certbot.yaml
+gcloud iam service-accounts create isidro-certbot \
+    --display-name="Isidro Certbot"
+gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
+    --member="serviceAccount:isidro-certbot@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
+    --role="projects/$GOOGLE_PROJECT/roles/isidro_certbot"
+gcloud iam service-accounts keys create isidro-certbot.json \
+    --iam-account="isidro-certbot@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+```
+
+Add the service account key to Kubernetes as a secret:
+```bash
+kubectl create secret generic isidro-certbot-key --from-file isidro-certbot.json
 ```
 
 ### Istio ingress gateway
