@@ -132,24 +132,38 @@ Create a personal access token, which includes `repo` and `workflow` permissions
 
 Mention @isidro in Slack messages, and get a response.  Use separate message threads for separate chatbot conversations.
 
+## Development
+
+### Skaffold
+
+Set the `GOOGLE_PROJECT` environment variable and configure kubeconfig to use the isidro cluster.
+
+Setup a service account with the Cloud Build Service Account Role:
+```bash
+gcloud iam service-accounts create isidro-skaffold \
+    --display-name="Isidro Skaffold"
+gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
+    --member="serviceAccount:isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
+    --role="roles/cloudbuild.builds.builder"
+gcloud iam service-accounts keys create isidro-skaffold.json \
+    --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+```
+
+Setup skaffold files and credentials:
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
+cp skaffold.dev.yaml skaffold.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
+```
+
+Make any required `skaffold.yaml` configuration changes, then run skaffold:
+```bash
+skaffold dev
+```
+
 ### Test payload
 ```bash
 curl -X POST https://example.com/api/v1/submit \
     -H "Content-Type: application/json" \
     -d '{"token": "1234567890", "event": {"channel": "quality", "ts": "1234567890", "user": "me", "text": "Hello"}}'
-```
-
-## Development
-
-### Skaffold
-
-1. Configure kubeconfig
-1. Create a service account and bind the Cloud Build Service Account role
-1. Generate a service account key for the new service account
-1. Set `GOOGLE_PROJECT` and `GOOGLE_APPLICATION_CREDENTIALS`
-
-```bash
-cp skaffold.dev.yaml skaffold.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
-skaffold dev
 ```

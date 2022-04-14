@@ -17,6 +17,7 @@ provisioning/install_asm_1.9
 # Key files
 isidro-certbot.json
 isidro-provisioner.json
+isidro-skaffold.json
 
 # Anthos service mesh output directory
 **/.asm-outdir
