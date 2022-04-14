@@ -42,7 +42,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 Setup secondary IP ranges in the desired region and subnet (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
 terraform init
-terraform apply
+terraform apply \
     -var network=default \
     -var subnetwork=default \
     -var ip_range_pods="gke-isidro-pods" \
