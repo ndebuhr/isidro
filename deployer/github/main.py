@@ -130,7 +130,7 @@ def poll_for_conclusion(
                 "channel": channel,
                 "thread_ts": thread_ts,
                 "user": user,
-                "text": 'The worflow completed with status "{0}" and conclusion "{1}"'.format(
+                "text": 'The workflow completed with status "{0}" and conclusion "{1}"'.format(
                     run_json["status"].upper(), run_json["conclusion"].upper()
                 ),
             },
