@@ -67,6 +67,15 @@ rabbitmq:
             {
               "name": "/"
             }
+          ],
+          "permissions": [
+            {
+              "user": "isidro",
+              "vhost": "/",
+              "configure": ".*",
+              "write": ".*",
+              "read": ".*"
+            },
           ]
         }
   loadDefinition:
