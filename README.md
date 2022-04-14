@@ -111,7 +111,7 @@ Create a Slack App.  Enable and configure the event subscription feature.
 _Relevant if you are using Mattermost as your chat tool_
 
 1. In the System Console, under "Integrations > Bot Accounts", "Enable Bot Account Creation"
-1. In the Integrations portal, create a bot account with the name "isidro", role "System Administrator",, and the "post:all"
+1. In the Integrations portal, create a bot account with the name "isidro" and role "System Administrator"
 1. Copy the access token to the Helm values (or Skaffold overrides) as `mattermost.accessToken`
 1. Add an outgoing webhook:
     1. Recommended title is "Isidro Mentions"
