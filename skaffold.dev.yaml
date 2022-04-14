@@ -48,6 +48,7 @@ deploy:
     releases:
     - name: isidro
       chartPath: chart
+      skipBuildDependencies: true
       namespace: default
       setValues:
         certbot.enabled: false
