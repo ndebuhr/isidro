@@ -81,6 +81,11 @@ kubectl create secret generic isidro-certbot-key --from-file isidro-certbot.json
 ### Istio ingress gateway
 
 ```bash
+git submodule init
+git submodule update
+```
+
+```bash
 kubectl create namespace istio-ingressgateway
 kubectl label namespace istio-ingressgateway istio.io/rev=asm-managed --overwrite
 kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway -n istio-ingressgateway
@@ -92,6 +97,7 @@ In the Google Cloud Console, enable Managed Prometheus for the provisioned clust
 
 ### Helm installation
 
+Change or override Helm values and then install.
 ```bash
 cd chart
 helm install isidro .
