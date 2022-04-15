@@ -42,7 +42,8 @@ export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 Enable the following APIs and features in GCP:
 1. API: Binary Authorization
 1. API: Cloud KMS
-1. API: Google Kubernetes Engine
+1. API: Kubernetes Engine
+1. API: GKE Hub
 1. API: Anthos
 1. Anthos Feature: Service Mesh
 
