@@ -126,7 +126,7 @@ _Relevant if you are using Mattermost as your chat tool_
 ### GitHub Actions
 _Relevant if you are triggering GitHub Actions workflows with the chatbot_
 
-Create a personal access token, which includes `repo` and `workflow` permissions.  Use the token for the Helm value `deployer.github.token`.
+Create a personal access token, which includes `repo`, `workflow`, and `packages` permissions.  Use the token for the Helm value `deployer.github.token`.
 
 ## Usage
 

@@ -79,8 +79,7 @@ class Gatekeeper:
             # Mattermost message (requires additional Mattermost API call to determine root_id)
             thread = requests.get(
                 "https://{0}/api/v4/posts/{1}".format(
-                    ISIDRO_DOMAIN,
-                    request_json["post_id"]
+                    ISIDRO_DOMAIN, request_json["post_id"]
                 ),
                 headers={"Authorization": f"Bearer {MATTERMOST_ACCESS_TOKEN}"},
             )

@@ -129,7 +129,7 @@ data:
           "ref": "refs/heads/master",
           "initialization message": "Unit tests are now running.  Results will be posted soon.",
           "completion message": "The unit tests run is complete.  Test results are attached.",
-          "artifacts": ["results.json"],
+          "artifacts to read": ["results"],
           "tie break priority": 2,
         },
         "keywords": [
@@ -226,7 +226,7 @@ data:
           "ref": "refs/heads/master",
           "initialization message": "Running unit tests...",
           "completion message": "The unit tests run is complete.",
-          "artifacts": ["results.json"],
+          "artifacts to read": ["results"],
           "tie break priority": 2,
         },
         "keywords": [

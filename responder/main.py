@@ -17,6 +17,7 @@ if not MATTERMOST_ACCESS_TOKEN:
 if not ISIDRO_DOMAIN:
     raise ValueError("No ISIDRO_DOMAIN environment variable set")
 
+
 class Responder:
     def __init__(self, request):
         request = request.get_json()

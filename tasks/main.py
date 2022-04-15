@@ -15,6 +15,12 @@ class Task:
         self.channel = request["channel"]
         self.thread_ts = request["thread_ts"]
         self.user = request["user"]
+        self.category = request["category"]
+        self.repository = (
+            request["repository"] if "repository" in request.keys() else None
+        )
+        self.workflow = request["workflow"] if "workflow" in request.keys() else None
+        self.ref = request["ref"] if "ref" in request.keys() else None
         self.initialization_message = (
             request["initialization message"]
             if "initialization message" in request.keys()
@@ -25,12 +31,11 @@ class Task:
             if "completion message" in request.keys()
             else None
         )
-        self.category = request["category"]
-        self.repository = (
-            request["repository"] if "repository" in request.keys() else None
+        self.artifacts_to_read = (
+            request["artifacts to read"]
+            if "artifacts to read" in request.keys()
+            else []
         )
-        self.workflow = request["workflow"] if "workflow" in request.keys() else None
-        self.ref = request["ref"] if "ref" in request.keys() else None
 
     def submit(self):
         if self.initialization_message is not None:
@@ -51,14 +56,15 @@ class Task:
         requests.post(
             "http://deployer-github/v1/deploy",
             json={
-                "repository": self.repository,
-                "workflow": self.workflow,
-                "ref": self.ref,
                 "platform": self.platform,
                 "channel": self.channel,
                 "thread_ts": self.thread_ts,
                 "user": self.user,
+                "repository": self.repository,
+                "workflow": self.workflow,
+                "ref": self.ref,
                 "completion message": self.completion_message,
+                "artifacts to read": self.artifacts_to_read,
             },
         ).raise_for_status()
 
