@@ -123,7 +123,7 @@ def poll_for_conclusion(
     run_json = run.json()
     if run_json["conclusion"] is None:
         raise RuntimeError(f"Workflow run {run_id} is still running")
-    else:
+    elif run_json["conclusion"] == "success":
         requests.post(
             f"http://responder/v1/respond",
             json={
@@ -132,6 +132,12 @@ def poll_for_conclusion(
                 "thread_ts": thread_ts,
                 "user": user,
                 "text": 'The [workflow]({0}) completed with status "{1}" and conclusion "{2}"'.format(
+                    f"https://github.com/{repository}/actions/runs/{run_id}",
+                    run_json["status"].upper(),
+                    run_json["conclusion"].upper(),
+                )
+                if platform == "mattermost"
+                else 'The workflow completed with status "{1}" and conclusion "{2}"'.format(
                     f"https://github.com/{repository}/actions/runs/{run_id}",
                     run_json["status"].upper(),
                     run_json["conclusion"].upper(),
@@ -179,4 +185,26 @@ def poll_for_conclusion(
                         "text": io.TextIOWrapper(artifact_file).read(),
                     },
                 ).raise_for_status()
+        return run_json["conclusion"]
+    else:
+        requests.post(
+            f"http://responder/v1/respond",
+            json={
+                "platform": platform,
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "user": user,
+                "text": 'The [workflow]({0}) completed with status "{1}" and conclusion "{2}"'.format(
+                    f"https://github.com/{repository}/actions/runs/{run_id}",
+                    run_json["status"].upper(),
+                    run_json["conclusion"].upper(),
+                )
+                if platform == "mattermost"
+                else 'The workflow completed with status "{1}" and conclusion "{2}"'.format(
+                    f"https://github.com/{repository}/actions/runs/{run_id}",
+                    run_json["status"].upper(),
+                    run_json["conclusion"].upper(),
+                ),
+            },
+        ).raise_for_status()
         return run_json["conclusion"]

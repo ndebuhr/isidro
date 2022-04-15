@@ -105,13 +105,19 @@ kubectl get svc -n istio-ingressgateway
 ### Slack configuration
 _Relevant if you are using Slack as your chat tool_
 
-Create a Slack App.  Enable and configure the event subscription feature.  
+Create a Slack app:
+1. Update the [example Slack manifest](slack/manifest.yaml) to use your Isidro endpoint
+1. Create a Slack app using the application manifest
+1. Consider giving the app a profile picture (e.g., the Terminator)
+1. Use the verification token, under the app's "Basic Information" for Helm value `slack.verificationToken`
+1. Use the OAuth token, under the app's "OAuth & Permissions" for Helm value `slack.oauthToken`
 
 ### Mattermost configuration
 _Relevant if you are using Mattermost as your chat tool_
 
 1. In the System Console, under "Integrations > Bot Accounts", "Enable Bot Account Creation"
 1. In the Integrations portal, create a bot account with the name "isidro" and role "System Administrator"
+    1. Consider giving the app a profile picture (e.g., the Terminator)
 1. Copy the access token to the Helm values (or Skaffold overrides) as `mattermost.accessToken`
 1. Add an outgoing webhook:
     1. Recommended title is "Isidro Mentions"
