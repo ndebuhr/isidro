@@ -39,6 +39,13 @@ Navigate to the [provisioning/](provisioning/) directory, then set the `GOOGLE_A
 export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 ```
 
+Enable the following APIs and features in GCP:
+1. API: Binary Authorization
+1. API: Cloud KMS
+1. API: Google Kubernetes Engine
+1. API: Anthos
+1. Anthos Feature: Service Mesh
+
 Setup secondary IP ranges in the desired region and subnet (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
 terraform init
@@ -80,11 +87,9 @@ kubectl label namespace istio-ingressgateway istio.io/rev=asm-managed --overwrit
 kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway -n istio-ingressgateway
 ```
 
-### Enable cluster features
+### Enable GMP
 
-In the Google Cloud Console:
-* Enable Anthos Service Mesh in "Anthos > Features"
-* Enable Managed Prometheus for the provisioned cluster
+In the Google Cloud Console, enable Managed Prometheus for the provisioned cluster
 
 ### Helm installation
 
