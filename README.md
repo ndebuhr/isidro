@@ -7,7 +7,13 @@ Isidro includes:
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
 
 ## Prerequisites
-1. Willingness and ability to run the system on Google Cloud Platform (other cloud providers are possible, but would require some hacking)
+1. Willingness and ability to run the system on Google Cloud Platform (other cloud providers are possible, but would require some hacking), including the following APIs and features:
+    1. API: Binary Authorization
+    1. API: Cloud KMS
+    1. API: Kubernetes Engine
+    1. API: GKE Hub
+    1. API: Anthos
+    1. Anthos Feature: Service Mesh
 1. A domain or subdomain managed through Google Cloud DNS
 
 ## System installation
@@ -38,14 +44,6 @@ Navigate to the [provisioning/](provisioning/) directory, then set the `GOOGLE_A
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 ```
-
-Enable the following APIs and features in GCP:
-1. API: Binary Authorization
-1. API: Cloud KMS
-1. API: Kubernetes Engine
-1. API: GKE Hub
-1. API: Anthos
-1. Anthos Feature: Service Mesh
 
 Setup secondary IP ranges in the desired region and subnet (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
