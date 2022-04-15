@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: repeater
+  labels:
+    app: repeater
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: repeater
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repeater
+  labels:
+    app: repeater
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repeater
+  template:
+    metadata:
+      labels:
+        app: repeater
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed"
+    spec:
+      containers:
+      - name: repeater
+        image: {{ .Values.repeater.image.repository }}:{{ .Values.repeater.image.tag }}
+        imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: repeater
+spec:
+  podSelector:
+    matchLabels:
+      app: repeater
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: orchestration
+  egress:
+  - {}

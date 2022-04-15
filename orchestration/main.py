@@ -126,11 +126,8 @@ class Orchestration:
             json=payload,
         ).raise_for_status()
 
-    def is_link(self):
-        return self.action["category"] == "link"
-
     def send_response(self):
-        if self.is_link():
+        if self.action["category"] == "link":
             requests.post(
                 f"http://responder/v1/respond",
                 json={
@@ -144,7 +141,18 @@ class Orchestration:
                     ),
                 },
             ).raise_for_status()
-        # TODO: Cover additional synchronous task cases
+        elif self.action["category"] == "repeater":
+            requests.post(
+                f"http://repeater/v1/repeat",
+                json={
+                    "platform": self.platform,
+                    "channel": self.channel,
+                    "thread_ts": self.thread_ts,
+                    "user": self.user,
+                    "text": self.text,
+                    "action": self.action,
+                },
+            ).raise_for_status()
 
 
 @app.route("/v1/orchestrate", methods=["POST"])

@@ -62,6 +62,9 @@ spec:
           app: orchestration
     - podSelector:
         matchLabels:
+          app: repeater
+    - podSelector:
+        matchLabels:
           app: tasks
     - podSelector:
         matchLabels:

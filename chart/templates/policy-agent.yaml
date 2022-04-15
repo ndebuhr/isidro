@@ -84,14 +84,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-sympathetic-actions-rego-v2
+          name: policy-agent-sympathetic-actions-rego-v3
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-sympathetic-actions-rego-v2
+  name: policy-agent-sympathetic-actions-rego-v3
 data:
   routing.rego: |
     package isidro.routing
@@ -134,6 +134,28 @@ data:
         },
         "keywords": [
           "test", "testing", "unit", "quality", "verify", "check", "run"
+        ]
+      },
+      {
+        "action": {
+          "confirmation message": "This sounds like a feature request or bug.  Would you like me to file your message as a GitHub issue?  This will improve awareness and understanding of your issue or request.",
+          "async": false,
+          "category": "repeater",
+          "verb": "POST",
+          "endpoint": "https://api.github.com/repos/ndebuhr/isidro/issues",
+          "headers": {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": "Token {{ .Values.deployer.github.token }}",
+          },
+          "payload": {
+            "title": "Feature request or bug (created automatically via chatbot)",
+            "body": "${var.text}",
+          },
+          "completion message": "The issue has been filed https://github.com/ndebuhr/isidro/issues.",
+          "tie break priority": 2,
+        },
+        "keywords": [
+          "issue", "bug", "feature", "request", "broken", "outage", "problem", "incident"
         ]
       }
     ]
@@ -181,14 +203,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-succinct-actions-rego-v2
+          name: policy-agent-succinct-actions-rego-v3
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-succinct-actions-rego-v2
+  name: policy-agent-succinct-actions-rego-v3
 data:
   routing.rego: |
     package isidro.routing
@@ -231,6 +253,28 @@ data:
         },
         "keywords": [
           "test", "testing", "unit", "quality", "verify", "check", "run"
+        ]
+      },
+      {
+        "action": {
+          "confirmation message": "Is what you describe either a feature request or bug?  If so, I'll file it as such.",
+          "async": false,
+          "category": "repeater",
+          "verb": "POST",
+          "endpoint": "https://api.github.com/repos/ndebuhr/isidro/issues",
+          "headers": {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": "Token {{ .Values.deployer.github.token }}",
+          },
+          "payload": {
+            "title": "Feature request or bug (created automatically via chatbot)",
+            "body": "${var.text}",
+          },
+          "completion message": "The issue has been filed https://github.com/ndebuhr/isidro/issues.",
+          "tie break priority": 2,
+        },
+        "keywords": [
+          "issue", "bug", "feature", "request", "broken", "outage", "problem", "incident"
         ]
       }
     ]

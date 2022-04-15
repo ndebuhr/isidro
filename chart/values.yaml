@@ -13,6 +13,11 @@ gatekeeper:
     repository: us.gcr.io/PROJECT/isidro/gatekeeper
     tag: latest
 
+repeater:
+  image:
+    repository: us.gcr.io/PROJECT/isidro/repeater
+    tag: latest
+
 responder:
   image:
     repository: us.gcr.io/PROJECT/isidro/responder
