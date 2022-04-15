@@ -167,6 +167,18 @@ Make any required `skaffold.yaml` configuration changes, then run skaffold:
 skaffold dev
 ```
 
+#### Skaffold-based persistent deployment
+
+To setup:
+```bash
+skaffold run
+```
+
+To teardown:
+```bash
+skaffold delete
+```
+
 ### Test payload
 ```bash
 curl -X POST https://example.com/api/v1/submit \
