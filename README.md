@@ -100,6 +100,7 @@ In the Google Cloud Console, enable Managed Prometheus for the provisioned clust
 Change or override Helm values and then install.
 ```bash
 cd chart
+helm dependencies update
 helm install isidro .
 ```
 
