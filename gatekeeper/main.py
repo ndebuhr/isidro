@@ -6,6 +6,7 @@ from flask import Flask, abort, request
 from opentelemetry import trace
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.propagate import set_global_textmap
 from opentelemetry.propagators.cloud_trace_propagator import (
     CloudTraceFormatPropagator,
@@ -43,6 +44,7 @@ tracer = trace.get_tracer(__name__)
 
 app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
 
 class Gatekeeper:
     def __init__(self, request):
