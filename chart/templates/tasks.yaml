@@ -31,6 +31,7 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed"
     spec:
+      serviceAccountName: isidro-microservices
       containers:
       - name: tasks
         image: {{ .Values.tasks.image.repository }}:{{ .Values.tasks.image.tag }}

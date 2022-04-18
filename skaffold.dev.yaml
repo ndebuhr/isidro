@@ -58,6 +58,7 @@ deploy:
       skipBuildDependencies: true
       namespace: default
       setValues:
+        project: example
         certbot.enabled: false
         certbot.domain: isidro.example.com
         certbot.email: admin@example.com

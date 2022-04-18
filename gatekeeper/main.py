@@ -3,13 +3,20 @@ import os
 import requests
 
 from flask import Flask, abort, request
+from opentelemetry import trace
+from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.propagate import set_global_textmap
+from opentelemetry.propagators.cloud_trace_propagator import (
+    CloudTraceFormatPropagator,
+)
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFICATION_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
 MATTERMOST_VERIFICATION_TOKEN = os.environ.get("MATTERMOST_VERIFICATION_TOKEN")
 ISIDRO_DOMAIN = os.environ.get("ISIDRO_DOMAIN")
-
-app = Flask(__name__)
 
 if not SLACK_VERIFICATION_TOKEN:
     raise ValueError("No SLACK_VERIFICATION_TOKEN environment variable set")
@@ -20,6 +27,22 @@ if not MATTERMOST_VERIFICATION_TOKEN:
 if not ISIDRO_DOMAIN:
     raise ValueError("No ISIDRO_DOMAIN environment variable set")
 
+set_global_textmap(CloudTraceFormatPropagator())
+
+tracer_provider = TracerProvider()
+cloud_trace_exporter = CloudTraceSpanExporter()
+tracer_provider.add_span_processor(
+    # BatchSpanProcessor buffers spans and sends them in batches in a
+    # background thread. The default parameters are sensible, but can be
+    # tweaked to optimize your performance
+    BatchSpanProcessor(cloud_trace_exporter)
+)
+trace.set_tracer_provider(tracer_provider)
+
+tracer = trace.get_tracer(__name__)
+
+app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
 
 class Gatekeeper:
     def __init__(self, request):

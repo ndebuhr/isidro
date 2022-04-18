@@ -20,7 +20,8 @@ module "gke" {
   ip_range_pods               = var.ip_range_pods
   ip_range_services           = var.ip_range_services
   network_policy              = true
-  grant_registry_access       = true
+  create_service_account      = false
+  service_account             = google_service_account.isidro_nodes.email
   enable_binary_authorization = true
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
@@ -34,11 +35,12 @@ module "gke" {
     },
   ]
   node_pools_oauth_scopes = {
+    # TODO: This seems to have no effect, or is overwritten by cloud_platform
     "asm-node-pool" : [
-      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
-      "https://www.googleapis.com/auth/devstorage.read_only"
+      "https://www.googleapis.com/auth/trace.append"
     ]
   }
 }
