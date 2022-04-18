@@ -48,6 +48,7 @@ includedPermissions:
 - iam.serviceAccounts.actAs
 - iam.serviceAccounts.get
 - iam.serviceAccounts.list
+- iam.serviceAccounts.update
 - serviceusage.services.disable
 - serviceusage.services.enable
 - serviceusage.services.get
