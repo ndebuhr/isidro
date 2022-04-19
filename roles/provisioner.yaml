@@ -49,6 +49,13 @@ includedPermissions:
 - iam.serviceAccounts.get
 - iam.serviceAccounts.list
 - iam.serviceAccounts.update
+- monitoring.alertPolicies.create
+- monitoring.alertPolicies.delete
+- monitoring.alertPolicies.get
+- monitoring.alertPolicies.update
+- monitoring.slos.create
+- monitoring.slos.delete
+- monitoring.slos.get
 - serviceusage.services.disable
 - serviceusage.services.enable
 - serviceusage.services.get
