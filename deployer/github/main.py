@@ -8,13 +8,39 @@ import zipfile
 
 from celery import Celery, Task, current_app
 from flask import Flask, abort, request
+from opentelemetry import trace
+from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.propagate import set_global_textmap
+from opentelemetry.propagators.cloud_trace_propagator import (
+    CloudTraceFormatPropagator,
+)
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 CELERY_BACKEND = "redis://isidro-redis-master:6379"
 CELERY_BROKER = "pyamqp://isidro:isidro@isidro-rabbitmq//"
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 
+set_global_textmap(CloudTraceFormatPropagator())
+
+tracer_provider = TracerProvider()
+cloud_trace_exporter = CloudTraceSpanExporter()
+tracer_provider.add_span_processor(
+    # BatchSpanProcessor buffers spans and sends them in batches in a
+    # background thread. The default parameters are sensible, but can be
+    # tweaked to optimize your performance
+    BatchSpanProcessor(cloud_trace_exporter)
+)
+trace.set_tracer_provider(tracer_provider)
+
+tracer = trace.get_tracer(__name__)
+
 app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
 
 tasks = Celery(
     "tasks",
