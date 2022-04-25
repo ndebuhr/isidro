@@ -13,6 +13,7 @@ Isidro includes:
     1. API: Kubernetes Engine
     1. API: GKE Hub
     1. API: Anthos
+    1. API: Anthos Service Mesh Certificate Authority
     1. Anthos Feature: Service Mesh
 1. A domain or subdomain managed through Google Cloud DNS
 
