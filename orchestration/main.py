@@ -24,10 +24,16 @@ CONFIRMATION_WORDS = [
     "y",
     "correct",
     "confirm",
-    "sure",
     "ok",
     "okay",
+    "cool",
+    "sure"
 ]
+
+GREETING = os.environ.get("GREETING")
+
+if not GREETING:
+    raise ValueError("No GREETING environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -102,7 +108,10 @@ class Orchestration:
                 "channel": self.channel,
                 "thread_ts": self.thread_ts,
                 "user": self.user,
-                "text": self.action["confirmation message"],
+                "text": "{0}  {1}".format(
+                    GREETING,
+                    self.action["confirmation message"]
+                ),
             },
         ).raise_for_status()
 

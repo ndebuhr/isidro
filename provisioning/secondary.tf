@@ -1,24 +1,22 @@
-data "google_client_config" "default" {}
-
 provider "kubernetes" {
-  host                   = "https://${module.gke.endpoint}"
+  alias                  = "secondary"
+  host                   = "https://${module.gke_secondary.endpoint}"
   token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
+  cluster_ca_certificate = base64decode(module.gke_secondary.ca_certificate)
 }
 
-data "google_project" "project" {}
-
-module "gke" {
+module "gke_secondary" {
+  depends_on                  = [module.gke_primary]
   source                      = "github.com/terraform-google-modules/terraform-google-kubernetes-engine"
   project_id                  = data.google_project.project.project_id
-  name                        = var.cluster_name
+  name                        = var.cluster_name_secondary
   regional                    = true
-  region                      = var.region
+  region                      = var.region_secondary
   release_channel             = "REGULAR"
   network                     = var.network
-  subnetwork                  = var.subnetwork
-  ip_range_pods               = var.ip_range_pods
-  ip_range_services           = var.ip_range_services
+  subnetwork                  = var.subnetwork_secondary
+  ip_range_pods               = var.ip_range_pods_secondary
+  ip_range_services           = var.ip_range_services_secondary
   network_policy              = true
   create_service_account      = false
   service_account             = google_service_account.isidro_nodes.email
@@ -45,13 +43,15 @@ module "gke" {
   }
 }
 
-module "asm" {
+module "asm_secondary" {
   source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/asm"
-  cluster_name              = module.gke.name
+  cluster_name              = module.gke_secondary.name
   project_id                = data.google_project.project.project_id
-  cluster_location          = module.gke.location
+  cluster_location          = module.gke_secondary.location
   enable_cni                = true
   enable_fleet_registration = true
-  enable_mesh_feature       = false
   fleet_id                  = "isidro"
+  providers = {
+    kubernetes = kubernetes.secondary
+  }
 }

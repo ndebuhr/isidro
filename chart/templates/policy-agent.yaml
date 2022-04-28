@@ -1,3 +1,4 @@
+{{ if eq .Values.policyAgent.enabled true }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -68,7 +69,7 @@ spec:
     spec:
       containers:
       - name: policy-agent
-        image: openpolicyagent/opa:0.33.1
+        image: {{ .Values.policyAgent.image.repository }}:{{ .Values.policyAgent.image.tag }}
         ports:
         - name: http
           containerPort: 8181
@@ -110,7 +111,7 @@ data:
       },
       {
         "action": {
-          "confirmation message": "Would my documentation be helpful to you?.  Please respond by sending a threaded message reply, which includes an @isidro mention.",
+          "confirmation message": "Would my documentation be helpful to you?  Please respond by sending a threaded message reply, which includes an @isidro mention.",
           "async": false,
           "category": "link",
           "href": "https://github.com/ndebuhr/isidro",
@@ -302,3 +303,4 @@ spec:
           app: orchestration
   egress:
   - {}
+{{ end }}

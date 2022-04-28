@@ -1,3 +1,4 @@
+{{ if eq .Values.keywords.enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -56,3 +57,4 @@ spec:
           app: orchestration
   egress:
   - {}
+{{ end }}

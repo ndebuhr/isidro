@@ -1,3 +1,4 @@
+{{ if eq .Values.orchestration.enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -45,7 +46,22 @@ spec:
           value: "1234567890"
         - name: MONGODB_DATABASE
           value: "isidro"
+        - name: GREETING
+          value: {{ .Values.orchestration.greeting }}
       restartPolicy: Always
+---
+apiVersion: monitoring.googleapis.com/v1alpha1
+kind: PodMonitoring
+metadata:
+  name: orchestration
+spec:
+  selector:
+    matchLabels:
+      app: orchestration
+  endpoints:
+  - port: 80
+    interval: 30s
+    timeout: 10s
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -70,3 +86,4 @@ spec:
           kubernetes.io/metadata.name: gmp-system
   egress:
   - {}
+{{ end }}

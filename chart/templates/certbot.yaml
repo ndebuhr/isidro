@@ -33,10 +33,9 @@ spec:
         args:
         - |
             kubectl create secret tls ingress-tls \
-              --namespace istio-ingressgateway \
               --dry-run -o yaml \
               --cert=/etc/ssl/fullchain.pem \
-              --key=/etc/ssl/privkey.pem | kubectl apply -n istio-ingressgateway -f -
+              --key=/etc/ssl/privkey.pem | kubectl apply -f -
         securityContext:
           readOnlyRootFilesystem: true
           runAsNonRoot: true
@@ -90,10 +89,9 @@ spec:
             args:
             - |
                 kubectl create secret tls ingress-tls \
-                  --namespace istio-ingressgateway \
                   --dry-run -o yaml \
                   --cert=/etc/ssl/fullchain.pem \
-                  --key=/etc/ssl/privkey.pem | kubectl apply -n istio-ingressgateway -f -
+                  --key=/etc/ssl/privkey.pem | kubectl apply -f -
             securityContext:
               readOnlyRootFilesystem: true
               runAsNonRoot: true
@@ -118,7 +116,6 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: certbot
-  namespace: istio-ingressgateway
 subjects:
 - kind: ServiceAccount
   name: certbot
@@ -132,7 +129,6 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: certbot
-  namespace: istio-ingressgateway
 rules:
 - apiGroups:
   - ""

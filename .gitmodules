@@ -1,3 +1,0 @@
-[submodule "anthos-service-mesh-packages"]
-	path = anthos-service-mesh-packages
-	url = git@github.com:GoogleCloudPlatform/anthos-service-mesh-packages

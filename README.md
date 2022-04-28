@@ -1,17 +1,25 @@
 # Isidro (Chatbot)
 
+> Isidro is an Anthos- and GKE-based microservices chatbot
+
 Isidro includes:
 * Connectors to Slack and Mattermost for event subscription and response
 * Policy- and NLP-based workflow planning
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
+* Cross-regional deployment
+   * Regional workload clusters in us-central1 (Council Bluffs, Iowa) and europe-west1 (Saint-Ghislain, Belgium)
+   * Regional MCI config cluster (GKE autopilot) in northamerica-northeast1 (Montreal, Canada)
+* Security features like binary authorization, mTLS, workload identity, and network policies
 
 ## Prerequisites
-1. Willingness and ability to run the system on Google Cloud Platform (other cloud providers are possible, but would require some hacking), including the following APIs and features:
+1. APIs and features enabled on Google Cloud Platform:
     1. API: Binary Authorization
     1. API: Cloud KMS
     1. API: Kubernetes Engine
     1. API: GKE Hub
+    1. API: Multi Cluster Ingress
+    1. API: Multi-Cluster Service Discovery
     1. API: Anthos
     1. API: Anthos Service Mesh Certificate Authority
     1. Anthos Feature: Service Mesh
@@ -46,17 +54,28 @@ Navigate to the [provisioning/](provisioning/) directory, then set the `GOOGLE_A
 export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 ```
 
-Setup secondary IP ranges in the desired region and subnet (e.g., "gke-isidro-pods" and "gke-isidro-services"), then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
+Setup secondary IP ranges in the desired regions and subnets, then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
 terraform init
 terraform apply \
-    -var network=default \
-    -var subnetwork=default \
-    -var ip_range_pods="gke-isidro-pods" \
-    -var ip_range_services="gke-isidro-services"
+    -var domain=isidro.example.com \
+    -var ip_range_pods_primary="gke-isidro-pods" \
+    -var ip_range_services_primary="gke-isidro-services" \
+    -var ip_range_pods_secondary="gke-isidro-pods" \
+    -var ip_range_services_secondary="gke-isidro-services" \
+    -var ip_range_pods_config="gke-isidro-config-pods" \
+    -var ip_range_services_config="gke-isidro-config-services"
 ```
 
-Configure kubectl to use the new cluster.  Create a namespace, if a non-default namespace is desired.
+Create kubecontext configurations for the three provisioned clusters:
+```bash
+gcloud container clusters get-credentials isidro-us --region us-central1
+gcloud container clusters get-credentials isidro-europe --region europe-west1
+gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us isidro-us
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-europe isidro-europe
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
+```
 
 ### Certbot (for TLS) preparation
 
@@ -76,41 +95,59 @@ gcloud iam service-accounts keys create isidro-certbot.json \
 
 Add the service account key to Kubernetes as a secret:
 ```bash
-kubectl create secret generic isidro-certbot-key --from-file isidro-certbot.json
-```
-
-### Istio ingress gateway
-
-```bash
-git submodule init
-git submodule update
-```
-
-```bash
-kubectl create namespace istio-ingressgateway
-kubectl label namespace istio-ingressgateway istio.io/rev=asm-managed --overwrite
-kubectl apply -f anthos-service-mesh-packages/samples/gateways/istio-ingressgateway -n istio-ingressgateway
+for kubecontext in isidro-us isidro-europe
+do
+    kubectl config use-context $kubecontext
+    kubectl create secret generic isidro-certbot-key --from-file isidro-certbot.json
+done
 ```
 
 ### Enable GMP
 
-In the Google Cloud Console, enable Managed Prometheus for the provisioned cluster
+In the Google Cloud Console, enable Managed Prometheus for the US and Europe clusters
 
-### Helm installation
+## Installation
 
-Change or override Helm values and then install.
+Setup a service account with the Cloud Build Service Account Role:
 ```bash
-cd chart
-helm dependencies update
-helm install isidro .
+gcloud iam service-accounts create isidro-skaffold \
+    --display-name="Isidro Skaffold"
+gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
+    --member="serviceAccount:isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
+    --role="roles/cloudbuild.builds.builder"
+gcloud iam service-accounts keys create isidro-skaffold.json \
+    --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+```
+
+Setup skaffold files and credentials:
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
+cp skaffold.dev.yaml skaffold.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
+```
+
+### Non-persistent (i.e., development) environments
+
+Make any required `skaffold.yaml` configuration changes, then run skaffold:
+```bash
+skaffold dev
+```
+
+### Persistent environments
+
+Make any required `skaffold.yaml` configuration changes, then run skaffold:
+```bash
+skaffold run
+```
+
+To teardown:
+```bash
+skaffold delete
 ```
 
 ### DNS setup
 
-Setup an A record DNS entry for the Istio Ingress Gateway Load Balancer IP
-```bash
-kubectl get svc -n istio-ingressgateway
-```
+Setup an A record DNS entry for the Istio Multi-Cluster Ingress IP
 
 ## System configuration
 
@@ -150,50 +187,9 @@ Create a personal access token, which includes `repo`, `workflow`, and `packages
 
 Mention @isidro in Slack messages, and get a response.  Use separate message threads for separate chatbot conversations.
 
-## Development
-
-### Skaffold
-
-Set the `GOOGLE_PROJECT` environment variable and configure kubeconfig to use the isidro cluster.
-
-Setup a service account with the Cloud Build Service Account Role:
-```bash
-gcloud iam service-accounts create isidro-skaffold \
-    --display-name="Isidro Skaffold"
-gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
-    --member="serviceAccount:isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
-    --role="roles/cloudbuild.builds.builder"
-gcloud iam service-accounts keys create isidro-skaffold.json \
-    --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
-```
-
-Setup skaffold files and credentials:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
-cp skaffold.dev.yaml skaffold.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
-```
-
-Make any required `skaffold.yaml` configuration changes, then run skaffold:
-```bash
-skaffold dev
-```
-
-#### Skaffold-based persistent deployment
-
-To setup:
-```bash
-skaffold run
-```
-
-To teardown:
-```bash
-skaffold delete
-```
-
 ### Test payload
 ```bash
-curl -X POST https://example.com/api/v1/submit \
+curl -X POST https://isidro.example.com/api/v1/submit \
     -H "Content-Type: application/json" \
     -d '{"token": "1234567890", "event": {"channel": "quality", "ts": "1234567890", "user": "me", "text": "Hello"}}'
 ```

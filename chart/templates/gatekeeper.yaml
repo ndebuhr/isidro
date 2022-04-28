@@ -1,3 +1,4 @@
+{{ if eq .Values.gatekeeper.enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -59,10 +60,7 @@ spec:
   - Egress
   - Ingress
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          istio: ingressgateway
-    - namespaceSelector: {}
+  - {}
   egress:
   - {}
+{{ end }}

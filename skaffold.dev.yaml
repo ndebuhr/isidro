@@ -1,9 +1,7 @@
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: dev
-requires:
-  - configs: ["nlp-dev"]
+  name: build
 build:
   artifacts:
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
@@ -50,7 +48,32 @@ build:
       - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
   googleCloudBuild:
     timeout: 3600s
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: build-nlp
+build:
+  artifacts:
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+    context: keywords
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  googleCloudBuild:
+    timeout: 3600s
+    machineType: E2_HIGHCPU_32
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-us
+requires:
+  - configs: ["build-nlp", "build"]
 deploy:
+  kubeContext: isidro-us
   helm:
     releases:
     - name: isidro
@@ -58,14 +81,15 @@ deploy:
       skipBuildDependencies: true
       namespace: default
       setValues:
-        project: example
+        project: GOOGLE_PROJECT
+        mci.enabled: false
         certbot.enabled: false
         certbot.domain: isidro.example.com
         certbot.email: admin@example.com
+        mattermost.enabled: true
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
-        slack.verificationToken: "1234567890"
-        slack.oauthToken: "1234567890"
+        orchestration.greeting: "Hello!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
@@ -81,16 +105,73 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: nlp-dev
-build:
-  artifacts:
-  - image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
-    context: keywords
-    kaniko:
-      cache: {}
-    hooks:
-      after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
-  googleCloudBuild:
-    timeout: 3600s
-    machineType: E2_HIGHCPU_32
+  name: deploy-europe
+requires:
+  - configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-europe
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      namespace: default
+      setValues:
+        project: GOOGLE_PROJECT
+        region: europe-west1
+        zones[0]: "europe-west1-b"
+        zones[1]: "europe-west1-c"
+        zones[2]: "europe-west1-d"
+        mci.enabled: false
+        certbot.enabled: false
+        certbot.domain: isidro.example.com
+        certbot.email: admin@example.com
+        mattermost.enabled: false
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        orchestration.greeting: "Bonjour!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-config
+requires:
+  - configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-config
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      namespace: default
+      setValues:
+        project: GOOGLE_PROJECT
+        mcs.enabled: true
+        certbot.enabled: true
+        certbot.domain: isidro.example.com
+        certbot.email: admin@example.com
+        gatekeeper.enabled: false
+        repeater.enabled: false
+        responder.enabled: false
+        deployer.github.enabled: false
+        orchestration.enabled: false
+        policyAgent.enabled: false
+        keywords.enabled: false
+        tasks.enabled: false
+        rabbitmq.enabled: false
+        redis.enabled: false
+        mongodb.enabled: false
+        mattermost.enabled: false
+        slack.enabled: false

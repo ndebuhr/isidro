@@ -1,6 +1,6 @@
 output "kubernetes_endpoint" {
   sensitive = true
-  value     = module.gke.endpoint
+  value     = module.gke_primary.endpoint
 }
 
 output "client_token" {
@@ -10,11 +10,15 @@ output "client_token" {
 
 output "ca_certificate" {
   sensitive = true
-  value     = module.gke.ca_certificate
+  value     = module.gke_primary.ca_certificate
 }
 
 output "service_account" {
-  value = module.gke.service_account
+  value = module.gke_primary.service_account
+}
+
+output "isidro_ip" {
+  value = google_compute_global_address.isidro.address
 }
 
 output "binauthz_keyring" {

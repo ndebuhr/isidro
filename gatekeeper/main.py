@@ -46,6 +46,7 @@ app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 
+
 class Gatekeeper:
     def __init__(self, request):
         self.request = request
@@ -170,3 +171,7 @@ def submission():
         return gatekeeper.challenge_response()
     else:
         return gatekeeper.general_response()
+
+@app.route("/", methods=["GET"])
+def health():
+    return ""

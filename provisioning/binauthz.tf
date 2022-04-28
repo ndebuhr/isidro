@@ -29,7 +29,14 @@ resource "google_binary_authorization_policy" "policy" {
   }
 
   cluster_admission_rules {
-    cluster                 = "${var.region}.${var.cluster_name}"
+    cluster                 = "${var.region_primary}.${var.cluster_name_primary}"
+    evaluation_mode         = "REQUIRE_ATTESTATION"
+    enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
+    require_attestations_by = [google_binary_authorization_attestor.isidro.name]
+  }
+
+  cluster_admission_rules {
+    cluster                 = "${var.region_secondary}.${var.cluster_name_secondary}"
     evaluation_mode         = "REQUIRE_ATTESTATION"
     enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
     require_attestations_by = [google_binary_authorization_attestor.isidro.name]
