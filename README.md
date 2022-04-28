@@ -12,6 +12,8 @@ Isidro includes:
    * Regional MCI config cluster (GKE autopilot) in northamerica-northeast1 (Montreal, Canada)
 * Security features like binary authorization, mTLS, workload identity, and network policies
 
+![Isidro Map](images/isidro-map.png)
+
 ## Prerequisites
 1. APIs and features enabled on Google Cloud Platform:
     1. API: Binary Authorization
