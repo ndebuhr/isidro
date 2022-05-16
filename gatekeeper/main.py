@@ -17,7 +17,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFICATION_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
 MATTERMOST_VERIFICATION_TOKEN = os.environ.get("MATTERMOST_VERIFICATION_TOKEN")
-ISIDRO_DOMAIN = os.environ.get("ISIDRO_DOMAIN")
+MATTERMOST_DOMAIN = os.environ.get("MATTERMOST_DOMAIN")
 
 if not SLACK_VERIFICATION_TOKEN:
     raise ValueError("No SLACK_VERIFICATION_TOKEN environment variable set")
@@ -25,8 +25,8 @@ if not MATTERMOST_ACCESS_TOKEN:
     raise ValueError("No MATTERMOST_ACCESS_TOKEN environment variable set")
 if not MATTERMOST_VERIFICATION_TOKEN:
     raise ValueError("No MATTERMOST_VERIFICATION_TOKEN environment variable set")
-if not ISIDRO_DOMAIN:
-    raise ValueError("No ISIDRO_DOMAIN environment variable set")
+if not MATTERMOST_DOMAIN:
+    raise ValueError("No MATTERMOST_DOMAIN environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -105,7 +105,7 @@ class Gatekeeper:
             # Mattermost message (requires additional Mattermost API call to determine root_id)
             thread = requests.get(
                 "https://{0}/api/v4/posts/{1}".format(
-                    ISIDRO_DOMAIN, request_json["post_id"]
+                    MATTERMOST_DOMAIN, request_json["post_id"]
                 ),
                 headers={"Authorization": f"Bearer {MATTERMOST_ACCESS_TOKEN}"},
             )

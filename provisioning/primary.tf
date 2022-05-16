@@ -18,7 +18,7 @@ module "gke_primary" {
   ip_range_services           = var.ip_range_services_primary
   network_policy              = true
   create_service_account      = false
-  service_account             = google_service_account.isidro_nodes.email
+  service_account             = google_service_account.nodes.email
   enable_binary_authorization = true
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
@@ -49,7 +49,6 @@ module "asm_primary" {
   cluster_location          = module.gke_primary.location
   enable_cni                = true
   enable_fleet_registration = true
-  fleet_id                  = "isidro"
   providers = {
     kubernetes = kubernetes.primary
   }

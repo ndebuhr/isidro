@@ -16,14 +16,14 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 SLACK_OAUTH_TOKEN = os.environ.get("SLACK_OAUTH_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
-ISIDRO_DOMAIN = os.environ.get("ISIDRO_DOMAIN")
+MATTERMOST_DOMAIN = os.environ.get("MATTERMOST_DOMAIN")
 
 if not SLACK_OAUTH_TOKEN:
     raise ValueError("No SLACK_OAUTH_TOKEN environment variable set")
 if not MATTERMOST_ACCESS_TOKEN:
     raise ValueError("No MATTERMOST_ACCESS_TOKEN environment variable set")
-if not ISIDRO_DOMAIN:
-    raise ValueError("No ISIDRO_DOMAIN environment variable set")
+if not MATTERMOST_DOMAIN:
+    raise ValueError("No MATTERMOST_DOMAIN environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -55,7 +55,7 @@ class Responder:
 
     def respond_mattermost(self):
         requests.post(
-            f"https://{ISIDRO_DOMAIN}/api/v4/posts",
+            f"https://{MATTERMOST_DOMAIN}/api/v4/posts",
             json={
                 "channel_id": self.channel,
                 "message": f"@{self.user} {self.text}",

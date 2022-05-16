@@ -32,7 +32,7 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed"
     spec:
-      serviceAccountName: isidro-microservices
+      serviceAccountName: tracing-microservice
       containers:
       - name: deployer-github
         image: {{ .Values.deployer.github.image.repository }}:{{ .Values.deployer.github.image.tag }}
@@ -61,7 +61,7 @@ spec:
         sidecar.istio.io/rewriteAppHTTPProbers: "false"
         istio.io/rev: "asm-managed"
     spec:
-      serviceAccountName: isidro-microservices
+      serviceAccountName: tracing-microservice
       containers:
       - name: deployer-github-worker
         image: {{ .Values.deployer.github.image.repository }}:{{ .Values.deployer.github.image.tag }}

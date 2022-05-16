@@ -32,7 +32,7 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed"
     spec:
-      serviceAccountName: isidro-microservices
+      serviceAccountName: tracing-microservice
       containers:
       - name: responder
         image: {{ .Values.responder.image.repository }}:{{ .Values.responder.image.tag }}
@@ -42,8 +42,8 @@ spec:
           value: "{{ .Values.slack.oauthToken }}"
         - name: MATTERMOST_ACCESS_TOKEN
           value: "{{ .Values.mattermost.accessToken }}"
-        - name: ISIDRO_DOMAIN
-          value: "{{ .Values.certbot.domain }}"
+        - name: MATTERMOST_DOMAIN
+          value: "{{ .Values.mattermost.domain }}"
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

@@ -21,6 +21,10 @@ output "isidro_ip" {
   value = google_compute_global_address.isidro.address
 }
 
+output "mattermost_ip" {
+  value = google_compute_global_address.mattermost.address
+}
+
 output "binauthz_keyring" {
   value = google_kms_key_ring.isidro.name
 }

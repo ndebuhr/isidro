@@ -69,6 +69,28 @@ build:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
+  name: deploy-mattermost
+deploy:
+  kubeContext: isidro-us
+  helm:
+    releases:
+    - name: mattermost
+      remoteChart: mattermost/mattermost-team-edition
+      version: 6.5.0
+      createNamespace: true
+      namespace: mattermost
+      setValues:
+        deploymentStrategy.type: Recreate
+        securityContext.fsGroup: "2000"
+        mysql.mysqlUser: isidro
+        mysql.mysqlPassword: isidro
+        mysql.persistence.storageClass: isidro-storage
+        persistence.data.storageClass: isidro-storage
+        persistence.plugins.storageClass: isidro-storage
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
   name: deploy-us
 requires:
   - configs: ["build-nlp", "build"]
@@ -79,14 +101,11 @@ deploy:
     - name: isidro
       chartPath: chart
       skipBuildDependencies: true
-      namespace: default
+      createNamespace: true
+      namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        mci.enabled: false
-        certbot.enabled: false
-        certbot.domain: isidro.example.com
-        certbot.email: admin@example.com
-        mattermost.enabled: true
+        mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         orchestration.greeting: "Hello!"
@@ -115,18 +134,15 @@ deploy:
     - name: isidro
       chartPath: chart
       skipBuildDependencies: true
-      namespace: default
+      createNamespace: true
+      namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
         region: europe-west1
         zones[0]: "europe-west1-b"
         zones[1]: "europe-west1-c"
         zones[2]: "europe-west1-d"
-        mci.enabled: false
-        certbot.enabled: false
-        certbot.domain: isidro.example.com
-        certbot.email: admin@example.com
-        mattermost.enabled: false
+        mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         orchestration.greeting: "Bonjour!"
@@ -146,32 +162,11 @@ apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
   name: deploy-config
-requires:
-  - configs: ["build-nlp", "build"]
 deploy:
   kubeContext: isidro-config
-  helm:
-    releases:
-    - name: isidro
-      chartPath: chart
-      skipBuildDependencies: true
-      namespace: default
-      setValues:
-        project: GOOGLE_PROJECT
-        mcs.enabled: true
-        certbot.enabled: true
-        certbot.domain: isidro.example.com
-        certbot.email: admin@example.com
-        gatekeeper.enabled: false
-        repeater.enabled: false
-        responder.enabled: false
-        deployer.github.enabled: false
-        orchestration.enabled: false
-        policyAgent.enabled: false
-        keywords.enabled: false
-        tasks.enabled: false
-        rabbitmq.enabled: false
-        redis.enabled: false
-        mongodb.enabled: false
-        mattermost.enabled: false
-        slack.enabled: false
+  kubectl:
+    manifests:
+    - "networking/namespace.yaml"
+    - "networking/multiclusteringress.yaml"
+    - "networking/multiclusterservices.yaml"
+    - "networking/certbot.yaml"

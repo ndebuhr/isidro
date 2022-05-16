@@ -30,13 +30,15 @@ module "asm_config" {
   cluster_location          = module.gke_config.location
   enable_cni                = true
   enable_fleet_registration = true
-  fleet_id                  = "isidro"
   providers = {
     kubernetes = kubernetes.config
   }
 }
 
 resource "google_gke_hub_feature" "mci" {
+  depends_on = [
+    module.asm_config
+  ]
   name = "multiclusteringress"
   location = "global"
   spec {
@@ -49,52 +51,4 @@ resource "google_gke_hub_feature" "mci" {
 
 resource "google_compute_global_address" "isidro" {
   name = "isidro"
-}
-
-resource "kubernetes_manifest" "mci" {
-  manifest = {
-    "apiVersion" = "networking.gke.io/v1"
-    "kind"       = "MultiClusterIngress"
-    "metadata" = {
-      "name"        = "isidro-ingress"
-      "namespace"   = "default"
-      "annotations" = {
-        "networking.gke.io/static-ip" = google_compute_global_address.isidro.address
-      }
-    }
-    "spec" = {
-      "template" = {
-        "spec" = {
-          "tls" = [
-            {
-              "hosts" = [
-                var.domain
-              ]
-              "secretName" = "ingress-tls"
-            }
-          ]
-          "backend" = {
-            "serviceName" = "mattermost"
-            "servicePort" = "8065"
-          }
-          "rules" = [
-            {
-              "http" = {
-                "paths" = [
-                  {
-                    "path" = "/isidro/api/*"
-                    "backend" = {
-                      "serviceName" = "gatekeeper"
-                      "servicePort" = "80"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    }
-  }
-  provider = kubernetes.config
 }

@@ -26,7 +26,6 @@ CONFIRMATION_WORDS = [
     "confirm",
     "ok",
     "okay",
-    "cool",
     "sure"
 ]
 

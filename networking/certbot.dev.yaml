@@ -1,0 +1,261 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: certbot-isidro
+  namespace: isidro
+spec:
+  template:
+    metadata:
+      labels:
+        app: certbot
+    spec:
+      serviceAccountName: certbot
+      initContainers:
+      - name: certbot
+        image: certbot/dns-google:v1.19.0
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            certbot certonly --dns-google \
+              -d 'ISIDRO_DOMAIN' --non-interactive --agree-tos -m admin@ISIDRO_DOMAIN && \
+            cat /etc/letsencrypt/live/ISIDRO_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
+            cat /etc/letsencrypt/live/ISIDRO_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+        volumeMounts:
+        - name: ssl
+          mountPath: /etc/ssl
+      containers:
+      - name: tls-secret
+        image: docker.io/bitnami/kubectl:1.20
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            kubectl create secret tls ingress-tls \
+              --dry-run -o yaml \
+              --cert=/etc/ssl/fullchain.pem \
+              --key=/etc/ssl/privkey.pem | kubectl apply -f -
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - name: ssl
+          mountPath: /etc/ssl
+      volumes:
+      - name: ssl
+        emptyDir: {}
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: certbot-isidro
+  namespace: isidro
+spec:
+  # generate a new ssl certificate every 60 days
+  schedule: "0 11 12 */2 *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: certbot
+        spec:
+          serviceAccountName: certbot
+          initContainers:
+          - name: certbot
+            image: certbot/dns-google:v1.19.0
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                certbot certonly --dns-google \
+                  -d 'ISIDRO_DOMAIN' --non-interactive --agree-tos -m admin@ISIDRO_DOMAIN && \
+                cat /etc/letsencrypt/live/ISIDRO_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
+                cat /etc/letsencrypt/live/ISIDRO_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+            volumeMounts:
+            - name: ssl
+              mountPath: /etc/ssl
+          containers:
+          - name: ssl-secret-creation
+            image: docker.io/bitnami/kubectl:1.20
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                kubectl create secret tls ingress-tls \
+                  --dry-run -o yaml \
+                  --cert=/etc/ssl/fullchain.pem \
+                  --key=/etc/ssl/privkey.pem | kubectl apply -f -
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+            volumeMounts:
+            - name: ssl
+              mountPath: /etc/ssl
+          volumes:
+          - name: ssl
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: certbot-mattermost
+  namespace: isidro
+spec:
+  template:
+    metadata:
+      labels:
+        app: certbot
+    spec:
+      serviceAccountName: certbot
+      initContainers:
+      - name: certbot
+        image: certbot/dns-google:v1.19.0
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            certbot certonly --dns-google \
+              -d 'MATTERMOST_DOMAIN' --non-interactive --agree-tos -m admin@MATTERMOST_DOMAIN && \
+            cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
+            cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+        volumeMounts:
+        - name: ssl
+          mountPath: /etc/ssl
+      containers:
+      - name: tls-secret
+        image: docker.io/bitnami/kubectl:1.20
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+            kubectl create secret tls ingress-tls \
+              --namespace mattermost \
+              --dry-run -o yaml \
+              --cert=/etc/ssl/fullchain.pem \
+              --key=/etc/ssl/privkey.pem | kubectl apply -f -
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - name: ssl
+          mountPath: /etc/ssl
+      volumes:
+      - name: ssl
+        emptyDir: {}
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: certbot-mattermost
+  namespace: isidro
+spec:
+  # generate a new ssl certificate every 60 days
+  schedule: "0 11 12 */2 *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: certbot
+        spec:
+          serviceAccountName: certbot
+          initContainers:
+          - name: certbot
+            image: certbot/dns-google:v1.19.0
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                certbot certonly --dns-google \
+                  -d 'MATTERMOST_DOMAIN' --non-interactive --agree-tos -m admin@MATTERMOST_DOMAIN && \
+                cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
+                cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+            volumeMounts:
+            - name: ssl
+              mountPath: /etc/ssl
+          containers:
+          - name: ssl-secret-creation
+            image: docker.io/bitnami/kubectl:1.20
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+                kubectl create secret tls ingress-tls \
+                  --namespace mattermost \
+                  --dry-run -o yaml \
+                  --cert=/etc/ssl/fullchain.pem \
+                  --key=/etc/ssl/privkey.pem | kubectl apply -f -
+            securityContext:
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+            volumeMounts:
+            - name: ssl
+              mountPath: /etc/ssl
+          volumes:
+          - name: ssl
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: certbot
+  namespace: isidro
+  annotations:
+    iam.gke.io/gcp-service-account: isidro-certbot@GOOGLE_PROJECT.iam.gserviceaccount.com
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: isidro
+subjects:
+- kind: ServiceAccount
+  name: certbot
+  namespace: isidro
+roleRef:
+  kind: Role
+  name: certbot
+  apiGroup: ""
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: isidro
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - create
+  - apply
+  - patch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: mattermost
+subjects:
+- kind: ServiceAccount
+  name: certbot
+  namespace: isidro
+roleRef:
+  kind: Role
+  name: certbot
+  apiGroup: ""
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: certbot
+  namespace: mattermost
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - create
+  - apply
+  - patch

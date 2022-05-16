@@ -1,0 +1,36 @@
+---
+apiVersion: networking.gke.io/v1
+kind: MultiClusterIngress
+metadata:
+  name: isidro-ingress
+  namespace: isidro
+  annotations:
+    networking.gke.io/static-ip: ISIDRO_IP
+spec:
+  template:
+    spec:
+      tls:
+      - hosts:
+        - ISIDRO_DOMAIN
+        secretName: "ingress-tls"
+      backend:
+        serviceName: gatekeeper
+        servicePort: 80
+---
+apiVersion: networking.gke.io/v1
+kind: MultiClusterIngress
+metadata:
+  name: mattermost-ingress
+  namespace: mattermost
+  annotations:
+    networking.gke.io/static-ip: MATTERMOST_IP
+spec:
+  template:
+    spec:
+      tls:
+      - hosts:
+        - MATTERMOST_DOMAIN
+        secretName: "ingress-tls"
+      backend:
+        serviceName: mattermost
+        servicePort: 8065

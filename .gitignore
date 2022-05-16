@@ -24,3 +24,7 @@ isidro-skaffold.json
 
 # Skaffold files
 skaffold.yaml
+
+# Configs
+networking/certbot.yaml
+networking/multiclusteringress.yaml

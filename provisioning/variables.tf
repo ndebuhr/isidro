@@ -1,7 +1,3 @@
-variable "domain" {
-  description = "Domain from which to serve the Isidro system"
-}
-
 variable "network" {
   description = "The VPC network to host the cluster in"
   default     = "default"

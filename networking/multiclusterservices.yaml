@@ -1,24 +1,8 @@
-{{ if eq .Values.mcs.enabled true }}
----
-apiVersion: networking.gke.io/v1
-kind: MultiClusterService
-metadata:
-  name: mattermost
-spec:
-  template:
-    spec:
-      selector:
-        app.kubernetes.io/name: mattermost
-      ports:
-      - name: web
-        protocol: TCP
-        port: 8065
-        targetPort: 8065
----
 apiVersion: networking.gke.io/v1
 kind: MultiClusterService
 metadata:
   name: gatekeeper
+  namespace: isidro
 spec:
   template:
     spec:
@@ -29,4 +13,19 @@ spec:
         protocol: TCP
         port: 80
         targetPort: 80
-{{ end }}
+---
+apiVersion: networking.gke.io/v1
+kind: MultiClusterService
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  template:
+    spec:
+      selector:
+        app.kubernetes.io/name: mattermost-team-edition
+      ports:
+      - name: web
+        protocol: TCP
+        port: 8065
+        targetPort: 8065

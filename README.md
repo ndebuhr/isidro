@@ -32,9 +32,11 @@ _While installation is possible using non-Linux clients, it's not a well-establi
 
 ### Provision with Terraform
 
-Set the `GOOGLE_PROJECT` environment variable, with something like:
+Set the `GOOGLE_PROJECT` and `ISIDRO_DOMAIN` environment variable, with something like:
 ```bash
 export GOOGLE_PROJECT=example
+export ISIDRO_DOMAIN=isidro.example.com
+export MATTERMOST_DOMAIN=mattermost.example.com
 ```
 
 Create a service account for provisioning the required resources:
@@ -60,13 +62,12 @@ Setup secondary IP ranges in the desired regions and subnets, then [run Terrafor
 ```bash
 terraform init
 terraform apply \
-    -var domain=isidro.example.com \
-    -var ip_range_pods_primary="gke-isidro-pods" \
-    -var ip_range_services_primary="gke-isidro-services" \
-    -var ip_range_pods_secondary="gke-isidro-pods" \
-    -var ip_range_services_secondary="gke-isidro-services" \
-    -var ip_range_pods_config="gke-isidro-config-pods" \
-    -var ip_range_services_config="gke-isidro-config-services"
+    -var ip_range_pods_primary="isidro-primary-pods" \
+    -var ip_range_services_primary="isidro-primary-services" \
+    -var ip_range_pods_secondary="isidro-secondary-pods" \
+    -var ip_range_services_secondary="isidro-secondary-services" \
+    -var ip_range_pods_config="isidro-config-pods" \
+    -var ip_range_services_config="isidro-config-services"
 ```
 
 Create kubecontext configurations for the three provisioned clusters:
@@ -79,38 +80,17 @@ kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-europe i
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
 ```
 
-### Certbot (for TLS) preparation
-
-Create a service account for provisioning the required resources:
-```bash
-gcloud iam roles create isidro_certbot \
-    --project=$GOOGLE_PROJECT \
-    --file=roles/certbot.yaml
-gcloud iam service-accounts create isidro-certbot \
-    --display-name="Isidro Certbot"
-gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
-    --member="serviceAccount:isidro-certbot@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
-    --role="projects/$GOOGLE_PROJECT/roles/isidro_certbot"
-gcloud iam service-accounts keys create isidro-certbot.json \
-    --iam-account="isidro-certbot@$GOOGLE_PROJECT.iam.gserviceaccount.com"
-```
-
-Add the service account key to Kubernetes as a secret:
-```bash
-for kubecontext in isidro-us isidro-europe
-do
-    kubectl config use-context $kubecontext
-    kubectl create secret generic isidro-certbot-key --from-file isidro-certbot.json
-done
-```
-
 ### Enable GMP
 
-In the Google Cloud Console, enable Managed Prometheus for the US and Europe clusters
+Enable Managed Prometheus for the US and Europe clusters:
+```bash
+gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
+gcloud beta container clusters update isidro-europe --region europe-west1 --enable-managed-prometheus
+```
 
 ## Installation
 
-Setup a service account with the Cloud Build Service Account Role:
+Setup a service account for building the required artifacts:
 ```bash
 gcloud iam service-accounts create isidro-skaffold \
     --display-name="Isidro Skaffold"
@@ -121,11 +101,32 @@ gcloud iam service-accounts keys create isidro-skaffold.json \
     --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
 ```
 
+Add helm repositories:
+```bash
+helm repo add mattermost https://helm.mattermost.com
+```
+
 Setup skaffold files and credentials:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
+ISIDRO_IP=$(cd provisioning; terraform output --raw isidro_ip)
+MATTERMOST_IP=$(cd provisioning; terraform output --raw mattermost_ip)
+
 cp skaffold.dev.yaml skaffold.yaml
+cp networking/multiclusteringress.dev.yaml networking/multiclusteringress.yaml
+cp networking/certbot.dev.yaml networking/certbot.yaml
+
+sed -i "s/ISIDRO_IP/$ISIDRO_IP/g" networking/multiclusteringress.yaml
+sed -i "s/MATTERMOST_IP/$MATTERMOST_IP/g" networking/multiclusteringress.yaml
+
+sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/multiclusteringress.yaml
+sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/certbot.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/multiclusteringress.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/certbot.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
+
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/certbot.yaml
 ```
 
 ### Non-persistent (i.e., development) environments
@@ -149,7 +150,7 @@ skaffold delete
 
 ### DNS setup
 
-Setup an A record DNS entry for the Istio Multi-Cluster Ingress IP
+Setup A record DNS entries for Isidro and Mattermost, using the respective Multi-Cluster Ingress IPs.
 
 ## System configuration
 
@@ -175,7 +176,7 @@ _Relevant if you are using Mattermost as your chat tool_
     1. Recommended description is "Push notification enabling the Isidro chatbot to respond to @mentions"
     1. Application type is "application/json"
     1. Trigger word is "@isidro"
-    1. Callback URL is https://example.com/isidro/api/v1/submit (replace example.com with your domain)
+    1. Callback URL is https://isidro.example.com/isidro/api/v1/submit (replace isidro.example.com with your Isidro domain)
     1. Leave the remaining values as the defaults
 1. Copy the verification token to the Helm values (or Skaffold overrides) as `mattermost.verificationToken`
 1. Upgrade the Helm installation

@@ -32,7 +32,7 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed"
     spec:
-      serviceAccountName: isidro-microservices
+      serviceAccountName: tracing-microservice
       containers:
       - name: gatekeeper
         image: {{ .Values.gatekeeper.image.repository }}:{{ .Values.gatekeeper.image.tag }}
@@ -44,8 +44,8 @@ spec:
           value: "{{ .Values.mattermost.accessToken }}"
         - name: MATTERMOST_VERIFICATION_TOKEN
           value: "{{ .Values.mattermost.verificationToken }}"
-        - name: ISIDRO_DOMAIN
-          value: "{{ .Values.certbot.domain }}"
+        - name: MATTERMOST_DOMAIN
+          value: "{{ .Values.mattermost.domain }}"
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

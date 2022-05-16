@@ -1,4 +1,4 @@
-resource "google_binary_authorization_policy" "policy" {
+resource "google_binary_authorization_policy" "isidro" {
   global_policy_evaluation_mode = "ENABLE"
 
   default_admission_rule {

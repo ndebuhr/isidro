@@ -32,7 +32,7 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed"
     spec:
-      serviceAccountName: isidro-microservices
+      serviceAccountName: tracing-microservice
       containers:
       - name: orchestration
         image: {{ .Values.orchestration.image.repository }}:{{ .Values.orchestration.image.tag }}

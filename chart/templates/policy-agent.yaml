@@ -188,7 +188,7 @@ spec:
     spec:
       containers:
       - name: policy-agent
-        image: openpolicyagent/opa:0.33.1
+        image: {{ .Values.policyAgent.image.repository }}:{{ .Values.policyAgent.image.tag }}
         ports:
         - name: http
           containerPort: 8181
