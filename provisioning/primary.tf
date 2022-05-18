@@ -6,7 +6,7 @@ provider "kubernetes" {
 }
 
 module "gke_primary" {
-  source                      = "github.com/terraform-google-modules/terraform-google-kubernetes-engine"
+  source                      = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/beta-public-cluster"
   project_id                  = data.google_project.project.project_id
   name                        = var.cluster_name_primary
   regional                    = true
@@ -28,6 +28,7 @@ module "gke_primary" {
       auto_upgrade = true
       # ASM requires minimum 4 nodes and e2-standard-4
       node_count   = 1
+      spot         = true
       machine_type = "e2-standard-4"
     },
   ]
