@@ -20,6 +20,7 @@ module "gke_primary" {
   create_service_account      = false
   service_account             = google_service_account.nodes.email
   enable_binary_authorization = true
+  gce_pd_csi_driver           = true
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
     {
