@@ -109,15 +109,10 @@ helm repo add mattermost https://helm.mattermost.com
 Setup skaffold files and credentials:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
-ISIDRO_IP=$(cd provisioning; terraform output --raw isidro_ip)
-MATTERMOST_IP=$(cd provisioning; terraform output --raw mattermost_ip)
 
 cp skaffold.dev.yaml skaffold.yaml
 cp networking/multiclusteringress.dev.yaml networking/multiclusteringress.yaml
 cp networking/certbot.dev.yaml networking/certbot.yaml
-
-sed -i "s/ISIDRO_IP/$ISIDRO_IP/g" networking/multiclusteringress.yaml
-sed -i "s/MATTERMOST_IP/$MATTERMOST_IP/g" networking/multiclusteringress.yaml
 
 sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/multiclusteringress.yaml
 sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/certbot.yaml
