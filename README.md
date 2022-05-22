@@ -111,12 +111,9 @@ Setup skaffold files and credentials:
 export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 
 cp skaffold.dev.yaml skaffold.yaml
-cp networking/multiclusteringress.dev.yaml networking/multiclusteringress.yaml
 cp networking/certbot.dev.yaml networking/certbot.yaml
 
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/multiclusteringress.yaml
 sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/certbot.yaml
-sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/multiclusteringress.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/certbot.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
 
