@@ -192,9 +192,6 @@ spec:
       containers:
       - name: policy-agent
         image: {{ .Values.policyAgent.image.repository }}:{{ .Values.policyAgent.image.tag }}
-        ports:
-        - name: http
-          containerPort: 80
         args:
         - "run"
         - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
