@@ -18,6 +18,7 @@ SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFICATION_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
 MATTERMOST_VERIFICATION_TOKEN = os.environ.get("MATTERMOST_VERIFICATION_TOKEN")
 MATTERMOST_DOMAIN = os.environ.get("MATTERMOST_DOMAIN")
+ORCHESTRATION_HOST = os.environ.get("ORCHESTRATION_HOST")
 
 if not SLACK_VERIFICATION_TOKEN:
     raise ValueError("No SLACK_VERIFICATION_TOKEN environment variable set")
@@ -27,6 +28,8 @@ if not MATTERMOST_VERIFICATION_TOKEN:
     raise ValueError("No MATTERMOST_VERIFICATION_TOKEN environment variable set")
 if not MATTERMOST_DOMAIN:
     raise ValueError("No MATTERMOST_DOMAIN environment variable set")
+if not ORCHESTRATION_HOST:
+    raise ValueError("No ORCHESTRATION_HOST environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -150,7 +153,7 @@ class Gatekeeper:
     def general_response(self):
         # Pass data to the orchestration service
         requests.post(
-            f"http://orchestration/v1/orchestrate",
+            f"http://{ORCHESTRATION_HOST}/v1/orchestrate",
             json={
                 "platform": self.get_platform(),
                 "channel": self.get_channel(),
@@ -171,6 +174,7 @@ def submission():
         return gatekeeper.challenge_response()
     else:
         return gatekeeper.general_response()
+
 
 @app.route("/", methods=["GET"])
 def health():

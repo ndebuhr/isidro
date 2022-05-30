@@ -14,6 +14,11 @@ from opentelemetry.propagators.cloud_trace_propagator import (
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
+RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
+
+if not RESPONDER_HOST:
+    raise ValueError("No RESPONDER_HOST environment variable set")
+
 set_global_textmap(CloudTraceFormatPropagator())
 
 tracer_provider = TracerProvider()
@@ -85,7 +90,7 @@ class Repeater:
                 data=self.payload_interpolation(self.payload),
             ).raise_for_status()
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": self.platform,
                 "channel": self.channel,
@@ -100,4 +105,9 @@ class Repeater:
 def repeat():
     repeat = Repeater(request)
     repeat.repeat_request()
+    return ""
+
+
+@app.route("/", methods=["GET"])
+def health():
     return ""

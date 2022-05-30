@@ -15,6 +15,14 @@ from opentelemetry.propagators.cloud_trace_propagator import (
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
+RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
+DEPLOYER_GITHUB_HOST = os.environ.get("DEPLOYER_GITHUB_HOST")
+
+if not RESPONDER_HOST:
+    raise ValueError("No RESPONDER_HOST environment variable set")
+if not DEPLOYER_GITHUB_HOST:
+    raise ValueError("No DEPLOYER_GITHUB_HOST environment variable set")
+
 set_global_textmap(CloudTraceFormatPropagator())
 
 tracer_provider = TracerProvider()
@@ -66,7 +74,7 @@ class Task:
     def submit(self):
         if self.initialization_message is not None:
             requests.post(
-                f"http://responder/v1/respond",
+                f"http://{RESPONDER_HOST}/v1/respond",
                 json={
                     "platform": self.platform,
                     "channel": self.channel,
@@ -80,7 +88,7 @@ class Task:
 
     def deploy_github(self):
         requests.post(
-            "http://deployer-github/v1/deploy",
+            f"http://{DEPLOYER_GITHUB_HOST}/v1/deploy",
             json={
                 "platform": self.platform,
                 "channel": self.channel,
@@ -99,4 +107,9 @@ class Task:
 def task():
     task = Task(request)
     task.submit()
+    return ""
+
+
+@app.route("/", methods=["GET"])
+def health():
     return ""

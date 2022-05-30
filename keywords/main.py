@@ -60,3 +60,8 @@ class Keywords:
 def keywords():
     keywords = Keywords(request)
     return keywords.keywords()
+
+
+@app.route("/", methods=["GET"])
+def health():
+    return ""

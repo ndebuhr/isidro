@@ -14,6 +14,11 @@ spec:
   selector:
     app: orchestration
 ---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: orchestration
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -48,6 +53,16 @@ spec:
           value: "isidro"
         - name: GREETING
           value: {{ .Values.orchestration.greeting }}
+        - name: RESPONDER_HOST
+          value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: KEYWORDS_HOST
+          value: keywords.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: POLICY_AGENT_HOST
+          value: policy-agent.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: TASKS_HOST
+          value: tasks.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: REPEATER_HOST
+          value: repeater.{{ .Release.Namespace }}.svc.clusterset.local
       restartPolicy: Always
 ---
 apiVersion: monitoring.googleapis.com/v1alpha1
@@ -76,11 +91,22 @@ spec:
   - Ingress
   ingress:
   - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
     - podSelector:
         matchLabels:
           app: gatekeeper
-  - from:
-    - podSelector: {}
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: gmp-system

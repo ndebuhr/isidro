@@ -14,6 +14,11 @@ spec:
   selector:
     app: keywords
 ---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: keywords
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,6 +57,19 @@ spec:
   - Egress
   ingress:
   - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
     - podSelector:
         matchLabels:
           app: orchestration

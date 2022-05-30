@@ -16,14 +16,16 @@ Isidro includes:
 
 ## Prerequisites
 1. APIs and features enabled on Google Cloud Platform:
-    1. API: Binary Authorization
-    1. API: Cloud KMS
-    1. API: Kubernetes Engine
-    1. API: GKE Hub
-    1. API: Multi Cluster Ingress
-    1. API: Multi-Cluster Service Discovery
     1. API: Anthos
     1. API: Anthos Service Mesh Certificate Authority
+    1. API: Binary Authorization
+    1. API: Cloud KMS
+    1. API: Cloud Resource Manager
+    1. API: GKE Hub
+    1. API: Kubernetes Engine
+    1. API: Multi Cluster Ingress
+    1. API: Multi-Cluster Service Discovery
+    1. API: Traffic Director
     1. Anthos Feature: Service Mesh
 1. A domain or subdomain managed through Google Cloud DNS
 
@@ -121,7 +123,7 @@ sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/certbot.yaml
 ```
 
-### Non-persistent (i.e., development) environments
+### Development environments
 
 Make any required `skaffold.yaml` configuration changes, then run skaffold:
 ```bash

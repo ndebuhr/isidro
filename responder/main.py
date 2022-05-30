@@ -91,3 +91,8 @@ def respond():
     responder = Responder(request)
     responder.respond()
     return ""
+
+
+@app.route("/", methods=["GET"])
+def health():
+    return ""

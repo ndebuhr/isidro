@@ -46,6 +46,8 @@ spec:
           value: "{{ .Values.mattermost.verificationToken }}"
         - name: MATTERMOST_DOMAIN
           value: "{{ .Values.mattermost.domain }}"
+        - name: ORCHESTRATION_HOST
+          value: orchestration.{{ .Release.Namespace }}.svc.clusterset.local
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

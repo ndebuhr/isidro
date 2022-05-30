@@ -23,6 +23,7 @@ CELERY_BACKEND = "redis://isidro-redis-master:6379"
 CELERY_BROKER = "pyamqp://isidro:isidro@isidro-rabbitmq//"
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -121,6 +122,11 @@ def deploy():
     return ""
 
 
+@app.route("/", methods=["GET"])
+def health():
+    return ""
+
+
 @tasks.task(
     autoretry_for=(Exception,),
     retry_backoff=True,
@@ -151,7 +157,7 @@ def poll_for_conclusion(
         raise RuntimeError(f"Workflow run {run_id} is still running")
     elif run_json["conclusion"] == "success":
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": platform,
                 "channel": channel,
@@ -171,7 +177,7 @@ def poll_for_conclusion(
             },
         ).raise_for_status()
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": platform,
                 "channel": channel,
@@ -202,7 +208,7 @@ def poll_for_conclusion(
                 # Assumes only one file in the artifact zip
                 artifact_file = artifact_zip.open(artifact_zip.infolist()[0])
                 requests.post(
-                    f"http://responder/v1/respond",
+                    f"http://{RESPONDER_HOST}/v1/respond",
                     json={
                         "platform": platform,
                         "channel": channel,
@@ -214,7 +220,7 @@ def poll_for_conclusion(
         return run_json["conclusion"]
     else:
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": platform,
                 "channel": channel,

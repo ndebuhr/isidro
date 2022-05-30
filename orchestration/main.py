@@ -26,13 +26,28 @@ CONFIRMATION_WORDS = [
     "confirm",
     "ok",
     "okay",
-    "sure"
+    "sure",
 ]
 
 GREETING = os.environ.get("GREETING")
+RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
+KEYWORDS_HOST = os.environ.get("KEYWORDS_HOST")
+POLICY_AGENT_HOST = os.environ.get("POLICY_AGENT_HOST")
+TASKS_HOST = os.environ.get("TASKS_HOST")
+REPEATER_HOST = os.environ.get("REPEATER_HOST")
 
 if not GREETING:
     raise ValueError("No GREETING environment variable set")
+if not RESPONDER_HOST:
+    raise ValueError("No RESPONDER_HOST environment variable set")
+if not KEYWORDS_HOST:
+    raise ValueError("No KEYWORDS_HOST environment variable set")
+if not POLICY_AGENT_HOST:
+    raise ValueError("No POLICY_AGENT_HOST environment variable set")
+if not TASKS_HOST:
+    raise ValueError("No TASKS_HOST environment variable set")
+if not REPEATER_HOST:
+    raise ValueError("No REPEATER_HOST environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 
@@ -101,22 +116,21 @@ class Orchestration:
             }
         )
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": self.platform,
                 "channel": self.channel,
                 "thread_ts": self.thread_ts,
                 "user": self.user,
                 "text": "{0}  {1}".format(
-                    GREETING,
-                    self.action["confirmation message"]
+                    GREETING, self.action["confirmation message"]
                 ),
             },
         ).raise_for_status()
 
     def send_rejection(self):
         requests.post(
-            f"http://responder/v1/respond",
+            f"http://{RESPONDER_HOST}/v1/respond",
             json={
                 "platform": self.platform,
                 "channel": self.channel,
@@ -128,7 +142,7 @@ class Orchestration:
 
     def get_action(self):
         response = requests.post(
-            f"http://keywords/v1/keywords",
+            f"http://{KEYWORDS_HOST}/v1/keywords",
             json={
                 "text": self.text,
             },
@@ -136,7 +150,7 @@ class Orchestration:
         response.raise_for_status()
         keywords = response.json()
         response = requests.post(
-            f"http://policy-agent/v1/data/isidro/routing/action",
+            f"http://{POLICY_AGENT_HOST}/v1/data/isidro/routing/action",
             json={
                 "input": {"keywords": keywords},
             },
@@ -156,14 +170,14 @@ class Orchestration:
         payload["thread_ts"] = self.thread_ts
         payload["user"] = self.user
         requests.post(
-            f"http://tasks/v1/tasks",
+            f"http://{TASKS_HOST}/v1/tasks",
             json=payload,
         ).raise_for_status()
 
     def send_response(self):
         if self.action["category"] == "link":
             requests.post(
-                f"http://responder/v1/respond",
+                f"http://{RESPONDER_HOST}/v1/respond",
                 json={
                     "platform": self.platform,
                     "channel": self.channel,
@@ -177,7 +191,7 @@ class Orchestration:
             ).raise_for_status()
         elif self.action["category"] == "repeater":
             requests.post(
-                f"http://repeater/v1/repeat",
+                f"http://{REPEATER_HOST}/v1/repeat",
                 json={
                     "platform": self.platform,
                     "channel": self.channel,
@@ -214,3 +228,8 @@ def orchestrate():
 @app.route("/metrics")
 def metrics():
     return generate_latest()
+
+
+@app.route("/", methods=["GET"])
+def health():
+    return ""

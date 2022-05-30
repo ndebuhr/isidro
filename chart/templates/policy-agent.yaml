@@ -43,9 +43,14 @@ spec:
   ports:
   - name: http
     port: 80
-    targetPort: 8181
+    targetPort: 80
   selector:
     app: policy-agent
+---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: policy-agent
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,13 +75,11 @@ spec:
       containers:
       - name: policy-agent
         image: {{ .Values.policyAgent.image.repository }}:{{ .Values.policyAgent.image.tag }}
-        ports:
-        - name: http
-          containerPort: 8181
         args:
         - "run"
         - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
         - "--server"
+        - "--addr=:80"
         - "/etc/opa/policies"
         volumeMounts:
         - name: actions-rego
@@ -191,11 +194,12 @@ spec:
         image: {{ .Values.policyAgent.image.repository }}:{{ .Values.policyAgent.image.tag }}
         ports:
         - name: http
-          containerPort: 8181
+          containerPort: 80
         args:
         - "run"
         - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
         - "--server"
+        - "--addr=:80"
         - "/etc/opa/policies"
         volumeMounts:
         - name: actions-rego
@@ -298,6 +302,19 @@ spec:
   - Egress
   ingress:
   - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
     - podSelector:
         matchLabels:
           app: orchestration
