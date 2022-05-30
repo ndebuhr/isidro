@@ -24,18 +24,23 @@ module "gke_primary" {
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
     {
-      name         = "asm-node-pool"
-      autoscaling  = false
-      auto_upgrade = true
-      # ASM requires minimum 4 nodes and e2-standard-4
-      node_count   = 1
-      spot         = true
-      machine_type = "e2-standard-4"
+      name            = "spot-nodes"
+      autoscaling     = false
+      auto_upgrade    = true
+      node_count      = 1
+      spot            = true
+      machine_type    = "e2-standard-2"
     },
+    {
+      name            = "core-nodes"
+      autoscaling     = false
+      auto_upgrade    = true
+      node_count      = 1
+      machine_type    = "e2-standard-2"
+    }
   ]
   node_pools_oauth_scopes = {
-    # TODO: This seems to have no effect, or is overwritten by cloud_platform
-    "asm-node-pool" : [
+    "all" : [
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
