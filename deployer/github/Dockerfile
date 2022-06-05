@@ -1,10 +1,6 @@
-FROM python:3
+FROM python:3-alpine
 
-RUN apt-get update -qqy && \
-    apt-get install -qqy --no-install-recommends \
-        tini && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache tini
 
 WORKDIR /usr/src/app
 
