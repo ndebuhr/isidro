@@ -9,18 +9,18 @@ provider "kubernetes" {
 }
 
 module "gke_config" {
-  source                      = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/beta-autopilot-public-cluster"
-  project_id                  = data.google_project.project.project_id
-  name                        = var.cluster_name_config
-  regional                    = true
-  region                      = var.region_config
-  release_channel             = "REGULAR"
-  network                     = var.network
-  subnetwork                  = var.subnetwork_config
-  ip_range_pods               = var.ip_range_pods_config
-  ip_range_services           = var.ip_range_services_config
+  source                          = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/beta-autopilot-public-cluster"
+  project_id                      = data.google_project.project.project_id
+  name                            = var.cluster_name_config
+  regional                        = true
+  region                          = var.region_config
+  release_channel                 = "REGULAR"
+  network                         = var.network
+  subnetwork                      = var.subnetwork_config
+  ip_range_pods                   = var.ip_range_pods_config
+  ip_range_services               = var.ip_range_services_config
   enable_vertical_pod_autoscaling = true
-  cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
+  cluster_resource_labels         = { "mesh_id" : "proj-${data.google_project.project.number}" }
 }
 
 module "asm_config" {
@@ -39,7 +39,7 @@ resource "google_gke_hub_feature" "mci" {
   depends_on = [
     module.asm_config
   ]
-  name = "multiclusteringress"
+  name     = "multiclusteringress"
   location = "global"
   spec {
     multiclusteringress {

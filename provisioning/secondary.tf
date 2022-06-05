@@ -25,19 +25,19 @@ module "gke_secondary" {
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
     {
-      name            = "spot-nodes"
-      autoscaling     = false
-      auto_upgrade    = true
-      node_count      = 1
-      spot            = true
-      machine_type    = "e2-standard-2"
+      name         = "spot-nodes"
+      autoscaling  = false
+      auto_upgrade = true
+      node_count   = 1
+      spot         = true
+      machine_type = "e2-standard-2"
     },
     {
-      name            = "core-nodes"
-      autoscaling     = false
-      auto_upgrade    = true
-      node_count      = 1
-      machine_type    = "e2-standard-2"
+      name         = "core-nodes"
+      autoscaling  = false
+      auto_upgrade = true
+      node_count   = 1
+      machine_type = "e2-standard-2"
     }
   ]
   node_pools_oauth_scopes = {
