@@ -31,6 +31,7 @@ module "gke_secondary" {
       node_count   = 1
       spot         = true
       machine_type = "e2-standard-2"
+      enable_gcfs  = true
     },
     {
       name         = "core-nodes"
@@ -38,6 +39,7 @@ module "gke_secondary" {
       auto_upgrade = true
       node_count   = 1
       machine_type = "e2-standard-2"
+      enable_gcfs  = true
     }
   ]
   node_pools_oauth_scopes = {
