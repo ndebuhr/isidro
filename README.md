@@ -26,6 +26,19 @@ Isidro includes:
     1. API: Multi Cluster Ingress
     1. API: Multi-Cluster Service Discovery
     1. API: Traffic Director
+    ```bash
+    gcloud services enable \
+        anthos.googleapis.com \
+        meshca.googleapis.com \
+        binaryauthorization.googleapis.com \
+        cloudkms.googleapis.com \
+        cloudresourcemanager.googleapis.com \
+        gkehub.googleapis.com \
+        container.googleapis.com \
+        multiclusteringress.googleapis.com \
+        multiclusterservicediscovery.googleapis.com \
+        trafficdirector.googleapis.com
+    ```
     1. Anthos Feature: Service Mesh
 1. A domain or subdomain managed through Google Cloud DNS
 
