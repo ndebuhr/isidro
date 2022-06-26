@@ -47,11 +47,12 @@ _While installation is possible using non-Linux clients, it's not a well-establi
 
 ### Provision with Terraform
 
-Set the `GOOGLE_PROJECT` and `ISIDRO_DOMAIN` environment variable, with something like:
+Set the `GOOGLE_PROJECT`, `ISIDRO_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NAME` environment variables, with something like:
 ```bash
 export GOOGLE_PROJECT=example
 export ISIDRO_DOMAIN=isidro.example.com
 export MATTERMOST_DOMAIN=mattermost.example.com
+export DNS_ZONE_NAME=example-com
 ```
 
 Create a service account for provisioning the required resources:
@@ -76,13 +77,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 Setup secondary IP ranges in the desired regions and subnets, then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
 ```bash
 terraform init
-terraform apply \
-    -var ip_range_pods_primary="isidro-primary-pods" \
-    -var ip_range_services_primary="isidro-primary-services" \
-    -var ip_range_pods_secondary="isidro-secondary-pods" \
-    -var ip_range_services_secondary="isidro-secondary-services" \
-    -var ip_range_pods_config="isidro-config-pods" \
-    -var ip_range_services_config="isidro-config-services"
+terraform apply
 ```
 
 Create kubecontext configurations for the three provisioned clusters:
@@ -127,13 +122,22 @@ export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 
 cp skaffold.dev.yaml skaffold.yaml
 cp networking/certbot.dev.yaml networking/certbot.yaml
+cp networking/configconnector-setup.dev.yaml networking/configconnector-setup.yaml
+cp networking/dns.dev.yaml networking/dns.yaml
+cp networking/namespace.dev.yaml networking/namespace.yaml
 
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
 sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/certbot.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/certbot.yaml
-sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
+sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/dns.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/dns.yaml
+
+sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" networking/dns.yaml
 
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/certbot.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/configconnector-setup.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/namespace.yaml
 ```
 
 ### Development environments
@@ -154,10 +158,6 @@ To teardown:
 ```bash
 skaffold delete
 ```
-
-### DNS setup
-
-Setup A record DNS entries for Isidro and Mattermost, using the respective Multi-Cluster Ingress IPs.
 
 ## System configuration
 
@@ -202,4 +202,11 @@ Mention @isidro in Slack messages, and get a response.  Use separate message thr
 curl -X POST https://isidro.example.com/api/v1/submit \
     -H "Content-Type: application/json" \
     -d '{"token": "1234567890", "event": {"channel": "quality", "ts": "1234567890", "user": "me", "text": "Hello"}}'
+```
+
+## Deprovisioning
+
+In the [Terraform provisioning directory](provisioning/).  Run:
+```bash
+terraform destroy
 ```

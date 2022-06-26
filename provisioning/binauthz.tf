@@ -29,14 +29,14 @@ resource "google_binary_authorization_policy" "isidro" {
   }
 
   cluster_admission_rules {
-    cluster                 = "${var.region_primary}.${var.cluster_name_primary}"
+    cluster                 = "${var.primary_cluster_region}.${var.primary_cluster_name}"
     evaluation_mode         = "REQUIRE_ATTESTATION"
     enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
     require_attestations_by = [google_binary_authorization_attestor.isidro.name]
   }
 
   cluster_admission_rules {
-    cluster                 = "${var.region_secondary}.${var.cluster_name_secondary}"
+    cluster                 = "${var.secondary_cluster_region}.${var.secondary_cluster_name}"
     evaluation_mode         = "REQUIRE_ATTESTATION"
     enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
     require_attestations_by = [google_binary_authorization_attestor.isidro.name]
@@ -67,11 +67,11 @@ resource "google_binary_authorization_attestor" "isidro" {
 }
 
 resource "random_string" "keyring_suffix" {
-  length  = 8
-  upper   = false
-  lower   = true
-  number  = false
-  special = false
+  length   = 8
+  upper    = false
+  lower    = true
+  numeric  = false
+  special  = false
 }
 
 resource "google_kms_key_ring" "isidro" {

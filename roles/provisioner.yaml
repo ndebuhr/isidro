@@ -25,6 +25,14 @@ includedPermissions:
 - compute.globalAddresses.delete
 - compute.globalAddresses.get
 - compute.instanceGroupManagers.get
+- compute.networks.create
+- compute.networks.delete
+- compute.networks.get
+- compute.networks.updatePolicy
+- compute.subnetworks.create
+- compute.subnetworks.delete
+- compute.subnetworks.get
+- compute.subnetworks.setPrivateIpGoogleAccess
 - compute.zones.list
 - container.clusters.create
 - container.clusters.delete

@@ -1,9 +1,0 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: isidro
----
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: mattermost

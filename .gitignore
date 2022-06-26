@@ -27,3 +27,6 @@ skaffold.yaml
 
 # Configs
 networking/certbot.yaml
+networking/configconnector-setup.yaml
+networking/dns.yaml
+networking/namespace.yaml

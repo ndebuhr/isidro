@@ -9,16 +9,20 @@ provider "kubernetes" {
 }
 
 module "gke_config" {
-  source                          = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/beta-autopilot-public-cluster"
+  depends_on = [
+    google_compute_subnetwork.config
+  ]
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
+  version = "21.2.0"
   project_id                      = data.google_project.project.project_id
-  name                            = var.cluster_name_config
+  name                            = var.config_cluster_name
   regional                        = true
-  region                          = var.region_config
-  release_channel                 = "REGULAR"
+  region                          = var.config_cluster_region
+  release_channel                 = "RAPID"
   network                         = var.network
-  subnetwork                      = var.subnetwork_config
-  ip_range_pods                   = var.ip_range_pods_config
-  ip_range_services               = var.ip_range_services_config
+  subnetwork                      = google_compute_subnetwork.config.name
+  ip_range_pods                   = "isidro-config-pods"
+  ip_range_services               = "isidro-config-services"
   enable_vertical_pod_autoscaling = true
   cluster_resource_labels         = { "mesh_id" : "proj-${data.google_project.project.number}" }
 }
@@ -43,12 +47,8 @@ resource "google_gke_hub_feature" "mci" {
   location = "global"
   spec {
     multiclusteringress {
-      config_membership = "projects/${data.google_project.project.project_id}/locations/global/memberships/${var.cluster_name_config}-membership"
+      config_membership = "projects/${data.google_project.project.project_id}/locations/global/memberships/${var.config_cluster_name}-membership"
     }
   }
   provider = google-beta
-}
-
-resource "google_compute_global_address" "isidro" {
-  name = "isidro"
 }

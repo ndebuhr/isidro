@@ -1,73 +1,79 @@
 variable "network" {
-  description = "The VPC network to host the cluster in"
-  default     = "default"
+  description = "The VPC network to create"
+  default     = "isidro"
 }
 
-variable "cluster_name_primary" {
-  description = "The name for the GKE cluster name"
+variable "primary_cluster_name" {
+  description = "The name for the primary GKE cluster"
   default     = "isidro-us"
 }
 
-variable "region_primary" {
-  description = "The first region to host the cluster in"
+variable "primary_cluster_region" {
+  description = "The primary cluster geographic region"
   default     = "us-central1"
 }
 
-variable "subnetwork_primary" {
-  description = "The region one subnetwork to host the cluster in"
-  default     = "default"
+variable "primary_cluster_pods_range" {
+  description = "The secondary ip range to use for the primary cluster pods"
+  default     = "172.16.64.0/19"
 }
 
-variable "ip_range_pods_primary" {
-  description = "The region one secondary ip range to use for pods"
+variable "primary_cluster_services_range" {
+  description = "The secondary ip range to use for the primary cluster services"
+  default     = "172.16.96.0/19"
 }
 
-variable "ip_range_services_primary" {
-  description = "The region one secondary ip range to use for services"
+variable "primary_cluster_auxiliary_range" {
+  description = "The ip range for services outside the primary cluster, but in the primary cluster region"
+  default     = "172.16.0.0/18"
 }
 
-variable "cluster_name_secondary" {
-  description = "The name for the GKE cluster name"
+variable "secondary_cluster_name" {
+  description = "The name for the secondary GKE cluster"
   default     = "isidro-europe"
 }
 
-variable "region_secondary" {
-  description = "The second region to host the cluster in"
+variable "secondary_cluster_region" {
+  description = "The secondary cluster geographic region"
   default     = "europe-west1"
 }
 
-variable "subnetwork_secondary" {
-  description = "The region two subnetwork to host the cluster in"
-  default     = "default"
+variable "secondary_cluster_pods_range" {
+  description = "The secondary ip range to use for the secondary cluster pods"
+  default     = "172.16.192.0/19"
 }
 
-variable "ip_range_pods_secondary" {
-  description = "The region two secondary ip range to use for pods"
+variable "secondary_cluster_services_range" {
+  description = "The secondary ip range to use for the secondary cluster services"
+  default     = "172.16.224.0/19"
 }
 
-variable "ip_range_services_secondary" {
-  description = "The region two secondary ip range to use for services"
+variable "secondary_cluster_auxiliary_range" {
+  description = "The ip range for services outside the secondary cluster, but in the secondary cluster region"
+  default     = "172.16.128.0/18"
 }
 
-variable "cluster_name_config" {
-  description = "The name for the GKE cluster name"
+variable "config_cluster_name" {
+  description = "The name for the config GKE cluster"
   default     = "isidro-config"
 }
 
-variable "region_config" {
-  description = "The region to host the config cluster in"
+variable "config_cluster_region" {
+  description = "The config cluster geographic region"
   default     = "northamerica-northeast1"
 }
 
-variable "subnetwork_config" {
-  description = "The config cluster region subnetwork"
-  default     = "default"
+variable "config_cluster_pods_range" {
+  description = "The secondary ip range to use for the config cluster pods"
+  default     = "172.17.64.0/19"
 }
 
-variable "ip_range_pods_config" {
-  description = "The config cluster region secondary ip range to use for pods"
+variable "config_cluster_services_range" {
+  description = "The secondary ip range to use for the config cluster services"
+  default     = "172.17.96.0/19"
 }
 
-variable "ip_range_services_config" {
-  description = "The config cluster region secondary ip range to use for services"
+variable "config_cluster_auxiliary_range" {
+  description = "The ip range for services outside the config cluster, but in the config cluster region"
+  default     = "172.17.0.0/18"
 }

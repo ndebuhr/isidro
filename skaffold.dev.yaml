@@ -93,7 +93,7 @@ kind: Config
 metadata:
   name: deploy-us
 requires:
-  - configs: ["build-nlp", "build"]
+- configs: ["build-nlp", "build"]
 deploy:
   kubeContext: isidro-us
   helm:
@@ -126,7 +126,7 @@ kind: Config
 metadata:
   name: deploy-europe
 requires:
-  - configs: ["build-nlp", "build"]
+- configs: ["build-nlp", "build"]
 deploy:
   kubeContext: isidro-europe
   helm:
@@ -161,12 +161,37 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-config
+  name: deploy-networking-1
 deploy:
   kubeContext: isidro-config
   kubectl:
     manifests:
-    - "networking/namespace.yaml"
+    - "networking/configconnector-operator.yaml"
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-networking-2
+requires:
+- configs: ["deploy-networking-1"]
+deploy:
+  kubeContext: isidro-config
+  kubectl:
+    manifests:
+    - "networking/configconnector-setup.yaml"
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-networking-3
+requires:
+- configs: ["deploy-networking-2"]
+deploy:
+  kubeContext: isidro-config
+  kubectl:
+    manifests:
+    - "networking/certbot.yaml"
+    - "networking/dns.yaml"
     - "networking/multiclusteringress.yaml"
     - "networking/multiclusterservices.yaml"
-    - "networking/certbot.yaml"
+    - "networking/namespace.yaml"

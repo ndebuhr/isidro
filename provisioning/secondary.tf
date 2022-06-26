@@ -6,17 +6,20 @@ provider "kubernetes" {
 }
 
 module "gke_secondary" {
-  depends_on                  = [module.gke_primary]
-  source                      = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/beta-public-cluster"
+  depends_on = [
+    google_compute_subnetwork.secondary
+  ]
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
+  version = "21.2.0"
   project_id                  = data.google_project.project.project_id
-  name                        = var.cluster_name_secondary
+  name                        = var.secondary_cluster_name
   regional                    = true
-  region                      = var.region_secondary
-  release_channel             = "REGULAR"
+  region                      = var.secondary_cluster_region
+  release_channel             = "RAPID"
   network                     = var.network
-  subnetwork                  = var.subnetwork_secondary
-  ip_range_pods               = var.ip_range_pods_secondary
-  ip_range_services           = var.ip_range_services_secondary
+  subnetwork                  = google_compute_subnetwork.secondary.name
+  ip_range_pods               = "isidro-secondary-pods"
+  ip_range_services           = "isidro-secondary-services"
   network_policy              = true
   create_service_account      = false
   service_account             = google_service_account.nodes.email
