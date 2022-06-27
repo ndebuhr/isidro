@@ -84,9 +84,11 @@ Create kubecontext configurations for the three provisioned clusters:
 ```bash
 gcloud container clusters get-credentials isidro-us --region us-central1
 gcloud container clusters get-credentials isidro-europe --region europe-west1
+gcloud container clusters get-credentials isidro-asia --region asia-southeast1
 gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us isidro-us
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-europe isidro-europe
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_asia-southeast1_isidro-asia isidro-asia
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
 ```
 
@@ -96,6 +98,7 @@ Enable Managed Prometheus for the US and Europe clusters:
 ```bash
 gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
 gcloud beta container clusters update isidro-europe --region europe-west1 --enable-managed-prometheus
+gcloud beta container clusters update isidro-asia --region asia-southeast1 --enable-managed-prometheus
 ```
 
 ## Installation

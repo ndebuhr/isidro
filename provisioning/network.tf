@@ -33,6 +33,21 @@ resource "google_compute_subnetwork" "secondary" {
   }
 }
 
+resource "google_compute_subnetwork" "tertiary" {
+  name          = "tertiary"
+  ip_cidr_range = var.tertiary_cluster_auxiliary_range
+  region        = var.tertiary_cluster_region
+  network       = google_compute_network.isidro.id
+  secondary_ip_range {
+    range_name    = "isidro-tertiary-pods"
+    ip_cidr_range = var.tertiary_cluster_pods_range
+  }
+  secondary_ip_range {
+    range_name    = "isidro-tertiary-services"
+    ip_cidr_range = var.tertiary_cluster_services_range
+  }
+}
+
 resource "google_compute_subnetwork" "config" {
   name          = "config"
   ip_cidr_range = var.config_cluster_auxiliary_range

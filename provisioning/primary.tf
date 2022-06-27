@@ -9,8 +9,8 @@ module "gke_primary" {
   depends_on = [
     google_compute_subnetwork.primary
   ]
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
-  version = "21.2.0"
+  source                      = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
+  version                     = "21.2.0"
   project_id                  = data.google_project.project.project_id
   name                        = var.primary_cluster_name
   regional                    = true
@@ -28,20 +28,11 @@ module "gke_primary" {
   cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
     {
-      name         = "spot-nodes"
-      autoscaling  = false
-      auto_upgrade = true
-      node_count   = 1
-      spot         = true
-      machine_type = "e2-standard-2"
-      enable_gcfs  = true
-    },
-    {
       name         = "core-nodes"
       autoscaling  = false
       auto_upgrade = true
       node_count   = 1
-      machine_type = "e2-standard-2"
+      machine_type = "t2d-standard-2"
       enable_gcfs  = true
     }
   ]

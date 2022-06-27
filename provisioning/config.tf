@@ -12,8 +12,8 @@ module "gke_config" {
   depends_on = [
     google_compute_subnetwork.config
   ]
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
-  version = "21.2.0"
+  source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
+  version                         = "21.2.0"
   project_id                      = data.google_project.project.project_id
   name                            = var.config_cluster_name
   regional                        = true

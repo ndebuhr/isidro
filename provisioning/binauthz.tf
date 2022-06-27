@@ -41,6 +41,13 @@ resource "google_binary_authorization_policy" "isidro" {
     enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
     require_attestations_by = [google_binary_authorization_attestor.isidro.name]
   }
+
+  cluster_admission_rules {
+    cluster                 = "${var.tertiary_cluster_region}.${var.tertiary_cluster_name}"
+    evaluation_mode         = "REQUIRE_ATTESTATION"
+    enforcement_mode        = "ENFORCED_BLOCK_AND_AUDIT_LOG"
+    require_attestations_by = [google_binary_authorization_attestor.isidro.name]
+  }
 }
 
 resource "google_container_analysis_note" "isidro" {
@@ -67,11 +74,11 @@ resource "google_binary_authorization_attestor" "isidro" {
 }
 
 resource "random_string" "keyring_suffix" {
-  length   = 8
-  upper    = false
-  lower    = true
-  numeric  = false
-  special  = false
+  length  = 8
+  upper   = false
+  lower   = true
+  numeric = false
+  special = false
 }
 
 resource "google_kms_key_ring" "isidro" {

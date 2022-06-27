@@ -53,6 +53,31 @@ variable "secondary_cluster_auxiliary_range" {
   default     = "172.16.128.0/18"
 }
 
+variable "tertiary_cluster_name" {
+  description = "The name for the tertiary GKE cluster"
+  default     = "isidro-asia"
+}
+
+variable "tertiary_cluster_region" {
+  description = "The tertiary cluster geographic region"
+  default     = "asia-southeast1"
+}
+
+variable "tertiary_cluster_pods_range" {
+  description = "The tertiary ip range to use for the tertiary cluster pods"
+  default     = "172.17.192.0/19"
+}
+
+variable "tertiary_cluster_services_range" {
+  description = "The secondary ip range to use for the tertiary cluster services"
+  default     = "172.17.224.0/19"
+}
+
+variable "tertiary_cluster_auxiliary_range" {
+  description = "The ip range for services outside the tertiary cluster, but in the tertiary cluster region"
+  default     = "172.17.128.0/18"
+}
+
 variable "config_cluster_name" {
   description = "The name for the config GKE cluster"
   default     = "isidro-config"
