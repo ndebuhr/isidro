@@ -161,6 +161,43 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
+  name: deploy-asia
+requires:
+- configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-asia
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      createNamespace: true
+      namespace: isidro
+      setValues:
+        project: GOOGLE_PROJECT
+        region: asia-southeast1
+        zones[0]: "asia-southeast1-a"
+        zones[1]: "asia-southeast1-b"
+        zones[2]: "asia-southeast1-c"
+        mattermost.domain: MATTERMOST_DOMAIN
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        orchestration.greeting: "你好!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
   name: deploy-networking-1
 deploy:
   kubeContext: isidro-config
