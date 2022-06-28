@@ -48,7 +48,8 @@ module "gke_tertiary" {
 }
 
 module "asm_tertiary" {
-  source                    = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/asm"
+  source                    = "terraform-google-modules/kubernetes-engine/google//modules/asm"
+  version                   = "21.2.0"
   cluster_name              = module.gke_tertiary.name
   project_id                = data.google_project.project.project_id
   cluster_location          = module.gke_tertiary.location
