@@ -8,7 +8,7 @@ Isidro includes:
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
 * Cross-regional deployment
-   * Regional workload clusters in us-central1 (Council Bluffs, Iowa) and europe-west1 (Saint-Ghislain, Belgium)
+   * Regional workload clusters in us-central1 (Council Bluffs, USA), europe-north1 (Hamina, Finland), and southamerica-east1 (São Paulo, Brazil)
    * Regional MCI config cluster (GKE autopilot) in northamerica-northeast1 (Montreal, Canada)
 * Security features like binary authorization, mTLS, workload identity, and network policies
 
@@ -83,12 +83,12 @@ terraform apply
 Create kubecontext configurations for the three provisioned clusters:
 ```bash
 gcloud container clusters get-credentials isidro-us --region us-central1
-gcloud container clusters get-credentials isidro-europe --region europe-west1
-gcloud container clusters get-credentials isidro-asia --region asia-southeast1
+gcloud container clusters get-credentials isidro-fi --region europe-north1
+gcloud container clusters get-credentials isidro-br --region southamerica-east1
 gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us isidro-us
-kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-europe isidro-europe
-kubectl config rename-context gke_"$GOOGLE_PROJECT"_asia-southeast1_isidro-asia isidro-asia
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-north1_isidro-fi isidro-fi
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_southamerica-east1_isidro-br isidro-br
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
 ```
 
@@ -97,8 +97,8 @@ kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isid
 Enable Managed Prometheus for the US and Europe clusters:
 ```bash
 gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
-gcloud beta container clusters update isidro-europe --region europe-west1 --enable-managed-prometheus
-gcloud beta container clusters update isidro-asia --region asia-southeast1 --enable-managed-prometheus
+gcloud beta container clusters update isidro-fi --region europe-north1 --enable-managed-prometheus
+gcloud beta container clusters update isidro-br --region southamerica-east1 --enable-managed-prometheus
 ```
 
 ## Installation

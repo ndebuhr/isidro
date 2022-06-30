@@ -30,12 +30,12 @@ variable "primary_cluster_auxiliary_range" {
 
 variable "secondary_cluster_name" {
   description = "The name for the secondary GKE cluster"
-  default     = "isidro-europe"
+  default     = "isidro-fi"
 }
 
 variable "secondary_cluster_region" {
   description = "The secondary cluster geographic region"
-  default     = "europe-west1"
+  default     = "europe-north1"
 }
 
 variable "secondary_cluster_pods_range" {
@@ -55,12 +55,12 @@ variable "secondary_cluster_auxiliary_range" {
 
 variable "tertiary_cluster_name" {
   description = "The name for the tertiary GKE cluster"
-  default     = "isidro-asia"
+  default     = "isidro-br"
 }
 
 variable "tertiary_cluster_region" {
   description = "The tertiary cluster geographic region"
-  default     = "asia-southeast1"
+  default     = "southamerica-east1"
 }
 
 variable "tertiary_cluster_pods_range" {

@@ -33,7 +33,7 @@ module "gke_tertiary" {
       auto_upgrade = true
       node_count   = 1
       spot         = true
-      machine_type = "t2d-standard-2"
+      machine_type = "n2d-standard-2"
       enable_gcfs  = true
     }
   ]

@@ -124,11 +124,11 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-europe
+  name: deploy-fi
 requires:
 - configs: ["build-nlp", "build"]
 deploy:
-  kubeContext: isidro-europe
+  kubeContext: isidro-fi
   helm:
     releases:
     - name: isidro
@@ -138,10 +138,10 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: europe-west1
-        zones[0]: "europe-west1-b"
-        zones[1]: "europe-west1-c"
-        zones[2]: "europe-west1-d"
+        region: europe-north1
+        zones[0]: "europe-north1-a"
+        zones[1]: "europe-north1-b"
+        zones[2]: "europe-north1-c"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -161,11 +161,11 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-asia
+  name: deploy-br
 requires:
 - configs: ["build-nlp", "build"]
 deploy:
-  kubeContext: isidro-asia
+  kubeContext: isidro-br
   helm:
     releases:
     - name: isidro
@@ -175,14 +175,14 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: asia-southeast1
-        zones[0]: "asia-southeast1-a"
-        zones[1]: "asia-southeast1-b"
-        zones[2]: "asia-southeast1-c"
+        region: southamerica-east1
+        zones[0]: "southamerica-east1-a"
+        zones[1]: "southamerica-east1-b"
+        zones[2]: "southamerica-east1-c"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
-        orchestration.greeting: "你好!"
+        orchestration.greeting: "Olá!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
