@@ -30,7 +30,7 @@ spec:
       labels:
         app: gatekeeper
         sidecar.istio.io/inject: "true"
-        istio.io/rev: "asm-managed"
+        istio.io/rev: "asm-managed-rapid"
     spec:
       serviceAccountName: tracing-microservice
       containers:

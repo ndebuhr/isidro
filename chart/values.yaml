@@ -66,7 +66,7 @@ rabbitmq:
   podLabels:
     app: rabbitmq
     sidecar.istio.io/inject: "true"
-    istio.io/rev: "asm-managed"
+    istio.io/rev: "asm-managed-rapid"
   persistence:
     storageClass: isidro-storage
   extraSecrets:
@@ -111,7 +111,7 @@ redis:
     podLabels:
       app: redis-master
       sidecar.istio.io/inject: "true"
-      istio.io/rev: "asm-managed"
+      istio.io/rev: "asm-managed-rapid"
     resources: {}
 
 mongodb:
@@ -121,7 +121,7 @@ mongodb:
   podLabels:
     app: mongodb
     sidecar.istio.io/inject: "true"
-    istio.io/rev: "asm-managed"
+    istio.io/rev: "asm-managed-rapid"
   auth:
     rootPassword: "1234567890"
     usernames:

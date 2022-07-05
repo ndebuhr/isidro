@@ -70,7 +70,7 @@ spec:
         app: policy-agent
         version: sympathetic
         sidecar.istio.io/inject: "true"
-        istio.io/rev: "asm-managed"
+        istio.io/rev: "asm-managed-rapid"
     spec:
       containers:
       - name: policy-agent
@@ -187,7 +187,7 @@ spec:
         app: policy-agent
         version: succinct
         sidecar.istio.io/inject: "true"
-        istio.io/rev: "asm-managed"
+        istio.io/rev: "asm-managed-rapid"
     spec:
       containers:
       - name: policy-agent
