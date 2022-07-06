@@ -12,19 +12,40 @@ module "gke_config" {
   depends_on = [
     google_compute_subnetwork.config
   ]
-  source                          = "terraform-google-modules/kubernetes-engine/google//modules/beta-autopilot-public-cluster"
-  version                         = "21.2.0"
-  project_id                      = data.google_project.project.project_id
-  name                            = var.config_cluster_name
-  regional                        = true
-  region                          = var.config_cluster_region
-  release_channel                 = "RAPID"
-  network                         = var.network
-  subnetwork                      = google_compute_subnetwork.config.name
-  ip_range_pods                   = "isidro-config-pods"
-  ip_range_services               = "isidro-config-services"
-  enable_vertical_pod_autoscaling = true
-  cluster_resource_labels         = { "mesh_id" : "proj-${data.google_project.project.number}" }
+  source                      = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
+  version                     = "21.2.0"
+  project_id                  = data.google_project.project.project_id
+  name                        = var.config_cluster_name
+  regional                    = true
+  region                      = var.config_cluster_region
+  release_channel             = "RAPID"
+  network                     = var.network
+  subnetwork                  = google_compute_subnetwork.config.name
+  ip_range_pods               = "isidro-config-pods"
+  ip_range_services           = "isidro-config-services"
+  create_service_account      = false
+  service_account             = google_service_account.nodes.email
+  enable_binary_authorization = true
+  gce_pd_csi_driver           = true
+  cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
+  node_pools = [
+    {
+      name         = "core-nodes"
+      autoscaling  = false
+      auto_upgrade = true
+      node_count   = 1
+      machine_type = "t2d-standard-2"
+      enable_gcfs  = true
+    }
+  ]
+  node_pools_oauth_scopes = {
+    "all" : [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/trace.append"
+    ]
+  }
 }
 
 module "asm_config" {
