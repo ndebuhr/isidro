@@ -41,6 +41,7 @@ Isidro includes:
     ```
     1. Anthos Feature: Service Mesh
 1. A domain or subdomain managed through Google Cloud DNS
+1. [Skaffold](https://skaffold.dev/) CLI v1.39+
 
 ## System installation
 _While installation is possible using non-Linux clients, it's not a well-established or documented process_

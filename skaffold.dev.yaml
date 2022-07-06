@@ -204,6 +204,11 @@ deploy:
   kubectl:
     manifests:
     - "vendor/configconnector-operator.yaml"
+    hooks:
+      after:
+      - host:
+          command: ["bash", "-c", "until kubectl get ConfigConnector --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
+  statusCheck: false
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
