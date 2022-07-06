@@ -2,13 +2,13 @@ apiVersion: dns.cnrm.cloud.google.com/v1beta1
 kind: DNSRecordSet
 metadata:
   name: isidro
-  namespace: config-connector-resources
+  namespace: configconnector-resources
 spec:
-  name: "ISIDRO_DOMAIN."
+  name: "{{ .Values.isidro.domain }}."
   type: A
   ttl: 300
   managedZoneRef:
-    external: "DNS_ZONE_NAME"
+    external: "{{ .Values.dns.zone }}"
   rrdatasRefs:
   - name: isidro
     kind: ComputeAddress
@@ -17,7 +17,7 @@ apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeAddress
 metadata:
   name: isidro
-  namespace: config-connector-resources
+  namespace: configconnector-resources
 spec:
   location: global
   resourceID: isidro
@@ -26,13 +26,13 @@ apiVersion: dns.cnrm.cloud.google.com/v1beta1
 kind: DNSRecordSet
 metadata:
   name: mattermost
-  namespace: config-connector-resources
+  namespace: configconnector-resources
 spec:
-  name: "MATTERMOST_DOMAIN."
+  name: "{{ .Values.mattermost.domain }}."
   type: A
   ttl: 300
   managedZoneRef:
-    external: "DNS_ZONE_NAME"
+    external: "{{ .Values.dns.zone }}"
   rrdatasRefs:
   - name: mattermost
     kind: ComputeAddress
@@ -41,7 +41,7 @@ apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeAddress
 metadata:
   name: mattermost
-  namespace: config-connector-resources
+  namespace: configconnector-resources
 spec:
   location: global
   resourceID: mattermost

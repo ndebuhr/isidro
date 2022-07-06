@@ -17,9 +17,9 @@ spec:
         args:
         - |
             certbot certonly --dns-google \
-              -d 'ISIDRO_DOMAIN' --non-interactive --agree-tos -m admin@ISIDRO_DOMAIN && \
-            cat /etc/letsencrypt/live/ISIDRO_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
-            cat /etc/letsencrypt/live/ISIDRO_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+              -d '{{ .Values.isidro.domain }}' --non-interactive --agree-tos -m admin@{{ .Values.isidro.domain }} && \
+            cat /etc/letsencrypt/live/{{ .Values.isidro.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+            cat /etc/letsencrypt/live/{{ .Values.isidro.domain }}/privkey.pem > /etc/ssl/privkey.pem
         volumeMounts:
         - name: ssl
           mountPath: /etc/ssl
@@ -67,9 +67,9 @@ spec:
             args:
             - |
                 certbot certonly --dns-google \
-                  -d 'ISIDRO_DOMAIN' --non-interactive --agree-tos -m admin@ISIDRO_DOMAIN && \
-                cat /etc/letsencrypt/live/ISIDRO_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
-                cat /etc/letsencrypt/live/ISIDRO_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+                  -d '{{ .Values.isidro.domain }}' --non-interactive --agree-tos -m admin@{{ .Values.isidro.domain }} && \
+                cat /etc/letsencrypt/live/{{ .Values.isidro.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+                cat /etc/letsencrypt/live/{{ .Values.isidro.domain }}/privkey.pem > /etc/ssl/privkey.pem
             volumeMounts:
             - name: ssl
               mountPath: /etc/ssl
@@ -113,9 +113,9 @@ spec:
         args:
         - |
             certbot certonly --dns-google \
-              -d 'MATTERMOST_DOMAIN' --non-interactive --agree-tos -m admin@MATTERMOST_DOMAIN && \
-            cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
-            cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+              -d '{{ .Values.mattermost.domain }}' --non-interactive --agree-tos -m admin@{{ .Values.mattermost.domain }} && \
+            cat /etc/letsencrypt/live/{{ .Values.mattermost.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+            cat /etc/letsencrypt/live/{{ .Values.mattermost.domain }}/privkey.pem > /etc/ssl/privkey.pem
         volumeMounts:
         - name: ssl
           mountPath: /etc/ssl
@@ -164,9 +164,9 @@ spec:
             args:
             - |
                 certbot certonly --dns-google \
-                  -d 'MATTERMOST_DOMAIN' --non-interactive --agree-tos -m admin@MATTERMOST_DOMAIN && \
-                cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/fullchain.pem > /etc/ssl/fullchain.pem && \
-                cat /etc/letsencrypt/live/MATTERMOST_DOMAIN/privkey.pem > /etc/ssl/privkey.pem
+                  -d '{{ .Values.mattermost.domain }}' --non-interactive --agree-tos -m admin@{{ .Values.mattermost.domain }} && \
+                cat /etc/letsencrypt/live/{{ .Values.mattermost.domain }}/fullchain.pem > /etc/ssl/fullchain.pem && \
+                cat /etc/letsencrypt/live/{{ .Values.mattermost.domain }}/privkey.pem > /etc/ssl/privkey.pem
             volumeMounts:
             - name: ssl
               mountPath: /etc/ssl
@@ -198,7 +198,7 @@ metadata:
   name: certbot
   namespace: isidro
   annotations:
-    iam.gke.io/gcp-service-account: isidro-certbot@GOOGLE_PROJECT.iam.gserviceaccount.com
+    iam.gke.io/gcp-service-account: isidro-certbot@{{ .Values.project }}.iam.gserviceaccount.com
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

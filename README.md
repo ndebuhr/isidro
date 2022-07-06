@@ -52,7 +52,7 @@ Set the `GOOGLE_PROJECT`, `ISIDRO_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NA
 export GOOGLE_PROJECT=example
 export ISIDRO_DOMAIN=isidro.example.com
 export MATTERMOST_DOMAIN=mattermost.example.com
-export DNS_ZONE_NAME=example-com
+export DNS_ZONE_NAME="example-com"
 ```
 
 Create a service account for provisioning the required resources:
@@ -124,23 +124,13 @@ Setup skaffold files and credentials:
 export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 
 cp skaffold.dev.yaml skaffold.yaml
-cp networking/certbot.dev.yaml networking/certbot.yaml
-cp networking/configconnector-setup.dev.yaml networking/configconnector-setup.yaml
-cp networking/dns.dev.yaml networking/dns.yaml
-cp networking/namespace.dev.yaml networking/namespace.yaml
-
-sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/certbot.yaml
-sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/certbot.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" networking/dns.yaml
-sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" networking/dns.yaml
-
-sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" networking/dns.yaml
-
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/certbot.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/configconnector-setup.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" networking/namespace.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
+sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
+
+cp vendor/configconnector-setup.dev.yaml vendor/configconnector-setup.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" vendor/configconnector-setup.yaml
 ```
 
 ### Development environments

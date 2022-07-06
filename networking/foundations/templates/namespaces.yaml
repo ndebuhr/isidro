@@ -11,6 +11,6 @@ metadata:
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: config-connector-resources
+  name: configconnector-resources
   annotations:
-    cnrm.cloud.google.com/project-id: GOOGLE_PROJECT
+    cnrm.cloud.google.com/project-id: "{{ .Values.project }}"

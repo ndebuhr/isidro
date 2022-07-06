@@ -1,0 +1,7 @@
+project: PROJECT
+isidro:
+  domain: isidro.example.com
+mattermost:
+  domain: mattermost.example.com
+dns:
+  zone: "example-com"
