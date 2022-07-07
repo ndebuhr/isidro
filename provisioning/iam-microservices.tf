@@ -15,3 +15,26 @@ resource "google_project_iam_member" "tracing_microservices_workload_identity_us
   member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/tracing-microservice]"
 }
 
+resource "google_service_account" "db_microservices" {
+  account_id   = "isidro-db-client-microservices"
+  display_name = "Isidro DB Client Microservices"
+}
+
+resource "google_project_iam_member" "db_microservices_spanner_user" {
+  project = data.google_project.project.project_id
+  role    = "roles/spanner.databaseUser"
+  member  = "serviceAccount:${google_service_account.db_microservices.email}"
+}
+
+resource "google_project_iam_member" "db_microservices_trace_writer" {
+  project = data.google_project.project.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.db_microservices.email}"
+}
+
+resource "google_project_iam_member" "db_microservices_workload_identity_user" {
+  project = data.google_project.project.project_id
+  role    = "roles/iam.workloadIdentityUser"
+  member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/db-client-microservice]"
+}
+

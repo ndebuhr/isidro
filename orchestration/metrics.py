@@ -1,10 +1,12 @@
-from mongo import confirmations_collection
+from spanner import database
 from prometheus_client import Gauge
 
 
 def channels():
-    confirmations = confirmations_collection()
-    return len(confirmations.distinct("channel"))
+    db = database()
+    with db.snapshot() as snapshot:
+        result = snapshot.execute_sql(f"SELECT COUNT(DISTINCT channel) FROM posts")
+    return result.one()[0]
 
 
 channels_metric = Gauge(
@@ -14,8 +16,10 @@ channels_metric.set_function(channels)
 
 
 def threads():
-    confirmations = confirmations_collection()
-    return len(confirmations.distinct("thread_ts"))
+    db = database()
+    with db.snapshot() as snapshot:
+        result = snapshot.execute_sql(f"SELECT COUNT(DISTINCT thread_ts) FROM posts")
+    return result.one()[0]
 
 
 threads_metric = Gauge("threads", "Number of Isidro conversations")
@@ -23,8 +27,10 @@ threads_metric.set_function(threads)
 
 
 def users():
-    confirmations = confirmations_collection()
-    return len(confirmations.distinct("user"))
+    db = database()
+    with db.snapshot() as snapshot:
+        result = snapshot.execute_sql(f"SELECT COUNT(DISTINCT user) FROM posts")
+    return result.one()[0]
 
 
 users_metric = Gauge("users", "Number of users who have had Isidro conversations")

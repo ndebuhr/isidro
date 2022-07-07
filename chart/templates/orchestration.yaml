@@ -37,19 +37,15 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed-rapid"
     spec:
-      serviceAccountName: tracing-microservice
+      serviceAccountName: db-client-microservice
       containers:
       - name: orchestration
         image: {{ .Values.orchestration.image.repository }}:{{ .Values.orchestration.image.tag }}
         imagePullPolicy: Always
         env:
-        - name: MONGODB_HOST
-          value: isidro-mongodb
-        - name: MONGODB_USERNAME
-          value: root
-        - name: MONGODB_PASSWORD
-          value: "1234567890"
-        - name: MONGODB_DATABASE
+        - name: SPANNER_INSTANCE_ID
+          value: "isidro"
+        - name: SPANNER_DATABASE_ID
           value: "isidro"
         - name: GREETING
           value: {{ .Values.orchestration.greeting }}

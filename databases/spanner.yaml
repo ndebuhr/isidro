@@ -1,0 +1,29 @@
+apiVersion: spanner.cnrm.cloud.google.com/v1beta1
+kind: SpannerInstance
+metadata:
+  name: isidro
+  namespace: configconnector-resources
+spec:
+  config: nam7
+  displayName: Isidro Database
+  processingUnits: 100
+---
+apiVersion: spanner.cnrm.cloud.google.com/v1beta1
+kind: SpannerDatabase
+metadata:
+  name: isidro
+  namespace: configconnector-resources
+spec:
+  instanceRef:
+    name: isidro
+  ddl:
+  - |
+    CREATE TABLE posts (
+      id STRING(255) NOT NULL,
+      updated_at TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true),
+      channel STRING(255) NOT NULL,
+      thread_ts STRING(255) NOT NULL,
+      user STRING(255) NOT NULL,
+      text STRING(8191) NOT NULL
+    )
+    PRIMARY KEY(id)

@@ -114,23 +114,6 @@ redis:
       istio.io/rev: "asm-managed-rapid"
     resources: {}
 
-mongodb:
-  enabled: true
-  global:
-    storageClass: isidro-storage
-  podLabels:
-    app: mongodb
-    sidecar.istio.io/inject: "true"
-    istio.io/rev: "asm-managed-rapid"
-  auth:
-    rootPassword: "1234567890"
-    usernames:
-    - "isidro"
-    passwords:
-    - "1234567890"
-    databases:
-    - "isidro"
-
 mattermost:
   enabled: true
   domain: isidro.example.com

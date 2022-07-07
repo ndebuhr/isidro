@@ -1,20 +1,14 @@
 import json
-import metrics
 import os
 import requests
 
+import metrics
+import trace
+
 from flask import Flask, abort, request
-from mongo import confirmations_collection
-from opentelemetry import trace
-from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.propagate import set_global_textmap
-from opentelemetry.propagators.cloud_trace_propagator import (
-    CloudTraceFormatPropagator,
-)
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from spanner import database, insert_post
 from prometheus_client import generate_latest
 
 CONFIRMATION_WORDS = [
@@ -49,20 +43,6 @@ if not TASKS_HOST:
 if not REPEATER_HOST:
     raise ValueError("No REPEATER_HOST environment variable set")
 
-set_global_textmap(CloudTraceFormatPropagator())
-
-tracer_provider = TracerProvider()
-cloud_trace_exporter = CloudTraceSpanExporter()
-tracer_provider.add_span_processor(
-    # BatchSpanProcessor buffers spans and sends them in batches in a
-    # background thread. The default parameters are sensible, but can be
-    # tweaked to optimize your performance
-    BatchSpanProcessor(cloud_trace_exporter)
-)
-trace.set_tracer_provider(tracer_provider)
-
-tracer = trace.get_tracer(__name__)
-
 app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
@@ -81,17 +61,28 @@ class Orchestration:
         self.action = None
 
     def confirmation(self):
-        confirmations = confirmations_collection()
-        count = confirmations.count_documents({"thread_ts": self.thread_ts})
-        if count == 0:
+        db = database()
+        with db.snapshot() as snapshot:
+            thread = snapshot.execute_sql(
+                f"""
+                SELECT * FROM posts
+                WHERE thread_ts='{self.thread_ts}'
+                ORDER BY updated_at DESC
+                """
+            )
+        post_count = 0
+        for post in thread:
+            post_count += 1
+        if post_count == 0:
+            raise Exception("Post was not successfully logged in the database")
+        elif post_count == 1:
             self.confirmed = False
         else:
             self.confirmation_text = self.text
-            confirmation = confirmations.find_one({"thread_ts": self.thread_ts})
-            self.channel = confirmation["channel"]
-            self.thread_ts = confirmation["thread_ts"]
-            self.user = confirmation["user"]
-            self.text = confirmation["text"]
+            self.channel = post[2]
+            self.thread_ts = post[3]
+            self.user = post[4]
+            self.text = post[5]
             self.confirmed = True
 
     def user_is_confirming(self):
@@ -106,15 +97,13 @@ class Orchestration:
                 return True
         return False
 
-    def send_confirmation(self):
-        confirmations_collection().insert_one(
-            {
-                "channel": self.channel,
-                "thread_ts": self.thread_ts,
-                "user": self.user,
-                "text": self.text,
-            }
+    def insert_post(self):
+        db = database()
+        db.run_in_transaction(
+            insert_post, self.channel, self.thread_ts, self.user, self.text
         )
+
+    def send_confirmation(self):
         requests.post(
             f"http://{RESPONDER_HOST}/v1/respond",
             json={
@@ -206,6 +195,7 @@ class Orchestration:
 @app.route("/v1/orchestrate", methods=["POST"])
 def orchestrate():
     orchestration = Orchestration(request)
+    orchestration.insert_post()
     orchestration.confirmation()
     if not orchestration.confirmed:
         orchestration.get_action()
