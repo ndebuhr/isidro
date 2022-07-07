@@ -88,14 +88,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-sympathetic-actions-rego-v3
+          name: policy-agent-sympathetic-actions-rego-v4
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-sympathetic-actions-rego-v3
+  name: policy-agent-sympathetic-actions-rego-v4
 data:
   routing.rego: |
     package isidro.routing
@@ -161,6 +161,17 @@ data:
         "keywords": [
           "issue", "bug", "feature", "request", "broken", "outage", "problem", "incident"
         ]
+      },
+      {
+        "action": {
+          "confirmation message": "Self-destruction would make me a lot cheaper, easier to manage, and more secure.  However, I cannot self terminate.  You must provide a confirmation to trigger the shutdown.  Please respond with a \"yes\" (or similar).",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl scale deployment deployer-github deployer-github-workers gatekeeper keywords orchestration policy-agent-succinct policy-agent-sympathetic repeater responder tasks kubebash --replicas 0 -n isidro`,
+          "initialization message": "![self-destruction](https://thumbs.gfycat.com/WatchfulEnviousGemsbok-max-1mb.gif)",
+          "tie break priority": 3,
+        },
+        "keywords": ["destruct", "destruction"]
       }
     ]
 
@@ -205,14 +216,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-succinct-actions-rego-v3
+          name: policy-agent-succinct-actions-rego-v4
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-succinct-actions-rego-v3
+  name: policy-agent-succinct-actions-rego-v4
 data:
   routing.rego: |
     package isidro.routing
@@ -278,6 +289,17 @@ data:
         "keywords": [
           "issue", "bug", "feature", "request", "broken", "outage", "problem", "incident"
         ]
+      },
+      {
+        "action": {
+          "confirmation message": "Would you like me to self-destruct?",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl scale deployment deployer-github deployer-github-workers gatekeeper keywords orchestration policy-agent-succinct policy-agent-sympathetic repeater responder tasks kubebash --replicas 0 -n isidro`,
+          "initialization message": "![self-destruction](https://thumbs.gfycat.com/WatchfulEnviousGemsbok-max-1mb.gif)",
+          "tie break priority": 3,
+        },
+        "keywords": ["destruct", "destruction"]
       }
     ]
 

@@ -38,3 +38,19 @@ resource "google_project_iam_member" "db_microservices_workload_identity_user" {
   member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/db-client-microservice]"
 }
 
+resource "google_service_account" "kubebash_microservices" {
+  account_id   = "isidro-kubebash-microservices"
+  display_name = "Isidro Kubebash Microservices"
+}
+
+resource "google_project_iam_member" "kubebash_microservices_trace_writer" {
+  project = data.google_project.project.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.kubebash_microservices.email}"
+}
+
+resource "google_project_iam_member" "kubebash_microservices_workload_identity_user" {
+  project = data.google_project.project.project_id
+  role    = "roles/iam.workloadIdentityUser"
+  member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/kubebash-microservice]"
+}

@@ -1,0 +1,81 @@
+{{ if eq .Values.kubebash.enabled true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubebash
+  labels:
+    app: kubebash
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 9000
+  selector:
+    app: kubebash
+---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: kubebash
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubebash
+  labels:
+    app: kubebash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubebash
+  template:
+    metadata:
+      labels:
+        app: kubebash
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed-rapid"
+    spec:
+      serviceAccountName: kubebash-microservice
+      containers:
+      - name: kubebash
+        image: {{ .Values.kubebash.image.repository }}:{{ .Values.kubebash.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: RESPONDER_HOST
+          value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: kubebash
+spec:
+  podSelector:
+    matchLabels:
+      app: kubebash
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
+    - podSelector:
+        matchLabels:
+          app: orchestration
+  egress:
+  - {}
+{{ end }}

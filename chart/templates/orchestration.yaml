@@ -49,16 +49,18 @@ spec:
           value: "isidro"
         - name: GREETING
           value: {{ .Values.orchestration.greeting }}
-        - name: RESPONDER_HOST
-          value: responder.{{ .Release.Namespace }}.svc.clusterset.local
         - name: KEYWORDS_HOST
           value: keywords.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: KUBEBASH_HOST
+          value: kubebash.{{ .Release.Namespace }}.svc.clusterset.local
         - name: POLICY_AGENT_HOST
           value: policy-agent.{{ .Release.Namespace }}.svc.clusterset.local
-        - name: TASKS_HOST
-          value: tasks.{{ .Release.Namespace }}.svc.clusterset.local
         - name: REPEATER_HOST
           value: repeater.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: RESPONDER_HOST
+          value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: TASKS_HOST
+          value: tasks.{{ .Release.Namespace }}.svc.clusterset.local
       restartPolicy: Always
 ---
 apiVersion: monitoring.googleapis.com/v1alpha1

@@ -26,6 +26,7 @@ CONFIRMATION_WORDS = [
 GREETING = os.environ.get("GREETING")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
 KEYWORDS_HOST = os.environ.get("KEYWORDS_HOST")
+KUBEBASH_HOST = os.environ.get("KUBEBASH_HOST")
 POLICY_AGENT_HOST = os.environ.get("POLICY_AGENT_HOST")
 TASKS_HOST = os.environ.get("TASKS_HOST")
 REPEATER_HOST = os.environ.get("REPEATER_HOST")
@@ -36,6 +37,8 @@ if not RESPONDER_HOST:
     raise ValueError("No RESPONDER_HOST environment variable set")
 if not KEYWORDS_HOST:
     raise ValueError("No KEYWORDS_HOST environment variable set")
+if not KUBEBASH_HOST:
+    raise ValueError("No KUBEBASH_HOST environment variable set")
 if not POLICY_AGENT_HOST:
     raise ValueError("No POLICY_AGENT_HOST environment variable set")
 if not TASKS_HOST:
@@ -163,8 +166,45 @@ class Orchestration:
             json=payload,
         ).raise_for_status()
 
-    def send_response(self):
-        if self.action["category"] == "link":
+    def is_link(self):
+        return self.action["category"] == "link"
+
+    def send_link(self):
+        requests.post(
+            f"http://{RESPONDER_HOST}/v1/respond",
+            json={
+                "platform": self.platform,
+                "channel": self.channel,
+                "thread_ts": self.thread_ts,
+                "user": self.user,
+                "text": "[{0}]({1})".format(
+                    self.action["completion message"],
+                    self.action["href"],
+                ),
+            },
+        ).raise_for_status()
+
+    def is_repeater(self):
+        return self.action["category"] == "repeater"
+
+    def send_repeater(self):
+        requests.post(
+            f"http://{REPEATER_HOST}/v1/repeat",
+            json={
+                "platform": self.platform,
+                "channel": self.channel,
+                "thread_ts": self.thread_ts,
+                "user": self.user,
+                "text": self.text,
+                "action": self.action,
+            },
+        ).raise_for_status()
+
+    def is_kubebash(self):
+        return self.action["category"] == "kubebash"
+
+    def send_kubebash(self):
+        if "initialization message" in self.action.keys():
             requests.post(
                 f"http://{RESPONDER_HOST}/v1/respond",
                 json={
@@ -172,22 +212,24 @@ class Orchestration:
                     "channel": self.channel,
                     "thread_ts": self.thread_ts,
                     "user": self.user,
-                    "text": "[{0}]({1})".format(
-                        self.action["completion message"],
-                        self.action["href"],
-                    ),
+                    "text": self.action["initialization message"],
                 },
             ).raise_for_status()
-        elif self.action["category"] == "repeater":
+        requests.post(
+            f"http://{KUBEBASH_HOST}/hooks/kubebash",
+            json={
+                "command": self.action["command"]
+            }
+        ).raise_for_status()
+        if "completion message" in self.action.keys():
             requests.post(
-                f"http://{REPEATER_HOST}/v1/repeat",
+                f"http://{RESPONDER_HOST}/v1/respond",
                 json={
                     "platform": self.platform,
                     "channel": self.channel,
                     "thread_ts": self.thread_ts,
                     "user": self.user,
-                    "text": self.text,
-                    "action": self.action,
+                    "text": self.action["completion message"],
                 },
             ).raise_for_status()
 
@@ -205,8 +247,12 @@ def orchestrate():
         orchestration.get_action()
         if orchestration.is_async():
             orchestration.send_task()
-        else:
-            orchestration.send_response()
+        elif orchestration.is_link():
+            orchestration.send_link()
+        elif orchestration.is_repeater():
+            orchestration.send_repeater()
+        elif orchestration.is_kubebash():
+            orchestration.send_kubebash()
         return ""
     elif not orchestration.user_is_confirming():
         orchestration.send_rejection()

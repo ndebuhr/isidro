@@ -18,6 +18,13 @@ build:
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
+    context: kubebash
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
     context: orchestration
     kaniko:
@@ -114,6 +121,7 @@ deploy:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
         repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
         responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
@@ -151,6 +159,7 @@ deploy:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
         repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
         responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
@@ -188,6 +197,7 @@ deploy:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
         repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
         responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
