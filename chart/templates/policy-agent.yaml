@@ -88,14 +88,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-sympathetic-actions-rego-v5
+          name: policy-agent-sympathetic-actions-rego-v6
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-sympathetic-actions-rego-v5
+  name: policy-agent-sympathetic-actions-rego-v6
 data:
   routing.rego: |
     package isidro.routing
@@ -187,6 +187,36 @@ data:
           "tie break priority": 2,
         },
         "keywords": ["replica"]
+      },
+      {
+        "action": {
+          "confirmation message": "It sounds like you'd like to setup a cron job.  If you've provided the desired name (prefix with \"cron-\" please), docker image (image:tag format), and schedule, then please confirm with a \"yes\".",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl create cronjob {0} --schedule="{1}" --image={2} -n isidro && kubectl patch cronjob {0} --patch '{"spec":{"jobTemplate":{"spec":{"template":{"spec":{"serviceAccountName":"kubebash-microservice"}}}}}}'`,
+          "interpolations": [
+            `\bcron-[a-z0-9\-]+\b`,
+            `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
+            `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
+          ],
+          "completion message": "Done!",
+          "tie break priority": 4,
+        },
+        "keywords": ["cronjob", "cron", "create"]
+      },
+      {
+        "action": {
+          "confirmation message": "It sounds like you'd like to remove a cron job.  If you've provided the desired name (prefix with \"cron-\" please), then please confirm with a \"yes\".",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl delete cronjob {0} -n isidro`,
+          "interpolations": [
+            `\bcron-[a-z0-9\-]+\b`,
+          ],
+          "completion message": "Done!",
+          "tie break priority": 4,
+        },
+        "keywords": ["cronjob", "cron", "delete"]
       }
     ]
 
@@ -231,14 +261,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-succinct-actions-rego-v5
+          name: policy-agent-succinct-actions-rego-v6
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-succinct-actions-rego-v5
+  name: policy-agent-succinct-actions-rego-v6
 data:
   routing.rego: |
     package isidro.routing
@@ -330,6 +360,36 @@ data:
           "tie break priority": 2,
         },
         "keywords": ["replica"]
+      },
+      {
+        "action": {
+          "confirmation message": "It sounds like you'd like to setup a cron job.  If you've provided the desired name (prefix with \"cron-\" please), docker image (image:tag format), and schedule, then please confirm with a \"yes\".",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl create cronjob {0} --schedule="{1}" --image={2} -n isidro && kubectl patch cronjob {0} --patch '{"spec":{"jobTemplate":{"spec":{"template":{"spec":{"serviceAccountName":"kubebash-microservice"}}}}}}'`,
+          "interpolations": [
+            `\bcron-[a-z0-9\-]+\b`,
+            `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
+            `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
+          ],
+          "completion message": "Done!",
+          "tie break priority": 4,
+        },
+        "keywords": ["cronjob", "cron", "create"]
+      },
+      {
+        "action": {
+          "confirmation message": "It sounds like you'd like to remove a cron job.  If you've provided the desired name (prefix with \"cron-\" please), then please confirm with a \"yes\".",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl delete cronjob {0} -n isidro`,
+          "interpolations": [
+            `\bcron-[a-z0-9\-]+\b`,
+          ],
+          "completion message": "Done!",
+          "tie break priority": 4,
+        },
+        "keywords": ["cronjob", "cron", "delete"]
       }
     ]
 
