@@ -116,7 +116,7 @@ deploy:
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         kubebash.enabled: true
-        orchestration.greeting: "Hello!"
+        orchestration.greeting: "Hello from Iowa!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
@@ -155,7 +155,7 @@ deploy:
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         kubebash.enabled: false
-        orchestration.greeting: "Bonjour!"
+        orchestration.greeting: "Hello from Finland!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
@@ -194,7 +194,7 @@ deploy:
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         kubebash.enabled: false
-        orchestration.greeting: "Olá!"
+        orchestration.greeting: "Hello from Brazil!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
