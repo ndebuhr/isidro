@@ -115,6 +115,7 @@ deploy:
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
+        kubebash.enabled: true
         orchestration.greeting: "Hello!"
         deployer.github.token: "1234567890"
       artifactOverrides:
@@ -153,6 +154,7 @@ deploy:
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
         orchestration.greeting: "Bonjour!"
         deployer.github.token: "1234567890"
       artifactOverrides:
@@ -191,6 +193,7 @@ deploy:
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
         orchestration.greeting: "Olá!"
         deployer.github.token: "1234567890"
       artifactOverrides:
