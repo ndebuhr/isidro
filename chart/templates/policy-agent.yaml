@@ -88,14 +88,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-sympathetic-actions-rego-v4
+          name: policy-agent-sympathetic-actions-rego-v5
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-sympathetic-actions-rego-v4
+  name: policy-agent-sympathetic-actions-rego-v5
 data:
   routing.rego: |
     package isidro.routing
@@ -172,6 +172,21 @@ data:
           "tie break priority": 3,
         },
         "keywords": ["destruct", "destruction"]
+      },
+      {
+        "action": {
+          "confirmation message": "It sounds like you'd like to scale some microservices in or out.  I can only do that with my own services (i.e., Isidro microservices).  Would you like me to scale the service that you mentioned?",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl scale deployment {0} --replicas {1} -n isidro`,
+          "interpolations": [
+            `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
+            `\b[0-9]+\b`
+          ],
+          "completion message": "Done!",
+          "tie break priority": 2,
+        },
+        "keywords": ["replica"]
       }
     ]
 
@@ -216,14 +231,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-succinct-actions-rego-v4
+          name: policy-agent-succinct-actions-rego-v5
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-succinct-actions-rego-v4
+  name: policy-agent-succinct-actions-rego-v5
 data:
   routing.rego: |
     package isidro.routing
@@ -300,6 +315,21 @@ data:
           "tie break priority": 3,
         },
         "keywords": ["destruct", "destruction"]
+      },
+      {
+        "action": {
+          "confirmation message": "Would you like me to scale Isidro services in/out, based on your provided configuration?",
+          "async": false,
+          "category": "kubebash",
+          "command": `kubectl scale deployment {0} --replicas {1} -n isidro`,
+          "interpolations": [
+            `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
+            `\b[0-9]+\b`
+          ],
+          "completion message": "Done!",
+          "tie break priority": 2,
+        },
+        "keywords": ["replica"]
       }
     ]
 

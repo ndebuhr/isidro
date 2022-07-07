@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import requests
 
 import metrics
@@ -204,6 +205,13 @@ class Orchestration:
         return self.action["category"] == "kubebash"
 
     def send_kubebash(self):
+        command = self.action["command"]
+        if "interpolations" in self.action.keys():
+            for i, interpolation in enumerate(self.action["interpolations"]):
+                replacement = re.findall(interpolation, self.text)
+                if len(replacement) == 0:
+                    self.fail_kubebash_interpolation()
+                command = command.replace("{" + str(i) + "}", str(replacement[0]))
         if "initialization message" in self.action.keys():
             requests.post(
                 f"http://{RESPONDER_HOST}/v1/respond",
@@ -216,10 +224,7 @@ class Orchestration:
                 },
             ).raise_for_status()
         requests.post(
-            f"http://{KUBEBASH_HOST}/hooks/kubebash",
-            json={
-                "command": self.action["command"]
-            }
+            f"http://{KUBEBASH_HOST}/hooks/kubebash", json={"command": command}
         ).raise_for_status()
         if "completion message" in self.action.keys():
             requests.post(
@@ -232,6 +237,19 @@ class Orchestration:
                     "text": self.action["completion message"],
                 },
             ).raise_for_status()
+
+    def fail_kubebash_interpolation(self):
+        requests.post(
+            f"http://{RESPONDER_HOST}/v1/respond",
+            json={
+                "platform": self.platform,
+                "channel": self.channel,
+                "thread_ts": self.thread_ts,
+                "user": self.user,
+                "text": "I could not infer enough detail in your request, so am unable to execute",
+            },
+        ).raise_for_status()
+        abort(400)
 
 
 @app.route("/v1/orchestrate", methods=["POST"])
