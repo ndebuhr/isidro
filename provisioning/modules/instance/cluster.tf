@@ -7,6 +7,7 @@ module "gke" {
   name                        = var.name
   regional                    = true
   region                      = var.region
+  zones                       = var.zones
   release_channel             = "RAPID"
   network                     = var.vpc
   subnetwork                  = google_compute_subnetwork.instance.name

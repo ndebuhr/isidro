@@ -3,13 +3,14 @@
 > Isidro is an Anthos- and GKE-based microservices chatbot
 
 Isidro includes:
-* Connectors to Slack and Mattermost for event subscription and response
+* Prebuilt connectors to Slack and Mattermost for event subscription and response
 * Policy- and NLP-based workflow planning
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
-* Cross-regional deployment
-   * Regional workload clusters in us-central1 (Council Bluffs, USA), europe-north1 (Hamina, Finland), and southamerica-east1 (São Paulo, Brazil)
-   * Regional MCI config cluster (GKE autopilot) in northamerica-northeast1 (Montreal, Canada)
+* Bundled, self-hosted Mattermost instance for development, debugging, and testing
+* Well-established paths for both development and production deployments
+    * DEV: 2 clusters, 2 regions, 5 zones, and a regional Cloud Spanner instance
+    * PROD: 6 clusters, 6 regions, 13 zone, and a multi-regional Cloud Spanner instance
 * Security features like binary authorization, mTLS, workload identity, and network policies
 
 ![Isidro Map](images/isidro-map.png)
@@ -83,7 +84,7 @@ terraform apply
 
 Create kubecontext configurations for the provisioned clusters:
 ```bash
-# For development and production setups
+# For development setups
 gcloud container clusters get-credentials isidro-us --region us-central1
 gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us isidro-us
@@ -91,25 +92,36 @@ kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isid
 ```
 
 ```bash
-# For production setups also run
-gcloud container clusters get-credentials isidro-fi --region europe-north1
-gcloud container clusters get-credentials isidro-br --region southamerica-east1
-kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-north1_isidro-fi isidro-fi
-kubectl config rename-context gke_"$GOOGLE_PROJECT"_southamerica-east1_isidro-br isidro-br
+# For production setups
+gcloud container clusters get-credentials isidro-us-ia --region us-central1
+gcloud container clusters get-credentials isidro-us-sc --region us-east1
+gcloud container clusters get-credentials isidro-be --region europe-west1
+gcloud container clusters get-credentials isidro-nl --region europe-west4
+gcloud container clusters get-credentials isidro-tw --region asia-east1
+gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us-ia isidro-us-ia
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-east1_isidro-us-sc isidro-us-sc
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-be isidro-be
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west4_isidro-nl isidro-nl
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_asia-east1_isidro-tw isidro-tw
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1 isidro-config
 ```
 
 ### Enable GMP
 
-Enable Managed Prometheus for the US and Europe clusters:
+Enable Managed Prometheus:
 ```bash
-# For development and production setups
+# For development setups
 gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
 ```
 
 ```bash
-# For production setups also run
-gcloud beta container clusters update isidro-fi --region europe-north1 --enable-managed-prometheus
-gcloud beta container clusters update isidro-br --region southamerica-east1 --enable-managed-prometheus
+# For production setups
+gcloud beta container clusters update isidro-us-ia --region us-central1 --enable-managed-prometheus &
+gcloud beta container clusters update isidro-us-sc --region us-east1 --enable-managed-prometheus &
+gcloud beta container clusters update isidro-be --region europe-west1 --enable-managed-prometheus &
+gcloud beta container clusters update isidro-nl --region europe-west4 --enable-managed-prometheus &
+gcloud beta container clusters update isidro-tw --region asia-east1 --enable-managed-prometheus
 ```
 
 ## Installation
@@ -139,7 +151,6 @@ export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 
 Hydrate configurations:
 ```bash
-# For development
 cp skaffold.dev.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
@@ -159,7 +170,6 @@ skaffold dev
 
 Hydrate confiigurations:
 ```bash
-# For production
 cp skaffold.prod.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml

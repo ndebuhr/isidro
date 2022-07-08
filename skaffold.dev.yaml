@@ -112,6 +112,10 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
+        region: us-east1
+        zones[0]: "us-east1-a"
+        zones[1]: "us-east1-c"
+        zones[2]: "us-east1-f"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"

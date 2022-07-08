@@ -22,6 +22,10 @@ variable "region" {
   description = "GKE region"
 }
 
+variable "zones" {
+  description = "GKE zones"
+}
+
 variable "node_count" {
   description = "GKE node count (per zone)"
 }

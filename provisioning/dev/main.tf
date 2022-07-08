@@ -16,10 +16,11 @@ module "primary" {
   pods_range             = "172.16.64.0/19"
   services_range         = "172.16.96.0/19"
   region                 = "us-central1"
+  zones                  = ["us-central1-a", "us-central1-c", "us-central1-f"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
-  machine_type           = "n2d-standard-2"
+  machine_type           = "t2d-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.primary
@@ -41,10 +42,11 @@ module "config" {
   pods_range             = "172.17.64.0/19"
   services_range         = "172.17.96.0/19"
   region                 = "northamerica-northeast1"
+  zones                  = ["northamerica-northeast1-b", "northamerica-northeast1-c"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
-  machine_type           = "n2d-standard-2"
+  machine_type           = "e2-standard-2"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.config

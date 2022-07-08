@@ -78,7 +78,7 @@ kind: Config
 metadata:
   name: deploy-mattermost
 deploy:
-  kubeContext: isidro-us
+  kubeContext: isidro-us-ia
   helm:
     releases:
     - name: mattermost
@@ -98,11 +98,11 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-us
+  name: deploy-us-ia
 requires:
 - configs: ["build-nlp", "build"]
 deploy:
-  kubeContext: isidro-us
+  kubeContext: isidro-us-ia
   helm:
     releases:
     - name: isidro
@@ -112,6 +112,10 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
+        region: us-east1
+        zones[0]: "us-east1-a"
+        zones[1]: "us-east1-c"
+        zones[2]: "us-east1-f"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -133,11 +137,11 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-fi
+  name: deploy-us-sc
 requires:
 - configs: ["build-nlp", "build"]
 deploy:
-  kubeContext: isidro-fi
+  kubeContext: isidro-us-sc
   helm:
     releases:
     - name: isidro
@@ -147,15 +151,14 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: europe-north1
-        zones[0]: "europe-north1-a"
-        zones[1]: "europe-north1-b"
-        zones[2]: "europe-north1-c"
+        region: us-east1
+        zones[0]: "us-east1-c"
+        zones[1]: "us-east1-d"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         kubebash.enabled: false
-        orchestration.greeting: "Hello from Finland!"
+        orchestration.greeting: "Hello from South Carolina!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
@@ -172,11 +175,11 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-br
+  name: deploy-be
 requires:
 - configs: ["build-nlp", "build"]
 deploy:
-  kubeContext: isidro-br
+  kubeContext: isidro-be
   helm:
     releases:
     - name: isidro
@@ -186,15 +189,90 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: southamerica-east1
-        zones[0]: "southamerica-east1-a"
-        zones[1]: "southamerica-east1-b"
-        zones[2]: "southamerica-east1-c"
+        region: europe-west1
+        zones[0]: "europe-west1-b"
+        zones[1]: "europe-west1-d"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
         kubebash.enabled: false
-        orchestration.greeting: "Hello from Brazil!"
+        orchestration.greeting: "Hello from Belgium!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-nl
+requires:
+- configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-nl
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      createNamespace: true
+      namespace: isidro
+      setValues:
+        project: GOOGLE_PROJECT
+        region: europe-west4
+        zones[0]: "europe-west4-a"
+        zones[1]: "europe-west4-b"
+        mattermost.domain: MATTERMOST_DOMAIN
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
+        orchestration.greeting: "Hello from the Netherlands!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-tw
+requires:
+- configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-tw
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      createNamespace: true
+      namespace: isidro
+      setValues:
+        project: GOOGLE_PROJECT
+        region: asia-east1
+        zones[0]: "asia-east1-a"
+        zones[1]: "asia-east1-b"
+        mattermost.domain: MATTERMOST_DOMAIN
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
+        orchestration.greeting: "Hello from Taiwan!"
         deployer.github.token: "1234567890"
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
