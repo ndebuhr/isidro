@@ -2,14 +2,14 @@
 
 set -e
 
-cd provisioning
+cd provisioning/$1
 KEYRING=$(terraform output --raw binauthz_keyring)
 KEYRING_LOCATION=$(terraform output --raw binauthz_keyring_location)
 ATTESTOR=$(terraform output --raw binauthz_attestor)
 KEY=$(terraform output --raw binauthz_key)
-cd ..
+cd ../..
 
-DIGEST=$(gcloud container images describe $1 \
+DIGEST=$(gcloud container images describe $2 \
     --format='get(image_summary.fully_qualified_digest)')
 
 gcloud beta container binauthz attestations sign-and-create \

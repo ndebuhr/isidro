@@ -4,15 +4,15 @@ resource "google_service_account" "tracing_microservices" {
 }
 
 resource "google_project_iam_member" "tracing_microservices_trace_writer" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/cloudtrace.agent"
   member  = "serviceAccount:${google_service_account.tracing_microservices.email}"
 }
 
 resource "google_project_iam_member" "tracing_microservices_workload_identity_user" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/iam.workloadIdentityUser"
-  member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/tracing-microservice]"
+  member  = "serviceAccount:${var.project_id}.svc.id.goog[isidro/tracing-microservice]"
 }
 
 resource "google_service_account" "db_microservices" {
@@ -21,21 +21,21 @@ resource "google_service_account" "db_microservices" {
 }
 
 resource "google_project_iam_member" "db_microservices_spanner_user" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/spanner.databaseUser"
   member  = "serviceAccount:${google_service_account.db_microservices.email}"
 }
 
 resource "google_project_iam_member" "db_microservices_trace_writer" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/cloudtrace.agent"
   member  = "serviceAccount:${google_service_account.db_microservices.email}"
 }
 
 resource "google_project_iam_member" "db_microservices_workload_identity_user" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/iam.workloadIdentityUser"
-  member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/db-client-microservice]"
+  member  = "serviceAccount:${var.project_id}.svc.id.goog[isidro/db-client-microservice]"
 }
 
 resource "google_service_account" "kubebash_microservices" {
@@ -44,13 +44,13 @@ resource "google_service_account" "kubebash_microservices" {
 }
 
 resource "google_project_iam_member" "kubebash_microservices_trace_writer" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/cloudtrace.agent"
   member  = "serviceAccount:${google_service_account.kubebash_microservices.email}"
 }
 
 resource "google_project_iam_member" "kubebash_microservices_workload_identity_user" {
-  project = data.google_project.project.project_id
+  project = var.project_id
   role    = "roles/iam.workloadIdentityUser"
-  member  = "serviceAccount:${data.google_project.project.project_id}.svc.id.goog[isidro/kubebash-microservice]"
+  member  = "serviceAccount:${var.project_id}.svc.id.goog[isidro/kubebash-microservice]"
 }

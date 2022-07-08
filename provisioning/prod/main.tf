@@ -1,18 +1,26 @@
+data "google_project" "project" {}
 data "google_client_config" "default" {}
 
+module "foundations" {
+  source = "../modules/foundation"
+  project_number = data.google_project.project.number
+  project_id = data.google_project.project.project_id
+
+}
+
 module "primary" {
-  source                 = "./modules/instance"
+  source                 = "../modules/instance"
   name                   = "isidro-us"
-  vpc                    = google_compute_network.isidro.name
+  vpc                    = module.foundations.vpc_name
   auxiliary_range        = "172.16.0.0/18"
   pods_range             = "172.16.64.0/19"
   services_range         = "172.16.96.0/19"
   region                 = "us-central1"
   node_count             = 1
-  nodes_service_account  = google_service_account.nodes.email
+  nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
   machine_type           = "n2d-standard-2"
-  binauthz_attestor_name = google_binary_authorization_attestor.isidro.name
+  binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.primary
   }
@@ -26,18 +34,18 @@ provider "kubernetes" {
 }
 
 module "secondary" {
-  source                 = "./modules/instance"
+  source                 = "../modules/instance"
   name                   = "isidro-fi"
-  vpc                    = google_compute_network.isidro.name
+  vpc                    = module.foundations.vpc_name
   auxiliary_range        = "172.16.128.0/18"
   pods_range             = "172.16.192.0/19"
   services_range         = "172.16.224.0/19"
   region                 = "europe-north1"
   node_count             = 1
-  nodes_service_account  = google_service_account.nodes.email
+  nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
   machine_type           = "n2d-standard-2"
-  binauthz_attestor_name = google_binary_authorization_attestor.isidro.name
+  binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.secondary
   }
@@ -51,18 +59,18 @@ provider "kubernetes" {
 }
 
 module "tertiary" {
-  source                 = "./modules/instance"
+  source                 = "../modules/instance"
   name                   = "isidro-br"
-  vpc                    = google_compute_network.isidro.name
+  vpc                    = module.foundations.vpc_name
   auxiliary_range        = "172.17.128.0/18"
   pods_range             = "172.17.192.0/19"
   services_range         = "172.17.224.0/19"
   region                 = "southamerica-east1"
   node_count             = 1
-  nodes_service_account  = google_service_account.nodes.email
+  nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
   machine_type           = "n2d-standard-2"
-  binauthz_attestor_name = google_binary_authorization_attestor.isidro.name
+  binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.tertiary
   }
@@ -76,18 +84,18 @@ provider "kubernetes" {
 }
 
 module "config" {
-  source                 = "./modules/instance"
+  source                 = "../modules/instance"
   name                   = "isidro-config"
-  vpc                    = google_compute_network.isidro.name
+  vpc                    = module.foundations.vpc_name
   auxiliary_range        = "172.17.0.0/18"
   pods_range             = "172.17.64.0/19"
   services_range         = "172.17.96.0/19"
   region                 = "northamerica-northeast1"
   node_count             = 1
-  nodes_service_account  = google_service_account.nodes.email
+  nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
   machine_type           = "n2d-standard-2"
-  binauthz_attestor_name = google_binary_authorization_attestor.isidro.name
+  binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.config
   }

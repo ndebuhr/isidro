@@ -70,34 +70,44 @@ gcloud iam service-accounts keys create isidro-provisioner.json \
     --iam-account="isidro-provisioner@$GOOGLE_PROJECT.iam.gserviceaccount.com"
 ```
 
-Navigate to the [provisioning/](provisioning/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
+Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
 ```
 
-Setup secondary IP ranges in the desired regions and subnets, then [run Terraform provisioning, with variable changes/overrides where required](provisioning/).  Something like:
+Run Terraform provisioning, with something like:
 ```bash
 terraform init
 terraform apply
 ```
 
-Create kubecontext configurations for the three provisioned clusters:
+Create kubecontext configurations for the provisioned clusters:
 ```bash
+# For development and production setups
 gcloud container clusters get-credentials isidro-us --region us-central1
-gcloud container clusters get-credentials isidro-fi --region europe-north1
-gcloud container clusters get-credentials isidro-br --region southamerica-east1
 gcloud container clusters get-credentials isidro-config --region northamerica-northeast1
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_us-central1_isidro-us isidro-us
+kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
+```
+
+```bash
+# For production setups also run
+gcloud container clusters get-credentials isidro-fi --region europe-north1
+gcloud container clusters get-credentials isidro-br --region southamerica-east1
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-north1_isidro-fi isidro-fi
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_southamerica-east1_isidro-br isidro-br
-kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1_isidro-config isidro-config
 ```
 
 ### Enable GMP
 
 Enable Managed Prometheus for the US and Europe clusters:
 ```bash
+# For development and production setups
 gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
+```
+
+```bash
+# For production setups also run
 gcloud beta container clusters update isidro-fi --region europe-north1 --enable-managed-prometheus
 gcloud beta container clusters update isidro-br --region southamerica-east1 --enable-managed-prometheus
 ```
@@ -120,10 +130,16 @@ Add helm repositories:
 helm repo add mattermost https://helm.mattermost.com
 ```
 
-Setup skaffold files and credentials:
+Setup skaffold credentials:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
+```
 
+### Development environments
+
+Hydrate configurations:
+```bash
+# For development
 cp skaffold.dev.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
@@ -134,14 +150,25 @@ cp vendor/configconnector-setup.dev.yaml vendor/configconnector-setup.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" vendor/configconnector-setup.yaml
 ```
 
-### Development environments
-
 Make any required `skaffold.yaml` configuration changes, then run skaffold:
 ```bash
 skaffold dev
 ```
 
-### Persistent environments
+### Production environments
+
+Hydrate confiigurations:
+```bash
+# For production
+cp skaffold.prod.yaml skaffold.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
+sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
+sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
+
+cp vendor/configconnector-setup.dev.yaml vendor/configconnector-setup.yaml
+sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" vendor/configconnector-setup.yaml
+```
 
 Make any required `skaffold.yaml` configuration changes, then run skaffold:
 ```bash
@@ -200,7 +227,7 @@ curl -X POST https://isidro.example.com/api/v1/submit \
 
 ## Deprovisioning
 
-In the [Terraform provisioning directory](provisioning/).  Run:
+In the Terraform provisioning directory, run:
 ```bash
 terraform destroy
 ```

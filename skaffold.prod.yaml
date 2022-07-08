@@ -10,49 +10,49 @@ build:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
     context: gatekeeper
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
     context: kubebash
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
     context: orchestration
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
     context: repeater
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
     context: responder
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
     context: tasks
     kaniko:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   googleCloudBuild:
     timeout: 3600s
 ---
@@ -68,7 +68,7 @@ build:
       cache: {}
     hooks:
       after:
-      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+      - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
   googleCloudBuild:
     timeout: 3600s
     machineType: E2_HIGHCPU_32
@@ -133,6 +133,84 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
+  name: deploy-fi
+requires:
+- configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-fi
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      createNamespace: true
+      namespace: isidro
+      setValues:
+        project: GOOGLE_PROJECT
+        region: europe-north1
+        zones[0]: "europe-north1-a"
+        zones[1]: "europe-north1-b"
+        zones[2]: "europe-north1-c"
+        mattermost.domain: MATTERMOST_DOMAIN
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
+        orchestration.greeting: "Hello from Finland!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-br
+requires:
+- configs: ["build-nlp", "build"]
+deploy:
+  kubeContext: isidro-br
+  helm:
+    releases:
+    - name: isidro
+      chartPath: chart
+      skipBuildDependencies: true
+      createNamespace: true
+      namespace: isidro
+      setValues:
+        project: GOOGLE_PROJECT
+        region: southamerica-east1
+        zones[0]: "southamerica-east1-a"
+        zones[1]: "southamerica-east1-b"
+        zones[2]: "southamerica-east1-c"
+        mattermost.domain: MATTERMOST_DOMAIN
+        mattermost.accessToken: "1234567890"
+        mattermost.verificationToken: "1234567890"
+        kubebash.enabled: false
+        orchestration.greeting: "Hello from Brazil!"
+        deployer.github.token: "1234567890"
+      artifactOverrides:
+        deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
+        gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
+        kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
+        orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
+        responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
+        tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks
+      imageStrategy:
+        helm: {}
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
   name: configconnector-install
 deploy:
   kubeContext: isidro-config
@@ -180,7 +258,7 @@ deploy:
         isidro.domain: ISIDRO_DOMAIN
         mattermost.domain: MATTERMOST_DOMAIN
         dns.zone: DNS_ZONE_NAME
-        spanner.config: us-central1
+        spanner.config: nam-eur-asia3
         spanner.processingUnits: 100
 ---
 apiVersion: skaffold/v2beta26

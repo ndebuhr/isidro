@@ -13,3 +13,11 @@ output "binauthz_attestor" {
 output "binauthz_key" {
   value = google_kms_crypto_key.isidro.name
 }
+
+output "vpc_name" {
+  value = google_compute_network.isidro.name
+}
+
+output "nodes_sa_email" {
+  value = google_service_account.nodes.email
+}
