@@ -73,7 +73,7 @@ gcloud iam service-accounts keys create isidro-provisioner.json \
 
 Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS=../isidro-provisioner.json
+export GOOGLE_APPLICATION_CREDENTIALS=../../isidro-provisioner.json
 ```
 
 Run Terraform provisioning, with something like:
