@@ -244,31 +244,32 @@ deploy:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-networking-foundation
+  name: deploy-auxiliary-chart
 requires:
 - configs: ["configconnector-setup"]
 deploy:
   kubeContext: isidro-config
   helm:
     releases:
-    - name: isidro-networking
-      chartPath: networking/foundations
+    - name: isidro-auxiliary
+      chartPath: auxiliary/chart
       setValues:
         project: GOOGLE_PROJECT
         isidro.domain: ISIDRO_DOMAIN
         mattermost.domain: MATTERMOST_DOMAIN
         dns.zone: DNS_ZONE_NAME
+        spanner.config: nam-eur-asia3
+        spanner.processingUnits: 100
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-auxiliary
+  name: deploy-auxiliary-manifests
 requires:
-- configs: ["deploy-networking-foundation"]
+- configs: ["deploy-auxiliary-chart"]
 deploy:
   kubeContext: isidro-config
   kubectl:
     manifests:
-    - "databases/spanner.yaml"
-    - "networking/multicluster/ingress.yaml"
-    - "networking/multicluster/services.yaml"
+    - "auxiliary/manifests/mci.yaml"
+    - "auxiliary/manifests/mcs.yaml"

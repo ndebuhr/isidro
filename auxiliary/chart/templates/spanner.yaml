@@ -4,9 +4,9 @@ metadata:
   name: isidro
   namespace: configconnector-resources
 spec:
-  config: nam7
+  config: {{ .Values.spanner.config }}
   displayName: Isidro Database
-  processingUnits: 100
+  processingUnits: {{ .Values.spanner.processingUnits }}
 ---
 apiVersion: spanner.cnrm.cloud.google.com/v1beta1
 kind: SpannerDatabase

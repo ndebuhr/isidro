@@ -1,7 +1,14 @@
 project: PROJECT
+
 isidro:
   domain: isidro.example.com
+
 mattermost:
   domain: mattermost.example.com
+
 dns:
   zone: "example-com"
+
+spanner:
+  config: nam-eur-asia3
+  processingUnits: 100
