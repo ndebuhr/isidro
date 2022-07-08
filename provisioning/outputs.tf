@@ -1,8 +1,3 @@
-output "client_token" {
-  sensitive = true
-  value     = base64encode(data.google_client_config.default.access_token)
-}
-
 output "binauthz_keyring" {
   value = google_kms_key_ring.isidro.name
 }
