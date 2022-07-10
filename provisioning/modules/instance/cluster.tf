@@ -22,9 +22,11 @@ module "gke" {
   node_pools = [
     {
       name         = "core"
-      autoscaling  = false
+      autoscaling  = var.autoscaling
       auto_upgrade = true
-      node_count   = var.node_count
+      node_count   = var.autoscaling ? 0 : var.node_count
+      min_count    = var.autoscaling ? var.min_flex : 0
+      max_count    = var.autoscaling ? var.max_flex : 0
       spot         = var.spot
       machine_type = var.machine_type
       enable_gcfs  = true

@@ -27,7 +27,23 @@ variable "zones" {
 }
 
 variable "node_count" {
-  description = "GKE node count (per zone)"
+  description = "Count of GKE nodes (per zone), if autoscaling is not used"
+  default     = 1
+}
+
+variable "autoscaling" {
+  description = "Enable GKE node autoscaling"
+  default     = false
+}
+
+variable "min_flex" {
+  description = "Minimum number of GKE nodes, if autoscaling is used"
+  default     = 1
+}
+
+variable "max_flex" {
+  description = "Maximum number of GKE nodes, if autoscaling is used"
+  default     = 1
 }
 
 variable "nodes_service_account" {
