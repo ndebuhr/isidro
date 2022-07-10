@@ -30,14 +30,15 @@ Isidro includes:
     ```bash
     gcloud services enable \
         anthos.googleapis.com \
-        meshca.googleapis.com \
         binaryauthorization.googleapis.com \
         cloudkms.googleapis.com \
         cloudresourcemanager.googleapis.com \
-        gkehub.googleapis.com \
         container.googleapis.com \
+        gkehub.googleapis.com \
+        meshca.googleapis.com \
         multiclusteringress.googleapis.com \
         multiclusterservicediscovery.googleapis.com \
+        spanner.googleapis.com \
         trafficdirector.googleapis.com
     ```
     1. Anthos Feature: Service Mesh
