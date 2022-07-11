@@ -188,7 +188,7 @@ deploy:
         isidro.domain: ISIDRO_DOMAIN
         mattermost.domain: MATTERMOST_DOMAIN
         dns.zone: DNS_ZONE_NAME
-        spanner.config: us-central1
+        spanner.config: regional-us-central1
         spanner.processingUnits: 100
 ---
 apiVersion: skaffold/v2beta26
