@@ -1,0 +1,40 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cloud-dns-issuer
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: cloud-dns-issuer-key
+    solvers:
+    - dns01:
+        cloudDNS:
+          project: {{ .Values.project }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: isidro
+  namespace: isidro
+spec:
+  secretName: ingress-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloud-dns-issuer
+  dnsNames:
+  - {{ .Values.isidro.domain }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mattermost
+  namespace: mattermost
+spec:
+  secretName: ingress-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: cloud-dns-issuer
+  dnsNames:
+  - {{ .Values.mattermost.domain }}

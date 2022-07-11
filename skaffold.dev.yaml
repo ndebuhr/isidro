@@ -76,6 +76,26 @@ build:
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
+  name: deploy-cert-manager
+deploy:
+  kubeContext: isidro-config
+  helm:
+    releases:
+    - name: cert-manager
+      remoteChart: jetstack/cert-manager
+      version: v1.8.2
+      createNamespace: true
+      namespace: cert-manager
+      setValues:
+        installCRDs: true
+    hooks:
+      after:
+      - host:
+          command: ["bash", "-c", "kubectl annotate serviceaccount --context=isidro-config --namespace=cert-manager --overwrite cert-manager \"iam.gke.io/gcp-service-account=isidro-cert-manager@GOOGLE_PROJECT.iam.gserviceaccount.com\""]
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
   name: deploy-mattermost
 deploy:
   kubeContext: isidro-us
@@ -138,6 +158,8 @@ apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
   name: configconnector-install
+requires:
+- configs: ["deploy-cert-manager"]
 deploy:
   kubeContext: isidro-config
   kubectl:

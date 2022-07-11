@@ -141,6 +141,7 @@ gcloud iam service-accounts keys create isidro-skaffold.json \
 Add helm repositories:
 ```bash
 helm repo add mattermost https://helm.mattermost.com
+helm repo add jetstack https://charts.jetstack.io
 ```
 
 Setup skaffold credentials:
