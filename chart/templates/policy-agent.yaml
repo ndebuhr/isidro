@@ -81,6 +81,7 @@ spec:
         - "--server"
         - "--addr=:80"
         - "/etc/opa/policies"
+        resources: {{ toYaml .Values.policyAgent.resources | nindent 10 }}
         volumeMounts:
         - name: actions-rego
           mountPath: /etc/opa/policies/routing.rego
@@ -129,6 +130,7 @@ spec:
         - "--server"
         - "--addr=:80"
         - "/etc/opa/policies"
+        resources: {{ toYaml .Values.policyAgent.resources | nindent 10 }}
         volumeMounts:
         - name: actions-rego
           mountPath: /etc/opa/policies/routing.rego

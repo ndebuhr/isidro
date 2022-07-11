@@ -47,6 +47,7 @@ spec:
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
         - name: DEPLOYER_GITHUB_HOST
           value: deployer-github.{{ .Release.Namespace }}.svc.clusterset.local
+        resources: {{ toYaml .Values.tasks.resources | nindent 10 }}
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

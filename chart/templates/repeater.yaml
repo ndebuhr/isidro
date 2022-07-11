@@ -45,6 +45,7 @@ spec:
         env:
         - name: RESPONDER_HOST
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        resources: {{ toYaml .Values.repeater.resources | nindent 10 }}
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

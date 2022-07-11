@@ -42,6 +42,7 @@ spec:
       - name: keywords
         image: {{ .Values.keywords.image.repository }}:{{ .Values.keywords.image.tag }}
         imagePullPolicy: Always
+        resources: {{ toYaml .Values.keywords.resources | nindent 10 }}
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1

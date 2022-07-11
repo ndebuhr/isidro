@@ -12,24 +12,52 @@ deployer:
       repository: us.gcr.io/PROJECT/isidro/deployer/github
       tag: latest
     token: "1234567890"
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        cpu: 1
+        memory: 1Gi
 
 gatekeeper:
   enabled: true
   image:
     repository: us.gcr.io/PROJECT/isidro/gatekeeper
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 keywords:
   enabled: true
   image:
     repository: us.gcr.io/PROJECT/isidro/keywords
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 kubebash:
   enabled: true
   image:
     repository: us.gcr.io/PROJECT/isidro/kubebash
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 orchestration:
   enabled: true
@@ -37,12 +65,26 @@ orchestration:
   image:
     repository: us.gcr.io/PROJECT/isidro/orchestration
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 policyAgent:
   enabled: true
   image:
     repository: openpolicyagent/opa
     tag: 0.33.1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
   sympathetic:
     config: |
       package isidro.routing
@@ -306,18 +348,39 @@ repeater:
   image:
     repository: us.gcr.io/PROJECT/isidro/repeater
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 responder:
   enabled: true
   image:
     repository: us.gcr.io/PROJECT/isidro/responder
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 tasks:
   enabled: true
   image:
     repository: us.gcr.io/PROJECT/isidro/tasks
     tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
 
 rabbitmq:
   enabled: true
@@ -332,6 +395,13 @@ rabbitmq:
     istio.io/rev: "asm-managed-rapid"
   persistence:
     storageClass: isidro-storage
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
   extraSecrets:
     load-definition:
       load_definition.json: |
@@ -377,7 +447,13 @@ redis:
       istio.io/rev: "asm-managed-rapid"
     persistence:
       storageClass: isidro-storage
-    resources: {}
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        cpu: 1
+        memory: 1Gi
 
 mattermost:
   enabled: true

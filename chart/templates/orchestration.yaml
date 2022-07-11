@@ -61,6 +61,7 @@ spec:
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
         - name: TASKS_HOST
           value: tasks.{{ .Release.Namespace }}.svc.clusterset.local
+        resources: {{ toYaml .Values.orchestration.resources | nindent 10 }}
       restartPolicy: Always
 ---
 apiVersion: monitoring.googleapis.com/v1alpha1
