@@ -96,7 +96,7 @@ policyAgent:
             "async": false,
             "category": "link",
             "href": "https://github.com/ndebuhr/isidro",
-            "completion message": "My documentation can be viewed here.",
+            "message": "My documentation can be viewed here.",
             "tie break priority": 0,
           },
           "keywords": []
@@ -107,7 +107,7 @@ policyAgent:
             "async": false,
             "category": "link",
             "href": "https://github.com/ndebuhr/isidro",
-            "completion message": "My documentation can be viewed here.",
+            "message": "My documentation can be viewed here.",
             "tie break priority": 1,
           },
           "keywords": ["help"]
@@ -172,7 +172,11 @@ policyAgent:
               `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
               `\b[0-9]+\b`
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Service \"{0}\" is now running {1} replicas.",
+            "completion interpolations": [
+              `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
+              `\b[0-9]+\b`
+            ],
             "tie break priority": 2,
           },
           "keywords": ["replica"]
@@ -188,7 +192,12 @@ policyAgent:
               `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
               `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Cronjob {0} is now running on schedule \"{1}\", using image {2}.",
+            "completion interpolations": [
+              `\bcron-[a-z0-9\-]+\b`,
+              `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
+              `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
+            ],
             "tie break priority": 4,
           },
           "keywords": ["cronjob", "cron", "create"]
@@ -202,7 +211,10 @@ policyAgent:
             "interpolations": [
               `\bcron-[a-z0-9\-]+\b`,
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Cronjob {0} has been destroyed.",
+            "completion interpolations": [
+              `\bcron-[a-z0-9\-]+\b`,
+            ],
             "tie break priority": 4,
           },
           "keywords": ["cronjob", "cron", "delete"]
@@ -224,7 +236,7 @@ policyAgent:
             "async": false,
             "category": "link",
             "href": "https://github.com/ndebuhr/isidro",
-            "completion message": "Here's the documentation.",
+            "message": "Here's the documentation.",
             "tie break priority": 0,
           },
           "keywords": []
@@ -235,7 +247,7 @@ policyAgent:
             "async": false,
             "category": "link",
             "href": "https://github.com/ndebuhr/isidro",
-            "completion message": "Here's the documentation.",
+            "message": "Here's the documentation.",
             "tie break priority": 1,
           },
           "keywords": ["help"]
@@ -300,7 +312,11 @@ policyAgent:
               `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
               `\b[0-9]+\b`
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Service \"{0}\" is now running {1} replicas.",
+            "completion interpolations": [
+              `(\bdeployer-github\b|\bdeployer-github-workers\b|\bgatekeeper\b|\bkeywords\b|\bkubebash\b|\borchestration\b|\bpolicy-agent-succinct\b|\bpolicy-agent-sympathetic\b|\brepeater\b|\btasks\b)`,
+              `\b[0-9]+\b`
+            ],
             "tie break priority": 2,
           },
           "keywords": ["replica"]
@@ -316,7 +332,12 @@ policyAgent:
               `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
               `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Cronjob {0} is now running on schedule \"{1}\", using image {2}.",
+            "completion interpolations": [
+              `\bcron-[a-z0-9\-]+\b`,
+              `[0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+ [0-9\,\*]+`,
+              `\b[a-z0-9\.\/]+:[a-z0-9\.]+\b`,
+            ],
             "tie break priority": 4,
           },
           "keywords": ["cronjob", "cron", "create"]
@@ -330,7 +351,10 @@ policyAgent:
             "interpolations": [
               `\bcron-[a-z0-9\-]+\b`,
             ],
-            "completion message": "Done!",
+            "completion message": "Done!  Cronjob {0} has been destroyed.",
+            "completion interpolations": [
+              `\bcron-[a-z0-9\-]+\b`,
+            ],
             "tie break priority": 4,
           },
           "keywords": ["cronjob", "cron", "delete"]

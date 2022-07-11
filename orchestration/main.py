@@ -107,31 +107,10 @@ class Orchestration:
             insert_post, self.channel, self.thread_ts, self.user, self.text
         )
 
-    def send_confirmation(self):
-        requests.post(
-            f"http://{RESPONDER_HOST}/v1/respond",
-            json={
-                "platform": self.platform,
-                "channel": self.channel,
-                "thread_ts": self.thread_ts,
-                "user": self.user,
-                "text": "{0}  {1}".format(
-                    GREETING, self.action["confirmation message"]
-                ),
-            },
-        ).raise_for_status()
-
     def send_rejection(self):
-        requests.post(
-            f"http://{RESPONDER_HOST}/v1/respond",
-            json={
-                "platform": self.platform,
-                "channel": self.channel,
-                "thread_ts": self.thread_ts,
-                "user": self.user,
-                "text": "That does not sound like a confirmation - I will not proceed",
-            },
-        ).raise_for_status()
+        self.send_message(
+            "That does not sound like a confirmation - I will not proceed"
+        )
 
     def get_action(self):
         response = requests.post(
@@ -157,6 +136,7 @@ class Orchestration:
         return self.action["async"]
 
     def send_task(self):
+        self.send_initialization()
         payload = self.action
         payload["platform"] = self.platform
         payload["channel"] = self.channel
@@ -166,29 +146,23 @@ class Orchestration:
             f"http://{TASKS_HOST}/v1/tasks",
             json=payload,
         ).raise_for_status()
+        # Completion messages are deferred to the task runner
 
     def is_link(self):
         return self.action["category"] == "link"
 
     def send_link(self):
-        requests.post(
-            f"http://{RESPONDER_HOST}/v1/respond",
-            json={
-                "platform": self.platform,
-                "channel": self.channel,
-                "thread_ts": self.thread_ts,
-                "user": self.user,
-                "text": "[{0}]({1})".format(
-                    self.action["completion message"],
-                    self.action["href"],
-                ),
-            },
-        ).raise_for_status()
+        self.send_initialization()
+        self.send_message(
+            "[{0}]({1})".format(self.action["message"], self.action["href"])
+        )
+        self.send_completion()
 
     def is_repeater(self):
         return self.action["category"] == "repeater"
 
     def send_repeater(self):
+        self.send_initialization()
         requests.post(
             f"http://{REPEATER_HOST}/v1/repeat",
             json={
@@ -200,45 +174,56 @@ class Orchestration:
                 "action": self.action,
             },
         ).raise_for_status()
+        # Completion messages are deferred to the repeater
 
     def is_kubebash(self):
         return self.action["category"] == "kubebash"
 
     def send_kubebash(self):
-        command = self.action["command"]
+        self.send_initialization()
         if "interpolations" in self.action.keys():
-            for i, interpolation in enumerate(self.action["interpolations"]):
-                replacement = re.findall(interpolation, self.text)
-                if len(replacement) == 0:
-                    self.fail_kubebash_interpolation()
-                command = command.replace("{" + str(i) + "}", str(replacement[0]))
-        if "initialization message" in self.action.keys():
-            requests.post(
-                f"http://{RESPONDER_HOST}/v1/respond",
-                json={
-                    "platform": self.platform,
-                    "channel": self.channel,
-                    "thread_ts": self.thread_ts,
-                    "user": self.user,
-                    "text": self.action["initialization message"],
-                },
-            ).raise_for_status()
+            command = self.interpolate(
+                self.text, self.action["command"], self.action["interpolations"]
+            )
+        else:
+            command = self.action["command"]
         requests.post(
             f"http://{KUBEBASH_HOST}/hooks/kubebash", json={"command": command}
         ).raise_for_status()
-        if "completion message" in self.action.keys():
-            requests.post(
-                f"http://{RESPONDER_HOST}/v1/respond",
-                json={
-                    "platform": self.platform,
-                    "channel": self.channel,
-                    "thread_ts": self.thread_ts,
-                    "user": self.user,
-                    "text": self.action["completion message"],
-                },
-            ).raise_for_status()
+        self.send_completion()
 
-    def fail_kubebash_interpolation(self):
+    def send_confirmation(self):
+        if "confirmation interpolations" in self.action.keys():
+            self.action["confirmation message"] = self.interpolate(
+                self.text,
+                self.action["confirmation message"],
+                self.action["confirmation interpolations"],
+            )
+        self.send_message(
+            "{0}  {1}".format(GREETING, self.action["confirmation message"])
+        )
+
+    def send_initialization(self):
+        if "initialization message" in self.action.keys():
+            if "initialization interpolations" in self.action.keys():
+                self.action["initialization message"] = self.interpolate(
+                    self.text,
+                    self.action["initialization message"],
+                    self.action["initialization interpolations"],
+                )
+            self.send_message(self.action["initialization message"])
+
+    def send_completion(self):
+        if "completion message" in self.action.keys():
+            if "completion interpolations" in self.action.keys():
+                self.action["completion message"] = self.interpolate(
+                    self.text,
+                    self.action["completion message"],
+                    self.action["completion interpolations"],
+                )
+            self.send_message(self.action["completion message"])
+
+    def send_message(self, message):
         requests.post(
             f"http://{RESPONDER_HOST}/v1/respond",
             json={
@@ -246,9 +231,24 @@ class Orchestration:
                 "channel": self.channel,
                 "thread_ts": self.thread_ts,
                 "user": self.user,
-                "text": "I could not infer enough detail in your request, so am unable to execute",
+                "text": message,
             },
         ).raise_for_status()
+
+    def interpolate(self, input_message, output_message, regex_expressions):
+        for i, expression in enumerate(regex_expressions):
+            replacement = re.findall(expression, input_message)
+            if len(replacement) == 0:
+                self.fail_interpolation()
+            output_message = output_message.replace(
+                "{" + str(i) + "}", str(replacement[0])
+            )
+        return output_message
+
+    def fail_interpolation(self):
+        self.send_message(
+            "I could not infer enough detail in from our conversation, so am unable to execute"
+        )
         abort(400)
 
 

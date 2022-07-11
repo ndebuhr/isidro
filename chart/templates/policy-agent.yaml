@@ -89,14 +89,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-sympathetic-actions-rego-v6
+          name: policy-agent-sympathetic-actions-rego-v7
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-sympathetic-actions-rego-v6
+  name: policy-agent-sympathetic-actions-rego-v7
 data:
   routing.rego: |
   {{ .Values.policyAgent.sympathetic.config | nindent 4 }}
@@ -138,14 +138,14 @@ spec:
       volumes:
       - name: actions-rego
         configMap:
-          name: policy-agent-succinct-actions-rego-v6
+          name: policy-agent-succinct-actions-rego-v7
           defaultMode: 0444
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: policy-agent-succinct-actions-rego-v6
+  name: policy-agent-succinct-actions-rego-v7
 data:
   routing.rego: |
   {{ .Values.policyAgent.succinct.config | nindent 4 }}

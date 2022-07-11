@@ -72,17 +72,6 @@ class Task:
         )
 
     def submit(self):
-        if self.initialization_message is not None:
-            requests.post(
-                f"http://{RESPONDER_HOST}/v1/respond",
-                json={
-                    "platform": self.platform,
-                    "channel": self.channel,
-                    "thread_ts": self.thread_ts,
-                    "user": self.user,
-                    "text": self.initialization_message,
-                },
-            ).raise_for_status()
         if self.category == "github actions":
             trigger = self.deploy_github()
 
