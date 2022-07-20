@@ -27,6 +27,9 @@ resource "google_binary_authorization_policy" "isidro" {
   admission_whitelist_patterns {
     name_pattern = "docker.io/bitnami/redis:*"
   }
+  admission_whitelist_patterns {
+    name_pattern = "quay.io/jetstack/*"
+  }
 
   cluster_admission_rules {
     cluster                 = "${var.region}.${var.name}"
