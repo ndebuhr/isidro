@@ -45,7 +45,7 @@ module "secondary" {
   zones                  = ["us-east1-c", "us-east1-d"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
-  spot                   = false
+  spot                   = true
   machine_type           = "t2d-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
@@ -71,7 +71,7 @@ module "tertiary" {
   zones                  = ["europe-west1-b", "europe-west1-d"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
-  spot                   = false
+  spot                   = true
   machine_type           = "t2d-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
@@ -97,7 +97,7 @@ module "quaternary" {
   zones                  = ["europe-west4-a", "europe-west4-b"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
-  spot                   = false
+  spot                   = true
   machine_type           = "t2d-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
@@ -123,7 +123,7 @@ module "quinary" {
   zones                  = ["asia-east1-a", "asia-east1-b"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
-  spot                   = false
+  spot                   = true
   machine_type           = "t2d-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
