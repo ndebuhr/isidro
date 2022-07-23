@@ -167,23 +167,9 @@ deploy:
     - "vendor/configconnector-operator.yaml"
     hooks:
       after:
+      # Ensure required CRDs are available
       - host:
           command: ["bash", "-c", "until kubectl get ConfigConnector --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
-  statusCheck: false
----
-apiVersion: skaffold/v2beta26
-kind: Config
-metadata:
-  name: configconnector-setup
-requires:
-- configs: ["configconnector-install"]
-deploy:
-  kubeContext: isidro-config
-  kubectl:
-    manifests:
-    - "vendor/configconnector-setup.yaml"
-    hooks:
-      after:
       - host:
           command: ["bash", "-c", "until kubectl get ComputeAddress --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
       - host:
@@ -192,13 +178,18 @@ deploy:
           command: ["bash", "-c", "until kubectl get SpannerInstance --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
       - host:
           command: ["bash", "-c", "until kubectl get SpannerDatabase --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
+      # Commandeer the ConfigConnector resource (for Helm management)
+      - host:
+          command: ["bash", "-c", "kubectl label ConfigConnector configconnector.core.cnrm.cloud.google.com --overwrite --context isidro-config app.kubernetes.io/managed-by='Helm'"]
+      - host:
+          command: ["bash", "-c", "kubectl annotate ConfigConnector configconnector.core.cnrm.cloud.google.com --overwrite --context isidro-config meta.helm.sh/release-name='isidro-auxiliary' meta.helm.sh/release-namespace='default'"]
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
   name: deploy-auxiliary-chart
 requires:
-- configs: ["configconnector-setup"]
+- configs: ["configconnector-install"]
 deploy:
   kubeContext: isidro-config
   helm:
