@@ -5,9 +5,9 @@
 Isidro includes:
 * Prebuilt connectors to Slack and Mattermost for event subscription and response
 * Policy- and NLP-based workflow planning
+* Easy delegation of build and deploy workflows to Jenkins, Cloud Build, and GitHub Actions
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
-* Bundled, self-hosted Mattermost instance for development, debugging, and testing
 * Well-established paths for both development and production deployments
     * DEV: 2 clusters, 2 regions, 5 zones, and a regional Cloud Spanner instance
     * PROD: 6 clusters, 6 regions, 13 zone, and a multi-regional Cloud Spanner instance
@@ -176,6 +176,14 @@ To teardown:
 skaffold delete
 ```
 
+## Deprovisioning
+
+In the Terraform provisioning directory, run:
+```bash
+gcloud init
+terraform destroy
+```
+
 ## System configuration
 
 ### Slack configuration
@@ -219,12 +227,4 @@ Mention @isidro in Slack messages, and get a response.  Use separate message thr
 curl -X POST https://isidro.example.com/api/v1/submit \
     -H "Content-Type: application/json" \
     -d '{"token": "1234567890", "event": {"channel": "quality", "ts": "1234567890", "user": "me", "text": "Hello"}}'
-```
-
-## Deprovisioning
-
-In the Terraform provisioning directory, run:
-```bash
-gcloud init
-terraform destroy
 ```
