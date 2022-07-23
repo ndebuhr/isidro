@@ -79,6 +79,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=../../isidro-provisioner.json
 
 Run Terraform provisioning, with something like:
 ```bash
+gcloud init
 terraform init
 terraform apply
 ```
@@ -106,23 +107,6 @@ kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west1_isidro-be isidr
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_europe-west4_isidro-nl isidro-nl
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_asia-east1_isidro-tw isidro-tw
 kubectl config rename-context gke_"$GOOGLE_PROJECT"_northamerica-northeast1 isidro-config
-```
-
-### Enable GMP
-
-Enable Managed Prometheus:
-```bash
-# For development setups
-gcloud beta container clusters update isidro-us --region us-central1 --enable-managed-prometheus
-```
-
-```bash
-# For production setups
-gcloud beta container clusters update isidro-us-ia --region us-central1 --enable-managed-prometheus &
-gcloud beta container clusters update isidro-us-sc --region us-east1 --enable-managed-prometheus &
-gcloud beta container clusters update isidro-be --region europe-west1 --enable-managed-prometheus &
-gcloud beta container clusters update isidro-nl --region europe-west4 --enable-managed-prometheus &
-gcloud beta container clusters update isidro-tw --region asia-east1 --enable-managed-prometheus
 ```
 
 ## Installation
@@ -241,5 +225,6 @@ curl -X POST https://isidro.example.com/api/v1/submit \
 
 In the Terraform provisioning directory, run:
 ```bash
+gcloud init
 terraform destroy
 ```

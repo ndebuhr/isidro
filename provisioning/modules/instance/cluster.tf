@@ -1,24 +1,25 @@
 data "google_project" "project" {}
 
 module "gke" {
-  source                      = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
-  version                     = "21.2.0"
-  project_id                  = data.google_project.project.project_id
-  name                        = var.name
-  regional                    = true
-  region                      = var.region
-  zones                       = var.zones
-  release_channel             = "RAPID"
-  network                     = var.vpc
-  subnetwork                  = google_compute_subnetwork.instance.name
-  ip_range_pods               = google_compute_subnetwork.instance.secondary_ip_range[0].range_name
-  ip_range_services           = google_compute_subnetwork.instance.secondary_ip_range[1].range_name
-  network_policy              = true
-  create_service_account      = false
-  service_account             = var.nodes_service_account
-  enable_binary_authorization = true
-  gce_pd_csi_driver           = true
-  cluster_resource_labels     = { "mesh_id" : "proj-${data.google_project.project.number}" }
+  source                               = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
+  version                              = "22.0.0"
+  project_id                           = data.google_project.project.project_id
+  name                                 = var.name
+  regional                             = true
+  region                               = var.region
+  zones                                = var.zones
+  release_channel                      = "RAPID"
+  network                              = var.vpc
+  subnetwork                           = google_compute_subnetwork.instance.name
+  ip_range_pods                        = google_compute_subnetwork.instance.secondary_ip_range[0].range_name
+  ip_range_services                    = google_compute_subnetwork.instance.secondary_ip_range[1].range_name
+  network_policy                       = true
+  create_service_account               = false
+  service_account                      = var.nodes_service_account
+  monitoring_enable_managed_prometheus = true
+  enable_binary_authorization          = true
+  gce_pd_csi_driver                    = true
+  cluster_resource_labels              = { "mesh_id" : "proj-${data.google_project.project.number}" }
   node_pools = [
     {
       name         = "core"
@@ -44,7 +45,7 @@ module "gke" {
 
 module "asm" {
   source                    = "terraform-google-modules/kubernetes-engine/google//modules/asm"
-  version                   = "21.2.0"
+  version                   = "22.0.0"
   cluster_name              = module.gke.name
   project_id                = data.google_project.project.project_id
   cluster_location          = module.gke.location
