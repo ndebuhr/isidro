@@ -47,6 +47,10 @@ spec:
           value: "{{ .Values.deployer.github.token }}"
         - name: RESPONDER_HOST
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: CELERY_BACKEND
+          value: "redis://redis.isidro.local:6379/0"
+        - name: CELERY_BROKER
+          value: "redis://redis.isidro.local:6379/1"
         resources: {{ toYaml .Values.deployer.github.resources | nindent 10 }}
       restartPolicy: Always
 ---
@@ -80,6 +84,10 @@ spec:
           value: "{{ .Values.deployer.github.token }}"
         - name: RESPONDER_HOST
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: CELERY_BACKEND
+          value: "redis://redis.isidro.local:6379/0"
+        - name: CELERY_BROKER
+          value: "redis://redis.isidro.local:6379/1"
         resources: {{ toYaml .Values.deployer.github.resources | nindent 10 }}
       restartPolicy: Always
 ---

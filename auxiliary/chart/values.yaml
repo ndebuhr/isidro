@@ -8,7 +8,3 @@ mattermost:
 
 dns:
   zone: "example-com"
-
-spanner:
-  config: nam-eur-asia3
-  processingUnits: 100

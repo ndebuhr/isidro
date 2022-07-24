@@ -19,11 +19,19 @@ from opentelemetry.propagators.cloud_trace_propagator import (
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-CELERY_BACKEND = "redis://isidro-redis-master:6379"
-CELERY_BROKER = "pyamqp://isidro:isidro@isidro-rabbitmq//"
-
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
+CELERY_BACKEND = os.environ.get("CELERY_BACKEND")
+CELERY_BROKER = os.environ.get("CELERY_BROKER")
+
+if not GITHUB_TOKEN:
+    raise ValueError("No GITHUB_TOKEN environment variable set")
+if not RESPONDER_HOST:
+    raise ValueError("No RESPONDER_HOST environment variable set")
+if not CELERY_BACKEND:
+    raise ValueError("No CELERY_BACKEND environment variable set")
+if not CELERY_BROKER:
+    raise ValueError("No CELERY_BROKER environment variable set")
 
 set_global_textmap(CloudTraceFormatPropagator())
 

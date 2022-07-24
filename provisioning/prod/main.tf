@@ -5,7 +5,7 @@ module "foundations" {
   source = "../modules/foundation"
   project_number = data.google_project.project.number
   project_id = data.google_project.project.project_id
-
+  spanner_config = "nam-eur-asia3"
 }
 
 module "primary" {
