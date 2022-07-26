@@ -35,6 +35,7 @@ Isidro includes:
         cloudresourcemanager.googleapis.com \
         container.googleapis.com \
         gkehub.googleapis.com \
+        redis.googleapis.com \
         meshca.googleapis.com \
         multiclusteringress.googleapis.com \
         multiclusterservicediscovery.googleapis.com \
