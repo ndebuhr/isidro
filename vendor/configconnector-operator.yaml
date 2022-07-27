@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/operator-system: "true"
   name: configconnector-operator-system
@@ -12,7 +12,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
     controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   labels:
@@ -116,7 +116,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
     controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   labels:
@@ -253,7 +253,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/operator-system: "true"
   name: configconnector-operator
@@ -263,8 +263,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
-    cnrm.cloud.google.com/version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
+    cnrm.cloud.google.com/version: 1.89.0
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/operator-system: "true"
@@ -335,7 +335,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/operator-system: "true"
@@ -495,7 +495,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/operator-system: "true"
   name: configconnector-operator-cnrm-viewer-role-binding
@@ -512,7 +512,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/operator-system: "true"
   name: configconnector-operator-rolebinding
@@ -529,7 +529,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/operator-system: "true"
   name: configconnector-operator-service
@@ -546,7 +546,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   annotations:
-    cnrm.cloud.google.com/operator-version: 1.88.0
+    cnrm.cloud.google.com/operator-version: 1.89.0
   labels:
     cnrm.cloud.google.com/component: configconnector-operator
     cnrm.cloud.google.com/operator-system: "true"
@@ -561,7 +561,7 @@ spec:
   template:
     metadata:
       annotations:
-        cnrm.cloud.google.com/operator-version: 1.88.0
+        cnrm.cloud.google.com/operator-version: 1.89.0
       labels:
         cnrm.cloud.google.com/component: configconnector-operator
         cnrm.cloud.google.com/operator-system: "true"
@@ -571,7 +571,7 @@ spec:
         - --local-repo=/configconnector-operator/channels
         command:
         - /configconnector-operator/manager
-        image: gcr.io/gke-release/cnrm/operator:3b25d50
+        image: gcr.io/gke-release/cnrm/operator:35d3b61
         imagePullPolicy: Always
         name: manager
         resources:
