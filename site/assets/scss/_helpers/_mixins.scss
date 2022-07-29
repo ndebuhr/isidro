@@ -1,0 +1,51 @@
+@mixin res($media) {
+  @if $media == phone {
+    @media screen and (max-width: 767px) {
+      @content;
+    }
+  } @else if $media == mobile {
+    @media screen and (min-width: 375px) {
+      @content;
+    }
+  }  @else if $media == tablet {
+    @media screen and (min-width: 768px) {
+      @content;
+    }
+  } @else if $media == tablet-only {
+    @media (min-width: 768px) and (max-width: 991px) {
+      @content;
+    }
+  } @else if $media == mobileMax {
+    @media screen and (max-width: 991px) {
+      @content;
+    }
+  } @else if $media == desktop {
+    @media screen and (min-width: 992px) {
+      @content;
+    }
+  } @else if $media == xlarge {
+    @media screen and (min-width: 1200px) {
+      @content;
+    }
+  } @else if $media == laptop {
+    @media screen and (min-width: 1366px) {
+      @content;
+    }
+  } @else if $media == xlarge-only {
+    @media (min-width: 1200px) and (max-width: 1599px) {
+      @content;
+    }
+  } @else if $media == xxlarge {
+    @media screen and (min-width: 1600px) {
+      @content;
+    }
+  } @else if $media == xtop {
+    @media screen and (min-width: 992px) and (max-height: 600px){
+      @content
+    }
+  } @else if $media == mobileXS {
+    @media screen and (max-width: 375px) {
+      @content;
+    }
+  }
+}

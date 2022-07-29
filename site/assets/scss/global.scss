@@ -1,0 +1,74 @@
+* {
+  font-family: 'Noto Sans', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+html {
+  scroll-behavior: inherit!important;
+}
+body {
+  background-color: #1A2A45;
+}
+
+main {
+  // overflow: hidden;
+  // margin-top: 65px;
+  // @include res(tablet) {
+  //   padding-left: 40px;
+  //   padding-right: 40px;
+  // }
+}
+
+.container {
+  max-width: 1280px;
+  // @include res(xlarge) {
+  //   max-width: 1610px;
+  // }
+}
+
+.btn {
+  white-space: nowrap;
+  box-shadow: none!important;
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+.custom-font {
+  font-family: 'Mansalva', cursive;
+  color: $yellow;
+}
+
+
+.btn:hover {
+  * {
+    fill: #1a2a45;
+  }
+}
+
+
+
+// highlight code 
+.highlight {
+  margin: 30px 0;
+  &>div {
+    padding: 10px 0;
+    overflow: auto;
+  }
+  td {
+    
+    &:first-child {
+      padding: 0 4px!important;
+      border-right: 1px solid #ffffff3d!important;
+    }
+    &:nth-child(2) {
+      padding: 0 15px 0 15px!important;
+    }
+  }
+  
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Nanum+Pen+Script&display=swap');

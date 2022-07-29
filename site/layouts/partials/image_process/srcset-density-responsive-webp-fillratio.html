@@ -1,0 +1,113 @@
+{{/*  get image resources  */}}
+{{- $img := .page.Resources.GetMatch .src -}}
+{{- if not $img -}}
+  {{- warnf "No image resource found at %s%s" .page.RelPermalink .src  -}}
+{{- end -}}
+{{- $src := "" -}}
+{{- $srcsetOrig := slice -}}
+{{- $srcsetWebp := slice -}}
+{{- $widths := slice -}}
+{{- $fillRatio := 0  -}}
+
+{{/*  calculate fill ratio  */}}
+{{- if .fillRatio -}}
+
+  {{- $fillRatio = div (index .fillRatio 0 | float) (index .fillRatio 1 | float) -}}
+{{- end -}}
+
+{{/*  if .width present for pixel density srcset  */}}
+{{- if .width -}}
+  {{- $densities := .densities | default (slice 1 2) -}}
+  {{- $densities = sort $densities -}}
+  {{- range $density := $densities -}}
+    {{- $widths = $widths | append (slice
+      (dict 
+        "desc" (printf "%dx" $density)
+        "width" (mul $.width $density)
+      )
+    ) -}}
+  {{- end -}}
+{{- else -}}
+{{/*  else produce responsive srcset  */}}
+
+  {{- $userWidths := .widths | default (slice 500 800 1200) -}}
+  {{- $userWidths = sort $userWidths -}}
+  {{- range $userWidth := $userWidths -}}
+    {{- $widths = $widths | append (slice
+      (dict 
+        "desc" (printf "%dw" $userWidth)
+        "width" $userWidth
+      )
+    ) -}}
+  {{- end -}}
+{{- end -}}
+
+
+
+{{- range $index, $width := $widths -}}
+  {{- $imgResizedOrig := "" -}}
+  {{- $imgResizedWebp := "" -}}
+
+  {{- if $fillRatio -}}
+    
+    {{/*  resulting fillHeight must be converted to integer for use with image resize  */}}
+    {{- $fillHeight := mul $width.width $fillRatio | int -}}
+
+    {{- if or (gt $width.width $img.Width) (gt $fillHeight $img.Height) -}}
+      {{- warnf "Source image %s (%dx%dpx) is not wide enough to resize to %dx%dpx " $img.RelPermalink $img.Width $img.Height $width.width $fillHeight -}}
+    {{- end -}}
+
+    {{/*  resize image  */}}
+    {{- $imgResizedOrig = $img.Fill (printf "%dx%d" $width.width $fillHeight) -}}
+    {{- $imgResizedWebp = $img.Fill (printf "%dx%d webp" $width.width $fillHeight) -}}
+
+  {{- else -}}
+    {{/*  do standard  */}}
+    {{- if gt $width.width $img.Width -}}
+      {{- warnf "Source image %s is not wide enough to resize to %dpx " $img.RelPermalink $width.width -}}
+    {{- end -}}
+    {{/*  resize image  */}}
+    {{- $imgResizedOrig = $img.Resize (printf "%dx" $width.width) -}}
+    {{- $imgResizedWebp = $img.Resize (printf "%dx webp" $width.width) -}}
+  {{- end -}}
+
+  
+
+  
+
+  {{- $srcsetOrig = $srcsetOrig | append (printf "%s %s" $imgResizedOrig.RelPermalink $width.desc  ) -}}
+  {{- $srcsetWebp = $srcsetWebp | append (printf "%s %s" $imgResizedWebp.RelPermalink $width.desc  ) -}}
+  {{- if $.width -}}
+    {{- if eq $index 0 -}}
+      {{- $src = $imgResizedOrig -}}
+    {{- end -}}
+  {{- else -}}
+    {{- if eq (len $widths) (add $index 1) -}}
+      {{- $src = $imgResizedWebp -}}
+    {{- end -}}
+  {{- end -}}
+
+
+  {{- if eq (len $widths) (add $index 1) -}}
+    {{- $src = $imgResizedOrig -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $srcsetOrig = delimit $srcsetOrig ", " -}}
+{{- $srcsetWebp = delimit $srcsetWebp ", " -}}
+
+{{/*  generate picture  */}}
+
+<picture>
+  <source srcset="{{ $srcsetWebp }}" type="image/webp">
+  <source srcset="{{ $srcsetOrig }}" type="{{ $src.MediaType }}">
+  <img 
+  src="{{ $src.RelPermalink }}" 
+  alt="{{ .alt }}" 
+  width="{{ $src.Width }}" 
+  height="{{ $src.Height }}"
+  class="{{ .class | default ""}}"
+  sizes="{{ .sizes | default "100vw" }}">
+</picture>
+
+

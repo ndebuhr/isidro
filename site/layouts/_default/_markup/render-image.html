@@ -1,0 +1,27 @@
+{{- $title := "" -}}
+{{- $alt := "" -}}
+
+{{/*  check named parameters  */}}
+
+{{- with .PlainText -}}
+  {{- $alt = . -}}
+{{- end -}}
+
+{{- with .Title -}}
+  {{- $title = . -}}
+{{- end -}}
+
+
+{{/*  assign to dict  */}}
+
+{{- $dict := (dict 
+  "page" .Page
+  "src" .Destination
+  "alt" $alt
+  "title" $title 
+) -}}
+
+
+{{/*  call image partial  */}}
+
+{{- partial "image_process/image" $dict -}}

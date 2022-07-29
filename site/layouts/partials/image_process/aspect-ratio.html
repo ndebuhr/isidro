@@ -1,0 +1,39 @@
+{{/*  set variables  */}}
+{{- $fillWidth := "" -}}
+{{- $fillHeight := "" -}}
+{{/*  get image resources  */}}
+{{- $img := .page.Resources.GetMatch .src -}}
+{{- if not $img -}}
+  {{- warnf "No image resource found at %s%s" .page.RelPermalink .src  -}}
+{{- end -}}
+{{/*  numbers converted to float  */}}
+{{- $imgRatio := div ($img.Height | float) ($img.Width | float)  -}}
+
+{{- $fillRatio := div (index .fillRatio 1 | float) (index .fillRatio 0 | float)  -}}
+
+{{/*  if image ratio is greater than .fillRatio, keep width and crop height  */}}
+{{- if gt $imgRatio $fillRatio -}}
+  {{- $fillWidth = $img.Width -}}
+  {{/*  resulting fillHeight must be converted to integer for use with image resize  */}}
+  {{- $fillHeight = mul $img.Width $fillRatio | int -}}
+
+{{- else  -}}
+  {{/*  if image ratio is equal to or less than .fillRatio, keep height and crop width  */}}
+  {{/*  reverse .fillRatio numbers, to apply crop to width  */}}
+  {{/*  numbers converted to float  */}}
+  {{- $fillRatio = div (index .fillRatio 0 | float) (index .fillRatio 1 | float) -}}
+  {{- $fillHeight = $img.Height -}}
+  {{- $fillWidth = mul $img.Height $fillRatio | int -}}
+{{- end -}}
+
+
+{{/*  process image  */}}
+
+{{- $imgResized := $img.Fill (printf "%dx%d" $fillWidth $fillHeight) -}}
+
+<img 
+  src="{{ $imgResized.RelPermalink }}" 
+  alt="{{ .alt }}" 
+  width="{{ $imgResized.Width }}" 
+  height="{{ $imgResized.Height }}"
+  class="{{ .class }}">

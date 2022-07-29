@@ -1,0 +1,45 @@
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer--inner">
+      <div class="footer__block">
+        <div class="footer__block--body">
+          <p>
+            If you like and/or use Isidro, give the repo a star
+          </p>
+        </div>
+        <div class="footer__block--action">
+          {{ partial "elements/button-link" (dict
+              "title" "Star the repository"
+              "href" $.Site.Params.resources.git.link
+              "external" true
+              "icon" $.Site.Params.resources.git.icon
+              "classes" "btn-primary"
+            ) }}
+        </div>
+      </div>
+
+      <div class="footer__block">
+        <div class="footer__block--body">
+          <p>
+            If you have issues or requests, please open an issue
+          </p>
+        </div>
+        <div class="footer__block--action">
+          {{ partial "elements/button-link" (dict
+              "title" "Open an issue"
+              "href" "https://github.com/ndebuhr/isidro/issues/new"
+              "external" true
+              "icon" $.Site.Params.resources.git.icon
+              "classes" "btn-primary"
+            ) }}
+        </div>
+      </div>
+
+    </div>
+    <div class="footer--copy">
+      
+      <p>&copy {{ $.Site.Copyright | default "Copyright &copy;" }} {{ now.Format "2006" }}</p>
+    </div>
+  </div>
+</footer>

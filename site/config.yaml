@@ -1,0 +1,52 @@
+baseURL: https://isidro.ai/
+# for xml output
+languageCode: en-us
+#for website
+defaultContentLanguage: en-us
+title: Isidro
+# enable robots
+enableRobotsTXT: true
+# alternate copyright company text
+copyright: Copyright
+
+
+markup: 
+  goldmark:
+    render: 
+      unsafe: true
+
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: false
+    hl_Lines: ""
+    hl_inline: false
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    noClasses: false
+    noHl: false
+    style: monokai
+    tabWidth: 10
+    pygmentsUseClasses: true
+    pygmentsCodefences: true
+
+
+params:
+  SetupSection: setup
+  UsageSection: usage
+  resources:
+    git:
+      icon: /icons/github-icon.svg
+      link: https://github.com/ndebuhr/isidro
+    email:
+      link: admin@isidro.ai
+
+  defaultDescription: "Isidro is an Anthos- and GKE-based microservices chatbot"
+  image:
+    widths:
+      default: [400, 600, 800, 1200]
+      productSingle: [350, 550, 900]
+    # densities: [1, 2]
+    class: img

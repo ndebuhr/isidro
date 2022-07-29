@@ -1,0 +1,43 @@
+{{- $title := "" -}}
+{{- $alt := "" -}}
+{{- $src := "" -}}
+{{- $width := "" -}}
+
+{{/*  check named parameters  */}}
+{{- if .IsNamedParams -}}
+  {{- with (.Get "src") -}}
+    {{- $src = . -}}
+  {{- end -}}
+  {{- with (.Get "alt") -}}
+    {{- $alt = . -}}
+  {{- end -}}
+  {{- with (.Get "title") -}}
+    {{- $title = . -}}
+  {{- end -}}
+  {{- with (.Get "width") -}}
+    {{- $width = . | int -}}
+  {{- end -}}
+
+{{- else -}}
+{{/*  if only one unnamed param in shortcode  */}}
+  {{- with (.Get 0) -}}
+    {{- $src = . -}}
+  {{- end -}}
+
+{{- end -}}
+
+
+{{/*  assign to dict  */}}
+
+{{- $dict := (dict 
+  "page" .Page
+  "src" $src
+  "alt" $alt
+  "title" $title 
+  "width" $width 
+) -}}
+
+
+{{/*  call image partial  */}}
+
+{{- partial "image_process/image" $dict -}}

@@ -1,0 +1,35 @@
+{{ $src := .page.Resources.GetMatch .src }}
+
+{{ $widths :=  site.Params.image.width.default | default (slice 400 600 800 1200) }}
+{{ $widths = sort $widths }}
+{{ $srcset := slice }}
+{{ $img := "" }}
+
+{{ range $index, $width := $widths }} 
+
+  {{ $resize :=  $src.Resize (printf "%vx" $width) }}
+  {{ $srcset = $srcset | append (printf "%s %vw" ( $resize.RelPermalink | safeURL) $width) }}
+  {{ if eq (len $widths) (add $index 1) }}
+    {{ $img = $resize }}
+  {{ end }}
+{{ end }}
+
+{{ $srcset = delimit $srcset ", " }}
+
+<img 
+  data-src="{{ $img.RelPermalink }}" 
+  data-srcset="{{ $srcset }}"
+  class="img-fluid lazyload"
+  height="{{ $img.Height }}"
+  width="{{ $img.Width }}"
+  alt="{{ .alt }}"
+  data-sizes="auto">
+
+<noscript>
+  <img 
+  src="{{ $img.RelPermalink }}" 
+  class="img-fluid lazyload"
+  height="{{ $img.Height }}"
+  width="{{ $img.Width }}"
+  alt="{{ .alt }}">
+</noscript>

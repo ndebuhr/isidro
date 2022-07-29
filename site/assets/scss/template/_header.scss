@@ -1,0 +1,216 @@
+@import "bootstrap-icons/font/bootstrap-icons.scss";
+
+// params
+// $headerHeight: 65px;
+
+// body {
+//   padding-top: $headerHeight;
+// }
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  height: 65px;
+  background-color: #1A2A45;
+  box-shadow: 0px 7px 9px rgba(0, 0, 0, 0.13);
+  padding: 10px 0;
+  .container {
+    max-width: 1610px;
+  }
+  &--inner {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  &__logo {
+    font-size: 28px;
+    font-family: 'Mansalva', cursive;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 40px;
+    &:hover {
+      color: #fff;
+    }
+  }
+  &--over_menu {
+    position: relative;
+    z-index: 3;
+  }
+}
+
+.nav {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  &--item {
+    margin-right: 30px;
+    width: 100%;
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      svg {
+        margin-right: 7px;
+      }
+    }
+    &.active * {
+      color: $yellow;
+      fill: $yellow;
+    }
+  }
+}
+
+
+
+
+
+
+
+@include res(mobileMax) {
+  .header {
+    &__logo {
+      margin-left: 10px;
+    }
+    &--button {
+      font-size: 13px;
+    }
+
+  }
+  #menu {
+    background-color: #1A2A45;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform  0.4s ease, opacity 0.4s ease;
+    padding: 130px 40px 15px;
+    @include res(tablet) {
+      width: 300px;
+      border-left: 2px solid $yellow;
+    }
+    .nav {
+      display: block;
+      &--item {
+        margin-bottom: 20px;
+        width: 100%;
+        margin: 0;
+        border-radius: 9px;
+        a {
+          display: flex;
+          align-items: center;
+          padding: 15px 20px;
+          font-size: 18px;
+          font-weight: 500;
+          @include res(tablet) {
+            padding: 12px 20px;
+            margin-bottom: 10px;
+          }
+          svg {
+            margin-right: 11px;
+          }
+        }
+        &.active {
+          background-color: rgba(255,255,255, 0.2);
+       }
+      }
+    }
+  }
+
+  // burger animation
+  .header--burger {
+    height: 50px;
+    min-width: 50px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    &.plate {
+      svg {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+      }
+      .burger {
+        filter: url(#gooeyness);
+      }
+      .x {
+        transform: scale(0);
+        transition: transform 400ms;
+      }
+      .line {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 7px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transform-origin: 50%;
+        transition: stroke-dasharray 500ms 200ms, stroke-dashoffset 500ms 200ms, transform 500ms 200ms;
+      }
+
+      .x .line {
+        stroke-width: 5.5px;
+      }
+      .x {
+        transition: transform 400ms;
+      }
+      .line {
+        transform-origin: 50%;
+        transition: transform 400ms 100ms;
+      }
+      
+      
+    } 
+  }
+  html {
+    height: 100%;
+  }
+  body.menu_show {
+    overflow: hidden;
+    height: 100%;
+    #menu {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+    .header--burger.plate {
+      .line {
+        transition: stroke-dasharray 500ms, stroke-dashoffset 500ms, transform 500ms;
+      }
+      .line {
+        transition: transform 400ms;
+      }
+      .line1 {
+        transform: translateX(18px) translateY(-3px) rotate(-45deg) scale(.7);
+      }
+      .line2 {
+        transform: translateX(-18px) translateY(-3px) rotate(45deg) scale(.7);
+      }
+      .line3 {
+        transform: translateY(0px) rotate(45deg) scale(.7);
+      }
+      .line4 {
+        transform: translateY(0px) rotate(-45deg) scale(.7);
+      }
+      .line5 {
+        transform: translateX(18px) translateY(3px) rotate(45deg) scale(.7);
+      }
+      .line6 {
+        transform: translateX(-18px) translateY(3px) rotate(-45deg) scale(.7);
+      }
+      .x {
+        transition: transform 400ms 100ms;
+        transform: scale(1);
+      }
+    }
+  }
+}

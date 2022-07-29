@@ -1,0 +1,263 @@
+{{ define "main" }}
+
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-9 col-lg-6">
+          <div class="hero__content">
+            <h1 class="hero__content--title">
+              <span class="custom-font">ISIDRO</span> — An Anthos- and GKE-Based Microservices Chatbot
+            </h1>
+            <div class="hero__content--body">
+              <p>A policy-based chatbot that orchestrates software engineering workflows and runs on Kubernetes</p>
+            </div>
+            {{ partial "elements/button-link" (dict
+              "title" "Source code"
+              "href"  $.Site.Params.resources.git.link
+              "external" true
+              "icon" $.Site.Params.resources.git.icon
+              "classes" "btn-outline-light btn-lg"
+            ) }}
+          </div>
+        </div>
+        <div class="col-md-8 col-lg-6 offset-md-2 offset-lg-0">
+
+          {{ partial "image_process/image" (dict
+              "page" . 
+              "src" "hero.png" 
+              "quality" 80
+              "hint" "drawing"
+              "width" 967
+              "sizes" "(min-width: 768px) 50vw, 100vw" 
+              "alt" "Image outputted 200 and 300 px"
+              "title" "Title text"
+              "class" "hero--img"
+          )}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section connectors">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <div class="section--title">
+            <p>
+              Prebuilt connectors to Slack and Mattermost for event subscription and response
+            </p>
+            <p>
+              Policy- and NLP-based workflow planning
+            </p>
+          </div>
+          
+        </div>
+        <div class="col-8 col-md-4 offset-1 text-center section--svg">
+          {{  partial "image_process/svg-icon" "/icons/messenger-bg.svg" }}
+        </div>
+        <div class="col-7 col-md-4 offset-5 offset-md-0 text-end section--svg section--svg__image">
+          {{ partial "image_process/svg-icon" "/icons/messangers.svg" }}
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section connectors">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-3 offset-md-1 order-md-3">
+          <div class="section--title">
+            <p>
+              Easy delegation of build and deploy workflows to <b style="color: #D33833;"><i>Jenkins</i></b>, <b style="color: #1a73e8;"><i>Google Cloud Build</i></b>, and <b style="color: #bf3989;"><i>GitHub Actions</i></b>
+            </p>
+          </div>
+        </div>
+        <div class="col-8 col-md-4 offset-1 offset-md-0 order-md-2 text-center section--svg">
+          {{  partial "image_process/svg-icon" "/icons/dev.svg" }}
+        </div>
+        <div class="col-7 col-md-4 offset-5 offset-md-0 order-md-1 text-start section--svg section--svg__image">
+          {{ partial "image_process/svg-icon" "/icons/workflows.svg" }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="section automated">
+    <div class="container">
+      <div class="section--title">
+        <h2>Broad range of functionality, plus extensibility</h2>
+      </div>
+      <div class="automated--inner">
+
+        {{ partial "pages/home/automated" (dict 
+          "page" .  
+          "Title" "Execution of workflows"
+          "step_1" "Development"
+          "step_2" "Test Execution"
+          "step_3" "Provisioning"
+          ) }}
+        
+        <div class="animation--logo">
+          Isidro
+        </div>
+
+        {{ partial "pages/home/automated" (dict 
+          "page" .  
+          "Title" "Presentation of data"
+          "step_1" "Test Results"
+          "step_2" "Deployment Metrics"
+          "step_3" "Bad Actor Management"
+          "mirror" true
+          ) }}      
+      </div>
+    </div>
+  </section>
+
+  <section class="section region">
+    <div class="container">
+      <div class="section--title">
+        <h2>Global scale for performance and reliability</h2>
+      </div>
+      <div class="region--inner">
+        <div class="row align-items-center">
+          <div class="col-md-4">
+            <div class="region__block">
+              <h3 class="region--title">Regional workload clusters and database replicas:</h3>
+              <ul class="region--list">
+                <li>us-central1  <span>(Council Bluffs, United States)</span></li>
+                <li>us-east1  <span>(Moncks Corner, United States)</span></li>
+                <li>europe-west1 <span>(Saint-Ghislain, Belgium)</span></li>
+                <li>europe-west4 <span>(Eemshaven, Netherlands)</span></li>
+                <li>asia-east1 <span>(Changhua County, Taiwan)</span></li>
+              </ul>
+            </div>
+
+            <div class="region__block">
+              <h3 class="region--title">Regional administrative cluster:</h3>
+              <ul class="region--list">
+                <li>northamerica-northeast1  <span>(Montréal, Canada)</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="region--map">
+              <!-- Montreal, Canada -->
+              <div class="region--location region--location__1">
+                <span>Administrative Cluster</span>
+              </div>
+              <!-- Council Bluffs, USA -->
+              <div class="region--location region--location__2 tag_bottom">
+                <span>Service and DB Replicas</span>
+              </div>
+              <!-- Saint Ghislain, Belgium -->
+              <div class="region--location region--location__3 tag_bottom">
+                <span>Service and DB Replicas</span>
+              </div>
+              <!-- Eemshaven, Netherlands -->
+              <div class="region--location region--location__4">
+                <span>Service and DB Replicas</span>
+              </div>
+              <!-- Moncks Corner, USA -->
+              <div class="region--location region--location__5 tag_bottom">
+                <span>Service and DB Replicas</span>
+              </div>
+              <!-- Changhua County, Taiwan -->
+              <div class="region--location region--location__6 tag_bottom">
+                <span>Service and DB Replicas</span>
+              </div>
+              {{  partial "image_process/svg-icon" "/svg/world.svg" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section security">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <div class="section--title">
+            <p>Security features like 
+              <span>binary authorization</span>, <span>mTLS</span>, 
+              <span>workload identity</span>, and <span>network policies</span></p>
+          </div>
+        </div>
+        <div class="col-md-6 offset-md-2">
+          <div class="security--asset">
+            {{  partial "image_process/svg-icon" "/svg/security.svg" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{/*  {{ partial "image_process/svg-icon" .Params.icon }}  */}}
+
+  {{/*  {{ with .Params.images }}
+    {{ with index . 0 }}
+      {{ partial "image" (dict "src" . "page" $ "alt" $.Title) }}
+    {{ end }}
+  {{ end }}  */}}
+
+  {{/*  <h1>Aspect ratio</h1>
+  {{- $opts := (dict "page" . "src" "test.png" "fillRatio" (slice 4 3) "alt" "Image ratio filled") -}}
+  {{ partial "image_process/aspect-ratio" $opts }}
+
+  <h1>Src set</h1>
+  {{- $opts2 := (dict "page" . "src" "test2.jpg" "width" 500 "densities" (slice 1 2 3) "alt" "Image ratio + srcset  1x, 2x, 3x") -}}
+  {{ partial "image_process/srcset-density" $opts2 }}
+
+
+  <h1>Responsive srcset set</h1>
+  {{- $opts3 := (dict 
+    "page" . 
+    "src" "test2.jpg" 
+    "widths" (slice 300 600) 
+    "sizes" "(min-width: 768px) 50vw, 100vw" 
+    "alt" "Image outputted 200 and 300 px") -}}
+  {{ partial "image_process/srcset-responsive" $opts3 }}
+
+
+  <h1>WebP</h1>
+  {{- $opts4 := (dict "page" . "src" "test2.jpg" "widths" (slice 300 600) "sizes" "(min-width: 768px) 50vw, 100vw" "alt" "Image outputted 200 and 300 px") -}}
+  {{ partial "image_process/srcset-responsive-webp" $opts4 }}
+
+
+  <h1>Density/Responsive/WebP</h1>
+  {{- $opts5 := (dict "page" . "src" "test2.jpg" "sizes" "(min-width: 768px) 50vw, 100vw" "alt" "Image outputted 200 and 300 px") -}}
+  {{ partial "image_process/srcset-density-responsive-webp" $opts5 }}  */}}
+
+  {{/*  <h1>Density/Responsive/WebP/fillRatio</h1>
+  {{- $opts6 := (dict 
+    "page" . 
+    "src" "test2.jpg" 
+    "fillRatio" (slice 4 3) 
+    "width" 200 
+    "sizes" "(min-width: 768px) 50vw, 100vw" 
+    "alt" "Image outputted 200 and 300 px"
+  ) -}}
+  {{ partial "image_process/srcset-density-responsive-webp-fillratio" $opts6 }}  */}}
+
+
+  {{/*  {{- $opts7 := (dict 
+    "page" . 
+    "src" "test2.jpg" 
+    "fillRatio" (slice 4 3) 
+    "quality" 80
+    "hint" "picture"
+    "anchor" "BottomLeft"
+    "width" 200
+    "resampleFilter" "NearestNeighbor"
+    "sizes" "(min-width: 768px) 50vw, 100vw" 
+
+    "alt" "Image outputted 200 and 300 px"
+    "title" "Title text"
+
+  ) -}}
+  {{ partial "image_process/image" $opts7 }}  */}}
+
+
+  {{ .Content }}
+{{ end }}

@@ -1,0 +1,353 @@
+
+.hero {
+  padding: 130px 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  @include res(tablet) { 
+    height: 100vh;
+  }
+  &__content {
+    margin-bottom: 40px;
+    &--title {
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.4em;
+      margin-bottom: 15px;
+      @include res(tablet) {
+        font-size: 32px;
+      }
+      @include res(desktop) {
+        font-size: 40px;
+      }
+    }
+    &--body {
+      margin-bottom: 40px;
+      p {
+        font-size: 20px;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        @include res(desktop) {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+  &--img {
+    width: 700px;
+    height: auto;
+    @include res(tablet) {
+      width: 950px;
+    }
+    @include res(desktop) {
+      width: inherit;
+      height: inherit;
+    }
+  }
+}
+
+
+
+
+.section {
+  padding: 80px 0;
+  @include res(tablet) {
+    padding: 200px 0;
+  }
+  &--title {
+    p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.7em;
+      letter-spacing: 0.04em;
+      opacity: 0.8;
+      text-align: center;
+      margin-bottom: 40px;
+      @include res(tablet) {
+        text-align: left;
+      }
+      @include res(desktop) {
+        font-size: 22px;
+      }
+    }
+  }
+}
+
+.section--svg {
+  svg {
+    max-width: 100%;
+  }
+  &__image {
+    margin-top: -200px;
+    @include res(tablet) {
+      margin-top: 0;
+    }
+  }
+}
+
+
+
+.automated {
+  text-align: center;
+  .section--title {
+    margin-bottom: 50px;
+  }
+}
+.automated--inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .animation--logo {
+    font-size: 44px;
+    font-family: 'Mansalva', cursive;
+    color: $yellow;
+    margin-top: 60px;
+  }
+}
+.animation {
+  position: relative;
+  &--title {
+    margin-bottom: 50px;
+    text-align: center;
+  }
+  svg{
+    overflow: visible!important;
+    text {
+      background-color: #fff;
+      color: #000;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+  }
+  &--inner {
+    position: relative;
+    display: inline-block;
+  }
+  &--text {
+    position: absolute;
+    z-index: 2;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    span {
+      position: relative;
+      z-index: 3;
+      white-space: nowrap;
+    }
+    .text__current, .text__progress{
+      padding: 5px 15px;
+      color: #000;
+    }
+    .text__progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 6;
+      height: 100%;
+      width: 100%;
+      color: #fff !important;
+      background-color: $success;
+      clip-path: inset(-1px 100% -1px 0px);
+    }  
+    &__1 {
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &__2 {
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -50%);
+    }
+    &__3 {
+      left: 50%;
+      bottom: 0;
+      transform: translate(-50%, 50%);
+    }
+  }
+
+  &--right {
+    svg {
+      transform: scale(-1, 1);
+    }
+    .animation--text {
+      &__1{
+        left: 100%;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+.region {
+  overflow: hidden;
+  .section--title {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+
+  &__block {
+    margin-bottom: 60px;
+  }
+  &--title {
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.4em;
+    margin-bottom: 22px;
+  }
+  &--list {
+    // list-style-type: none;
+    li {
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1.4em;
+      margin-bottom: 15px;
+      text-indent: 4px;
+      span {
+        font-size: 14px;
+      }
+      &::marker {
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  // map styles
+  &--map {
+    position: relative;
+    width: max-content;
+  }
+
+  @keyframes pulse {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(3.5);
+    }
+  }
+
+  &--location {
+    font-size: 14px;
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    background-color: $green;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background-color: $success;
+      border-radius: 100%;
+      opacity: 0.7;
+      animation: pulse 2s infinite;
+      animation-delay: 0.4s;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background-color: $success;
+      border-radius: 100%;
+      opacity: 0.4;
+      animation: pulse 2s infinite;
+    }
+    span {
+      position: absolute;
+      right: 50%;
+      bottom: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000;
+      border: 1px solid #000;
+      border-radius: 5px 5px 0px 5px;
+      white-space: nowrap;
+      padding: 0px 6px;
+    }
+    &.tag_bottom {
+      span {
+        top: 50%;
+        bottom: inherit;
+        border-radius: 5px 0 5px 5px;
+      }
+    }
+  }
+}
+
+
+.region--location{
+  // Methodology is to locate the pixel left/top percentage from the 1047x689 map image, then offset 13px/2
+  // 6.5px == half of the marker size
+  // Montreal, Canada
+  &__1 {
+    left: calc(26.6% - 6.5px);
+    top: calc(47.9% - 6.5px);
+  }
+  // Council Bluffs, USA
+  &__2 {
+    left: calc(20.2% - 6.5px);
+    top: calc(50.7% - 6.5px);
+  }
+  // Saint Ghislain, Belgium
+  &__3 {
+    left: calc(48.0% - 6.5px);
+    top: calc(44.8% - 6.5px);
+  }
+  // Eemshaven, Netherlands
+  &__4 {
+    left: calc(48.9% - 6.5px);
+    top: calc(43.0% - 6.5px);
+  }
+  // Moncks Corner, USA
+  &__5 {
+    left: calc(24.8% - 6.5px);
+    top: calc(54.3% - 6.5px);
+  }
+  // Changhua County, Taiwan
+  &__6 {
+    left: calc(80.5% - 6.5px);
+    top: calc(59.1% - 6.5px);
+  }
+}
+
+
+
+.security {
+  .section--title {
+    p {
+      span {
+        position: relative;
+        white-space: nowrap;
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          border: 1px solid $yellow;
+          width: 100%;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+  &--asset {
+    svg {
+      max-width: 100%;
+    }
+  }
+}

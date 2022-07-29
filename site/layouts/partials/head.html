@@ -1,0 +1,45 @@
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  {{- if .IsHome -}}
+    {{- .Site.Title -}}
+  {{- else -}}
+    {{- .Title -}} - {{- .Site.Title -}}
+  {{- end -}}
+</title>
+
+<meta name="description" content="{{- with .Description  -}}{{- . -}}{{- else -}}{{- if .IsPage -}} {{- .Summary -}} {{- else -}} {{- .Site.Params.defaultDescription -}} {{- end -}} {{- end -}}">
+
+{{- range .AlternativeOutputFormats -}}
+  <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL}}">
+{{- end -}}
+
+{{/* canonical rel tags */}}
+{{- if .IsNode -}}
+  <link rel="canonical" href="{{ .Paginator.URL | safeURL}}">
+  {{- if .Paginator.HasNext -}}
+    <link rel="next" href="{{ .Paginator.Next.URL | safeURL}}">
+  {{- end -}}
+  {{- if .Paginator.HasPrev -}}
+    <link rel="prev" href="{{- .Paginator.Prev.URL | safeURL -}}">
+  {{- end -}}
+{{- else -}}
+  <link rel="canonical" href="{{ .Permalink | safeURL}}">
+{{- end -}}
+
+{{- if .Params.private -}}
+  <meta name="robots" content="noindex, nofollow" />
+{{- else if .Params.robots -}}
+  <meta name="robots" content="{{- .Params.robots -}}" />
+{{- end -}}
+
+{{/*  google fonts  */}}
+<link href="https://fonts.googleapis.com/css2?family=Mansalva&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+{{/*  website styles  */}}
+{{ partial "libSASS" "scss/main.scss" }}
+
+{{/*  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>  */}}
+{{/*  website javascript  */}}
+{{ partial "esbuild" "js/main.js" }}

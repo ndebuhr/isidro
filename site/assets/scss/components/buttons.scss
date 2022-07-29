@@ -1,0 +1,37 @@
+// .btn {
+//   display: inline-flex;
+//   flex-wrap: nowrap;
+//   align-items: center;
+//   &-small {
+//     font-size: 16px;
+//   }
+//   &-primary {
+
+//   }
+// }
+
+
+.btn {
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 25px;
+  svg {
+    margin-right: 9px;
+  }
+  &-primary {
+    color: #1A2A45;
+    font-weight: 600;
+    svg {
+      * {
+        fill: #1A2A45;
+      }
+    }
+  }
+}
+
+.btn-outline-color{
+  &-yellow {
+    border-color: $yellow;
+  }
+}

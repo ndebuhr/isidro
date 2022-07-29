@@ -1,0 +1,65 @@
+
+<header class="header" id="header">
+  <div class="container">
+    <div class="header--inner">
+      <a href="" class="header__logo header--over_menu">
+        Isidro
+      </a>
+      <nav id="menu">
+        <ul class="nav" role="menu">
+          {{ $currentPage := . }}
+          {{ range .Site.Menus.main }}
+            <li class="nav--item {{ if or ( $.HasMenuCurrent "main" . ) ( $.IsMenuCurrent "main" . ) }}active{{ end }}">
+              <a href="{{ .URL }}">
+                {{ with .Pre }}
+                  {{ partial "image_process/svg-icon" . }}
+                {{ end }}
+                {{ .Title }}
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      </nav>
+      
+      {{ partial "elements/button-link" (dict
+        "title" "Source code"
+        "href" $.Site.Params.resources.git.link
+        "external" true
+        "icon" $.Site.Params.resources.git.icon
+        "classes" "btn-primary ms-auto header--button header--over_menu me-3 me-lg-0"
+      ) }}
+
+
+      {{/*  {{ partial "elements/button-link" (dict
+        "title" "Source code"
+        "href"  $.Site.Params.resources.git.link
+        "external" true
+        "classes" "btn-primary ms-auto header--button header--over_menu me-3 me-lg-0"
+      ) }}  */}}
+
+      <button class="header--burger plate d-lg-none" id="btn_burger">
+        <svg>
+          <defs>
+            <filter id="gooeyness">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blur" />
+              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="gooeyness" />
+              <feComposite in="SourceGraphic" in2="gooeyness" operator="atop" />
+            </filter>
+          </defs>
+        </svg>
+        <svg class="burger" version="1.1" height="100" width="100" viewBox="0 0 100 100">
+          <path class="line line1" d="M 50,35 H 25" />
+          <path class="line line2" d="M 50,35 H 75" />
+          <path class="line line3" d="M 50,50 H 25" />
+          <path class="line line4" d="M 50,50 H 75" />
+          <path class="line line5" d="M 50,65 H 25" />
+          <path class="line line6" d="M 50,65 H 75" />
+        </svg>
+        <svg class="x" version="1.1" height="100" width="100" viewBox="0 0 100 100">
+          <path class="line" d="M 34,32 L 66,68" />
+          <path class="line" d="M 66,32 L 34,68" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

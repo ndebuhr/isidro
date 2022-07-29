@@ -1,0 +1,16 @@
+
+
+{{- with .title -}}
+  <a 
+    href="{{ $.href }}" 
+    class="btn {{ $.classes }}" 
+    {{ with $.external }}
+      target="blank"
+    {{ end }}
+  >
+    {{ with $.icon }}
+      {{ partial "image_process/svg-icon" . }}
+    {{ end }}
+    {{ . }}
+  </a>
+{{- end -}}

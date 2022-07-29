@@ -1,0 +1,36 @@
+{{/*  get image resources  */}}
+{{- $img := .page.Resources.GetMatch .src -}}
+{{- if not $img -}}
+  {{- warnf "No image resource found at %s%s" .page.RelPermalink .src  -}}
+{{- end -}}
+
+
+{{- $densities := .densities | default (slice 1 2) -}}
+{{- $densities = sort $densities -}}
+
+{{- $src := "" -}}
+{{- $srcset := slice -}}
+
+{{- range $index, $density := $densities -}}
+  {{- $width := mul $.width $density -}}
+  {{- if gt $.width $img.Width -}}
+    {{- warnf "Source image %s is not wide enough to resize to %dpx (%d destiny)" $img.RelPermalink $width $density -}}
+  {{- end -}}
+  {{- $resized := $img.Resize (printf "%dx" $width) -}}
+  {{- $srcset = $srcset | append (printf "%s %dx" $resized.RelPermalink $density) -}}
+  {{- if eq $density 1 -}}
+    {{- $src = $resized -}}
+  {{- end -}}
+
+{{- end -}}
+
+{{- $srcset = delimit $srcset ", " -}}
+
+
+<img 
+  srcset="{{ $srcset }}"
+  src="{{ $src.RelPermalink }}" 
+  alt="{{ .alt }}" 
+  width="{{ $src.Width }}" 
+  height="{{ $src.Height }}"
+  class="{{ .class }}">

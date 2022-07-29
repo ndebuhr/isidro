@@ -1,0 +1,47 @@
+{{/*  get image resources  */}}
+{{- $img := .page.Resources.GetMatch .src -}}
+{{- if not $img -}}
+  {{- warnf "No image resource found at %s%s" .page.RelPermalink .src  -}}
+{{- end -}}
+{{- $src := "" -}}
+{{- $srcsetOrig := slice -}}
+{{- $srcsetWebp := slice -}}
+
+{{- $widths := sort .widths  -}}
+
+{{- range $index, $width := $widths -}}
+
+  {{- if gt $.width $img.Width -}}
+    {{- warnf "Source image %s is not wide enough to resize to %dpx " $img.RelPermalink $width -}}
+  {{- end -}}
+
+  {{- $imgResizedOrig := $img.Resize (printf "%dx" $width) -}}
+  {{- $imgResizedWebp := $img.Resize (printf "%dx webp" $width) -}}
+
+  {{- $srcsetOrig = $srcsetOrig | append (printf "%s %dw" $imgResizedOrig.RelPermalink $width  ) -}}
+  {{- $srcsetWebp = $srcsetWebp | append (printf "%s %dw" $imgResizedWebp.RelPermalink $width  ) -}}
+
+
+  {{- if eq (len $widths) (add $index 1) -}}
+    {{- $src = $imgResizedOrig -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $srcsetOrig = delimit $srcsetOrig ", " -}}
+{{- $srcsetWebp = delimit $srcsetWebp ", " -}}
+
+{{/*  generate picture  */}}
+
+<picture>
+  <source srcset="{{ $srcsetWebp }}" type="image/webp">
+  <source srcset="{{ $srcsetOrig }}" type="{{ $src.MediaType }}">
+  <img 
+  src="{{ $src.RelPermalink }}" 
+  alt="{{ .alt }}" 
+  width="{{ $src.Width }}" 
+  height="{{ $src.Height }}"
+  class="{{ .class | default ""}}"
+  sizes="{{ .sizes | default "100vw" }}">
+</picture>
+
+
