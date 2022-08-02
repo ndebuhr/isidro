@@ -153,10 +153,16 @@ class Orchestration:
 
     def send_link(self):
         self.send_initialization()
-        self.send_message(
-            "[{0}]({1})".format(self.action["message"], self.action["href"])
-        )
-        self.send_completion()
+        if self.platform == "mattermost":
+            self.send_message(
+                "[{0}]({1})".format(self.action["message"], self.action["href"])
+            )
+            self.send_completion()
+        if self.platform == "slack":
+            self.send_message(
+                "<{1}|{0}>".format(self.action["message"], self.action["href"])
+            )
+            self.send_completion()
 
     def is_repeater(self):
         return self.action["category"] == "repeater"

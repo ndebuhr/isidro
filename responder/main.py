@@ -70,7 +70,8 @@ class Responder:
             json={
                 "channel": self.channel,
                 "thread_ts": self.thread_ts,
-                "text": f"<@{self.user}> {self.text}.",
+                "text": f"<@{self.user}> {self.text}",
+                "parse": "none",
             },
             headers={
                 "Authorization": f"Bearer {SLACK_OAUTH_TOKEN}",
