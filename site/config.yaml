@@ -50,3 +50,5 @@ params:
       productSingle: [350, 550, 900]
     # densities: [1, 2]
     class: img
+
+  gtmContainerID: "GTM-1234567890"
