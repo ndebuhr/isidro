@@ -11,6 +11,7 @@
         <div class="footer__block--action">
           {{ partial "elements/button-link" (dict
               "title" "Star the repository"
+              "id" "github-star-repo"
               "href" $.Site.Params.resources.git.link
               "external" true
               "icon" $.Site.Params.resources.git.icon
@@ -28,6 +29,7 @@
         <div class="footer__block--action">
           {{ partial "elements/button-link" (dict
               "title" "Open an issue"
+              "id" "github-open-issue"
               "href" "https://github.com/ndebuhr/isidro/issues/new"
               "external" true
               "icon" $.Site.Params.resources.git.icon

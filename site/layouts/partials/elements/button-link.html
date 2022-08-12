@@ -3,6 +3,7 @@
 {{- with .title -}}
   <a 
     href="{{ $.href }}" 
+    id="{{ $.id }}" 
     class="btn {{ $.classes }}" 
     {{ with $.external }}
       target="blank"
