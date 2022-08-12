@@ -2,10 +2,11 @@ data "google_project" "project" {}
 data "google_client_config" "default" {}
 
 module "foundations" {
-  source = "../modules/foundation"
-  project_number = data.google_project.project.number
-  project_id = data.google_project.project.project_id
-  spanner_config = "regional-us-central1"
+  source           = "../modules/foundation"
+  project_number   = data.google_project.project.number
+  project_id       = data.google_project.project.project_id
+  spanner_config   = "regional-us-central1"
+  memorystore_tier = "BASIC"
 }
 
 module "primary" {

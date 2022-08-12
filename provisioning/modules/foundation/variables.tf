@@ -9,3 +9,7 @@ variable "project_number" {
 variable "spanner_config" {
   description = "The geographic config for the Isidro operational database"
 }
+
+variable "memorystore_tier" {
+  description = "The Cloud Memorystore (Redis) tier, for the instance that will be used to back asynchronous task queues"
+}
