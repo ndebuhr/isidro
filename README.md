@@ -10,7 +10,7 @@ Isidro includes:
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
 * Well-established paths for both development and production deployments
     * DEV: 2 clusters, 2 regions, 5 zones, and a regional Cloud Spanner instance
-    * PROD: 6 clusters, 6 regions, 13 zone, and a multi-regional Cloud Spanner instance
+    * PROD: 6 clusters, 6 regions, 13 zones, and a multi-regional Cloud Spanner instance
 * Security features like binary authorization, mTLS, workload identity, and network policies
 
 ![Isidro Map](images/isidro-map.png)
