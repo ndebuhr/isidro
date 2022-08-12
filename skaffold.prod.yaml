@@ -322,28 +322,42 @@ deploy:
       # Ensure required CRDs are available
       - host:
           command: ["bash", "-c", "until kubectl get ConfigConnector --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
-      - host:
-          command: ["bash", "-c", "until kubectl get ComputeAddress --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
-      - host:
-          command: ["bash", "-c", "until kubectl get DNSRecordSet --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
-      # Commandeer the ConfigConnector resource (for Helm management)
-      - host:
-          command: ["bash", "-c", "kubectl label ConfigConnector configconnector.core.cnrm.cloud.google.com --overwrite --context isidro-config app.kubernetes.io/managed-by='Helm'"]
-      - host:
-          command: ["bash", "-c", "kubectl annotate ConfigConnector configconnector.core.cnrm.cloud.google.com --overwrite --context isidro-config meta.helm.sh/release-name='isidro-auxiliary' meta.helm.sh/release-namespace='default'"]
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
-  name: deploy-auxiliary-chart
+  name: configconnector-setup
 requires:
 - configs: ["configconnector-install"]
 deploy:
   kubeContext: isidro-config
   helm:
     releases:
-    - name: isidro-auxiliary
-      chartPath: auxiliary/chart
+    - name: isidro-configconnector
+      chartPath: auxiliary/configconnector
+      setValues:
+        configconnector.project: GOOGLE_PROJECT
+    hooks:
+      after:
+      # Ensure required CRDs are available
+      - host:
+          command: ["bash", "-c", "until kubectl get ComputeAddress --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
+      - host:
+          command: ["bash", "-c", "until kubectl get DNSRecordSet --context isidro-config; do echo Waiting for CRD creation...; sleep 3; done"]
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: deploy-networking
+requires:
+- configs: ["configconnector-setup"]
+deploy:
+  kubeContext: isidro-config
+  helm:
+    releases:
+    - name: isidro-networking
+      chartPath: auxiliary/networking
+      skipBuildDependencies: true
       setValues:
         project: GOOGLE_PROJECT
         isidro.domain: ISIDRO_DOMAIN
@@ -355,10 +369,10 @@ kind: Config
 metadata:
   name: deploy-auxiliary-manifests
 requires:
-- configs: ["deploy-auxiliary-chart"]
+- configs: ["deploy-networking"]
 deploy:
   kubeContext: isidro-config
   kubectl:
     manifests:
-    - "auxiliary/manifests/mci.yaml"
-    - "auxiliary/manifests/mcs.yaml"
+    - "auxiliary/multicluster/mci.yaml"
+    - "auxiliary/multicluster/mcs.yaml"
