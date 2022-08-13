@@ -13,3 +13,7 @@ variable "spanner_config" {
 variable "memorystore_tier" {
   description = "The Cloud Memorystore (Redis) tier, for the instance that will be used to back asynchronous task queues"
 }
+
+variable "gbash_role" {
+  description = "GCP IAM role to attach to the gBash service, which enables gcloud CLI commands within chatbot workflows"
+}

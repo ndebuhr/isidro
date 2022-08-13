@@ -7,6 +7,7 @@ module "foundations" {
   project_id       = data.google_project.project.project_id
   spanner_config   = "nam-eur-asia3"
   memorystore_tier = "STANDARD_HA"
+  gbash_role       = "roles/editor"
 }
 
 module "primary" {

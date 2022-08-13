@@ -18,6 +18,13 @@ build:
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh prod $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
+    context: gbash
+    kaniko:
+      cache: {}
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
     context: kubebash
     kaniko:
@@ -145,6 +152,7 @@ deploy:
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        gbash.image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
@@ -183,6 +191,7 @@ deploy:
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        gbash.image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
@@ -221,6 +230,7 @@ deploy:
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        gbash.image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
@@ -259,6 +269,7 @@ deploy:
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        gbash.image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
@@ -297,6 +308,7 @@ deploy:
       artifactOverrides:
         deployer.github.image: us.gcr.io/GOOGLE_PROJECT/isidro/deployer/github
         gatekeeper.image: us.gcr.io/GOOGLE_PROJECT/isidro/gatekeeper
+        gbash.image: us.gcr.io/GOOGLE_PROJECT/isidro/gbash
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration

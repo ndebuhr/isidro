@@ -1,0 +1,82 @@
+{{ if eq .Values.gbash.enabled true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: gbash
+  labels:
+    app: gbash
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 9000
+  selector:
+    app: gbash
+---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: gbash
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gbash
+  labels:
+    app: gbash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gbash
+  template:
+    metadata:
+      labels:
+        app: gbash
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed-rapid"
+    spec:
+      serviceAccountName: gbash-microservice
+      containers:
+      - name: gbash
+        image: {{ .Values.gbash.image.repository }}:{{ .Values.gbash.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: RESPONDER_HOST
+          value: responder.{{ .Release.Namespace }}.svc.clusterset.local
+        resources: {{ toYaml .Values.gbash.resources | nindent 10 }}
+      restartPolicy: Always
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gbash
+spec:
+  podSelector:
+    matchLabels:
+      app: gbash
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
+    - podSelector:
+        matchLabels:
+          app: orchestration
+  egress:
+  - {}
+{{ end }}
