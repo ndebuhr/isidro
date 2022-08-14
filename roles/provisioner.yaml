@@ -21,6 +21,11 @@ includedPermissions:
 - cloudkms.cryptoKeys.update
 - cloudkms.keyRings.create
 - cloudkms.keyRings.get
+- compute.firewalls.create
+- compute.firewalls.delete
+- compute.firewalls.get
+- compute.firewalls.list
+- compute.firewalls.update
 - compute.globalAddresses.create
 - compute.globalAddresses.delete
 - compute.globalAddresses.get
