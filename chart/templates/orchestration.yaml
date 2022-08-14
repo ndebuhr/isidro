@@ -49,6 +49,8 @@ spec:
           value: "isidro"
         - name: GREETING
           value: {{ .Values.orchestration.greeting }}
+        - name: GBASH_HOST
+          value: gbash.{{ .Release.Namespace }}.svc.clusterset.local
         - name: KEYWORDS_HOST
           value: keywords.{{ .Release.Namespace }}.svc.clusterset.local
         - name: KUBEBASH_HOST

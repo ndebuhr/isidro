@@ -27,6 +27,7 @@ CONFIRMATION_WORDS = [
 GREETING = os.environ.get("GREETING")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
 KEYWORDS_HOST = os.environ.get("KEYWORDS_HOST")
+GBASH_HOST = os.environ.get("GBASH_HOST")
 KUBEBASH_HOST = os.environ.get("KUBEBASH_HOST")
 POLICY_AGENT_HOST = os.environ.get("POLICY_AGENT_HOST")
 TASKS_HOST = os.environ.get("TASKS_HOST")
@@ -38,6 +39,8 @@ if not RESPONDER_HOST:
     raise ValueError("No RESPONDER_HOST environment variable set")
 if not KEYWORDS_HOST:
     raise ValueError("No KEYWORDS_HOST environment variable set")
+if not GBASH_HOST:
+    raise ValueError("No GBASH_HOST environment variable set")
 if not KUBEBASH_HOST:
     raise ValueError("No KUBEBASH_HOST environment variable set")
 if not POLICY_AGENT_HOST:
@@ -198,6 +201,22 @@ class Orchestration:
         ).raise_for_status()
         self.send_completion()
 
+    def is_gbash(self):
+        return self.action["category"] == "gbash"
+
+    def send_gbash(self):
+        self.send_initialization()
+        if "interpolations" in self.action.keys():
+            command = self.interpolate(
+                self.text, self.action["command"], self.action["interpolations"]
+            )
+        else:
+            command = self.action["command"]
+        requests.post(
+            f"http://{GBASH_HOST}/hooks/gbash", json={"command": command}
+        ).raise_for_status()
+        self.send_completion()
+
     def send_confirmation(self):
         if "confirmation interpolations" in self.action.keys():
             self.action["confirmation message"] = self.interpolate(
@@ -277,6 +296,8 @@ def orchestrate():
             orchestration.send_repeater()
         elif orchestration.is_kubebash():
             orchestration.send_kubebash()
+        elif orchestration.is_gbash():
+            orchestration.send_gbash()
         return ""
     elif not orchestration.user_is_confirming():
         orchestration.send_rejection()
