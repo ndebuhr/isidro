@@ -48,7 +48,7 @@ trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer(__name__)
 
 app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app)
+FlaskInstrumentor().instrument_app(app, excluded_urls="/")
 RequestsInstrumentor().instrument()
 
 tasks = Celery(

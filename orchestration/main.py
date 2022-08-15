@@ -51,7 +51,7 @@ if not REPEATER_HOST:
     raise ValueError("No REPEATER_HOST environment variable set")
 
 app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app)
+FlaskInstrumentor().instrument_app(app, excluded_urls="/")
 RequestsInstrumentor().instrument()
 
 
