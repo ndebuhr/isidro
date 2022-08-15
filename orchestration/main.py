@@ -271,9 +271,8 @@ class Orchestration:
         return output_message
 
     def fail_interpolation(self):
-        self.send_message(
-            "I could not infer enough detail in from our conversation, so am unable to execute"
-        )
+        if "interpolation failure message" in self.action.keys():
+            self.send_message(self.action["interpolation failure message"])
         abort(400)
 
 
