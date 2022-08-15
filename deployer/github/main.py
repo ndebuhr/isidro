@@ -6,6 +6,8 @@ import requests
 import time
 import zipfile
 
+from metrics import define_metrics
+
 from celery import Celery, Task, current_app
 from flask import Flask, abort, request
 from opentelemetry import trace
@@ -18,6 +20,7 @@ from opentelemetry.propagators.cloud_trace_propagator import (
 )
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from prometheus_client import generate_latest
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
@@ -48,7 +51,10 @@ trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer(__name__)
 
 app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app, excluded_urls="/")
+# Exclude the root path, which is hit regularly for load balancer health checks
+# https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1181
+# Assumes RFC1035 domains
+FlaskInstrumentor().instrument_app(app, excluded_urls="^http[s]?:\/\/[A-Za-z0-9\-\.]+\/$")
 RequestsInstrumentor().instrument()
 
 tasks = Celery(
@@ -56,6 +62,7 @@ tasks = Celery(
     backend=CELERY_BACKEND,
     broker=CELERY_BROKER,
 )
+define_metrics(tasks)
 
 if not GITHUB_TOKEN:
     raise ValueError("No GITHUB_TOKEN environment variable set")
@@ -248,3 +255,8 @@ def poll_for_conclusion(
             },
         ).raise_for_status()
         return run_json["conclusion"]
+
+
+@app.route("/metrics")
+def metrics():
+    return generate_latest()

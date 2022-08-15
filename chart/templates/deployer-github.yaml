@@ -54,6 +54,19 @@ spec:
         resources: {{ toYaml .Values.deployer.github.resources | nindent 10 }}
       restartPolicy: Always
 ---
+apiVersion: monitoring.googleapis.com/v1alpha1
+kind: PodMonitoring
+metadata:
+  name: deployer-github
+spec:
+  selector:
+    matchLabels:
+      app: deployer-github
+  endpoints:
+  - port: 80
+    interval: 30s
+    timeout: 10s
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

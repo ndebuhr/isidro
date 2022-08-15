@@ -51,7 +51,10 @@ if not REPEATER_HOST:
     raise ValueError("No REPEATER_HOST environment variable set")
 
 app = Flask(__name__)
-FlaskInstrumentor().instrument_app(app, excluded_urls="/")
+# Exclude the root path, which is hit regularly for load balancer health checks
+# https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1181
+# Assumes RFC1035 domains
+FlaskInstrumentor().instrument_app(app, excluded_urls="^http[s]?:\/\/[A-Za-z0-9\-\.]+\/$")
 RequestsInstrumentor().instrument()
 
 
