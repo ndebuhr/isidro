@@ -179,3 +179,9 @@ def submission():
 @app.route("/", methods=["GET"])
 def health():
     return ""
+
+
+@app.after_request
+def limit_slack_retries(response):
+    response.headers["X-Slack-No-Retry"] = "1"
+    return response
