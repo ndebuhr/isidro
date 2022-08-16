@@ -99,6 +99,7 @@ policyAgent:
       cpu: 1
       memory: 1Gi
   sympathetic:
+    enabled: true
     config: |
       package isidro.routing
 
@@ -239,6 +240,7 @@ policyAgent:
       keyword_match_counts := [count(keyword_matches[m]) | keyword_matches[m]]
       action := [options[i].action | keyword_match_counts[i] == max(keyword_match_counts)]
   succinct:
+    enabled: true
     config: |
       package isidro.routing
 
