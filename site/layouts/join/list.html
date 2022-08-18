@@ -1,0 +1,21 @@
+{{- define "main" -}}
+
+<div class="docs">
+  <div class="docs__pageNav">
+  </div>
+  <div class="docs__nav">
+    <div class="docs_control">
+    </div>
+    <div class="docs__nav--menu" id="menuDocs">
+    </div>
+  </div>
+  <div class="docs__content js-toc-content" id="doc_content">
+    <div class="content">
+    <h1 class="docs__content--title">Get Notified</h1><br>
+    <div>Be the first to hear about new features and capabilities</div><br>
+    </div>
+    {{ partial "email/form" }}
+  </div>
+</div>
+
+{{- end -}}
