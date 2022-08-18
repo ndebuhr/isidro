@@ -34,8 +34,6 @@ markup:
 
 
 params:
-  SetupSection: setup
-  UsageSection: usage
   resources:
     git:
       icon: /icons/github-icon.svg
