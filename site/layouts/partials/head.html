@@ -20,6 +20,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','{{- .Site.Params.gtmContainerID -}}');</script>
 <!-- End Google Tag Manager -->
 
+<script src="https://www.google.com/recaptcha/enterprise.js?render={{- .Site.Params.recaptchaKey -}}"></script>
+
 {{- range .AlternativeOutputFormats -}}
   <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL}}">
 {{- end -}}

@@ -52,3 +52,4 @@ params:
     class: img
 
   gtmContainerID: "GTM-1234567890"
+  recaptchaKey: "1234567890__1234567890"
