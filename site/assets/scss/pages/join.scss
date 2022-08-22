@@ -14,3 +14,7 @@
 .form-block input, select {
     border-radius: 0.25rem
 }
+
+.form-block input:invalid {
+    border-color: red;
+}
