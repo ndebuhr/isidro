@@ -33,5 +33,7 @@ def users():
     return result.one()[0]
 
 
-users_metric = Gauge("isidro:users", "Number of users who have had Isidro conversations")
+users_metric = Gauge(
+    "isidro:users", "Number of users who have had Isidro conversations"
+)
 users_metric.set_function(users)

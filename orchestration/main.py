@@ -4,11 +4,10 @@ import re
 import requests
 
 import metrics
-import trace
+import observability
 
 from flask import Flask, abort, request
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from spanner import database, insert_post
 from prometheus_client import generate_latest
 
@@ -54,8 +53,9 @@ app = Flask(__name__)
 # Exclude the root path, which is hit regularly for load balancer health checks
 # https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1181
 # Assumes RFC1035 domains
-FlaskInstrumentor().instrument_app(app, excluded_urls="^http[s]?:\/\/[A-Za-z0-9\-\.]+\/$")
-RequestsInstrumentor().instrument()
+FlaskInstrumentor().instrument_app(
+    app, excluded_urls="^http[s]?:\/\/[A-Za-z0-9\-\.]+\/$"
+)
 
 
 class Orchestration:

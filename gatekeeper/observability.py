@@ -19,4 +19,4 @@ tracer_provider.add_span_processor(
 )
 trace.set_tracer_provider(tracer_provider)
 
-tracer = trace.get_tracer("isidro-orchestration")
+tracer = trace.get_tracer(__name__)
