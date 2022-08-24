@@ -1,0 +1,35 @@
+<form id="feedback-form" action="/v1/feedback/submit">
+    <div class="form-block row">
+        <label for="job-type" class="col-md-4">Chatbot User Type</label><br>
+        <select name="job-type" id="job-type" class="col-md-6">
+            <option disabled selected value></option>
+            <option value="user">User</option>
+            <option value="power-user">Power User</option>
+            <option value="developer">Developer</option>
+            <option value="operations">Operations</option>
+            <option value="management">Management</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    <div class="form-block row">
+        <label for="job-type" class="col-md-4">Job or Role</label><br>
+        <select name="job-type" id="job-type" class="col-md-6">
+            <option disabled selected value></option>
+            <option value="engineer">Engineer</option>
+            <option value="manager">Manager</option>
+            <option value="executive">Executive</option>
+            <option value="student">Student</option>
+            <option value="hobbyist">Hobbyist</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+    <div class="form-block row">
+        <label for="job-type" class="col-md-4">Feedback</label><br>
+        <textarea name="feedback" class="col-md-6" required></textarea>
+    </div>
+    <div class="form-block row">
+        <div class="col-md-3">
+            <input id="feedback-subscribe" type="submit" value="Submit" class="btn btn-primary">
+        </div>
+    </div>
+</form>

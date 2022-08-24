@@ -11,10 +11,14 @@
     line-height: 24px;
 }
 
-.form-block input, select {
+.form-block input, select, textarea {
     border-radius: 0.25rem
 }
 
-.form-block input:invalid {
+.form-block textarea {
+    height: 128px;
+}
+
+.form-block textarea:invalid {
     border-color: red;
 }

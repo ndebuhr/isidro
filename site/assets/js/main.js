@@ -168,13 +168,14 @@ btnDocs?.addEventListener('click', function() {
   this?.classList.toggle('active');
 });
 
-const formEmail = document.getElementById('email-form')
+const feedbackForm = document.getElementById('feedback-form')
 
-formEmail?.addEventListener('submit', (event) => {
+feedbackForm?.addEventListener('submit', (event) => {
   let submitter = document.getElementById(event.submitter.id);
   submitter.style.backgroundColor = '#198754';
   submitter.style.borderColor = '#198754';
 })
+feedbackForm?.addEventListener("submit", handleFormSubmit);
 
 document.querySelectorAll('.dropdown_toggle').forEach( button => {
   button.addEventListener('click', (e) => {
@@ -293,6 +294,3 @@ async function handleFormSubmit(event) {
 		console.error(error);
 	}
 }
-
-const exampleForm = document.getElementById("email-form");
-exampleForm.addEventListener("submit", handleFormSubmit);
