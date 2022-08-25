@@ -66,10 +66,10 @@ class Orchestration:
         self.confirmed = False
         self.confirmation_text = None
         self.action = None
+        self.database = database()
 
     def confirmation(self):
-        db = database()
-        with db.snapshot() as snapshot:
+        with self.database.snapshot() as snapshot:
             thread = snapshot.execute_sql(
                 f"""
                 SELECT * FROM posts
@@ -105,8 +105,7 @@ class Orchestration:
         return False
 
     def insert_post(self):
-        db = database()
-        db.run_in_transaction(
+        self.database.run_in_transaction(
             insert_post, self.channel, self.thread_ts, self.user, self.text
         )
 
