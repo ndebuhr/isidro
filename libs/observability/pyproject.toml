@@ -1,0 +1,15 @@
+[project]
+name = "observability"
+version = "0.1.0"
+description = "Opinionated approach to setting up OpenTelemetry-based distributed tracing in Isidro microservices"
+dependencies = [
+    'opentelemetry-api >= 1.11.0, < 2.0.0',
+    'opentelemetry-exporter-gcp-trace >= 1.2.0, < 2.0.0',
+    'opentelemetry-instrumentation-flask >= 0.30b0, < 1.0',
+    'opentelemetry-instrumentation-requests >= 0.30b0, < 1.0',
+    'opentelemetry-propagator-gcp >= 1.2.0, < 2.0.0',
+    'opentelemetry-sdk >= 1.11.0, < 2.0.0'
+]
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -8,6 +8,8 @@ build:
     context: deployer/github
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -15,6 +17,8 @@ build:
     context: gatekeeper
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -22,6 +26,8 @@ build:
     context: gbash
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -29,6 +35,8 @@ build:
     context: kubebash
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -36,6 +44,8 @@ build:
     context: orchestration
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -43,6 +53,8 @@ build:
     context: repeater
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -50,6 +62,8 @@ build:
     context: responder
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -57,6 +71,8 @@ build:
     context: tasks
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
@@ -73,6 +89,8 @@ build:
     context: keywords
     kaniko:
       cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
