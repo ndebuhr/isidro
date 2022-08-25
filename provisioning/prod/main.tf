@@ -23,7 +23,7 @@ module "primary" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
-  machine_type           = "t2d-standard-4"
+  machine_type           = "e2-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.primary
@@ -49,7 +49,7 @@ module "secondary" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
-  machine_type           = "t2d-standard-4"
+  machine_type           = "e2-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.secondary
@@ -75,7 +75,7 @@ module "tertiary" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
-  machine_type           = "t2d-standard-4"
+  machine_type           = "e2-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.tertiary
@@ -101,7 +101,7 @@ module "quaternary" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
-  machine_type           = "t2d-standard-4"
+  machine_type           = "e2-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.quaternary
@@ -127,7 +127,7 @@ module "quinary" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
-  machine_type           = "t2d-standard-4"
+  machine_type           = "e2-standard-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.quinary
