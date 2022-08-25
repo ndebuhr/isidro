@@ -2,10 +2,7 @@ import json
 import os
 import requests
 
-import observability
-
 from flask import Flask, abort, request
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
 SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFICATION_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
@@ -25,12 +22,6 @@ if not ORCHESTRATION_HOST:
     raise ValueError("No ORCHESTRATION_HOST environment variable set")
 
 app = Flask(__name__)
-# Exclude the root path, which is hit regularly for load balancer health checks
-# https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1181
-# Assumes RFC1035 domains
-FlaskInstrumentor().instrument_app(
-    app, excluded_urls="^http[s]?:\/\/[A-Za-z0-9\-\.]+\/$"
-)
 
 
 class Gatekeeper:
