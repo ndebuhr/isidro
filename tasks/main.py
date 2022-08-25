@@ -16,10 +16,8 @@ if not DEPLOYER_GITHUB_HOST:
     raise ValueError("No DEPLOYER_GITHUB_HOST environment variable set")
 
 app = Flask(__name__)
-observability.setup(
-    flask_app=app,
-    requests_enabled=True
-)
+observability.setup(flask_app=app, requests_enabled=True)
+
 
 class Task:
     def __init__(self, request):

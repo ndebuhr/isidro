@@ -18,10 +18,7 @@ if not MATTERMOST_DOMAIN:
     raise ValueError("No MATTERMOST_DOMAIN environment variable set")
 
 app = Flask(__name__)
-observability.setup(
-    flask_app=app,
-    requests_enabled=True
-)
+observability.setup(flask_app=app, requests_enabled=True)
 
 
 class Responder:

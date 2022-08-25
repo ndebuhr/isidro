@@ -49,10 +49,7 @@ if not REPEATER_HOST:
     raise ValueError("No REPEATER_HOST environment variable set")
 
 app = Flask(__name__)
-trace = observability.setup(
-    flask_app=app,
-    requests_enabled=True
-)
+trace = observability.setup(flask_app=app, requests_enabled=True)
 
 
 class Orchestration:

@@ -29,10 +29,7 @@ if not CELERY_BROKER:
     raise ValueError("No CELERY_BROKER environment variable set")
 
 app = Flask(__name__)
-trace = observability.setup(
-    flask_app=app,
-    requests_enabled=True
-)
+trace = observability.setup(flask_app=app, requests_enabled=True)
 
 tasks = Celery(
     "tasks",

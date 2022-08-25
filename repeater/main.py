@@ -12,10 +12,8 @@ if not RESPONDER_HOST:
     raise ValueError("No RESPONDER_HOST environment variable set")
 
 app = Flask(__name__)
-observability.setup(
-    flask_app=app,
-    requests_enabled=True
-)
+observability.setup(flask_app=app, requests_enabled=True)
+
 
 class Repeater:
     def __init__(self, request):

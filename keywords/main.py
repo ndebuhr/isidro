@@ -13,9 +13,8 @@ nlp = spacy.load("en_core_web_lg")
 POS_TAGS = ["PROPN", "NOUN", "VERB", "NUM", "SYM", "X"]
 
 app = Flask(__name__)
-observability.setup(
-    flask_app=app
-)
+observability.setup(flask_app=app)
+
 
 class Keywords:
     def __init__(self, request):
