@@ -136,9 +136,6 @@ deploy:
         securityContext.fsGroup: "2000"
         mysql.mysqlUser: isidro
         mysql.mysqlPassword: isidro
-        mysql.persistence.storageClass: isidro-storage
-        persistence.data.storageClass: isidro-storage
-        persistence.plugins.storageClass: isidro-storage
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
@@ -157,10 +154,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: us-central1
-        zones[0]: "us-central1-a"
-        zones[1]: "us-central1-c"
-        zones[2]: "us-central1-f"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -197,9 +190,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: us-east1
-        zones[0]: "us-east1-c"
-        zones[1]: "us-east1-d"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -236,9 +226,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: europe-west1
-        zones[0]: "europe-west1-b"
-        zones[1]: "europe-west1-d"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -275,9 +262,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: europe-west4
-        zones[0]: "europe-west4-a"
-        zones[1]: "europe-west4-b"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"
@@ -314,9 +298,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: asia-east1
-        zones[0]: "asia-east1-a"
-        zones[1]: "asia-east1-b"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"

@@ -136,9 +136,6 @@ deploy:
         securityContext.fsGroup: "2000"
         mysql.mysqlUser: isidro
         mysql.mysqlPassword: isidro
-        mysql.persistence.storageClass: isidro-storage
-        persistence.data.storageClass: isidro-storage
-        persistence.plugins.storageClass: isidro-storage
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
@@ -157,10 +154,6 @@ deploy:
       namespace: isidro
       setValues:
         project: GOOGLE_PROJECT
-        region: us-central1
-        zones[0]: "us-central1-a"
-        zones[1]: "us-central1-c"
-        zones[2]: "us-central1-f"
         mattermost.domain: MATTERMOST_DOMAIN
         mattermost.accessToken: "1234567890"
         mattermost.verificationToken: "1234567890"

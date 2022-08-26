@@ -1,9 +1,4 @@
 project: PROJECT
-region: us-central1
-zones:
-- us-central1-a
-- us-central1-b
-- us-central1-f
 
 deployer:
   github:
@@ -14,7 +9,7 @@ deployer:
     token: "1234567890"
     resources:
       requests:
-        cpu: 250m
+        cpu: 125m
         memory: 1Gi
       limits:
         cpu: 1
@@ -27,7 +22,7 @@ gatekeeper:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -40,7 +35,7 @@ gbash:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -53,7 +48,7 @@ keywords:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -66,7 +61,7 @@ kubebash:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -80,7 +75,7 @@ orchestration:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -93,7 +88,7 @@ policyAgent:
     tag: 0.33.1
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -389,7 +384,7 @@ repeater:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -402,7 +397,7 @@ responder:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1
@@ -415,7 +410,7 @@ tasks:
     tag: latest
   resources:
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 1Gi
     limits:
       cpu: 1

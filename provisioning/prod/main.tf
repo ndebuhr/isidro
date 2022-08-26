@@ -19,7 +19,7 @@ module "primary" {
   pods_range             = "172.16.64.0/19"
   services_range         = "172.16.96.0/19"
   region                 = "us-central1"
-  zones                  = ["us-central1-a", "us-central1-c", "us-central1-f"]
+  zones                  = ["us-central1-c"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
@@ -45,7 +45,7 @@ module "secondary" {
   pods_range             = "172.16.192.0/19"
   services_range         = "172.16.224.0/19"
   region                 = "us-east1"
-  zones                  = ["us-east1-c", "us-east1-d"]
+  zones                  = ["us-east1-d"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
@@ -71,7 +71,7 @@ module "tertiary" {
   pods_range             = "172.17.64.0/19"
   services_range         = "172.17.96.0/19"
   region                 = "europe-west1"
-  zones                  = ["europe-west1-b", "europe-west1-d"]
+  zones                  = ["europe-west1-b"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
@@ -97,7 +97,7 @@ module "quaternary" {
   pods_range             = "172.17.192.0/19"
   services_range         = "172.17.224.0/19"
   region                 = "europe-west4"
-  zones                  = ["europe-west4-a", "europe-west4-b"]
+  zones                  = ["europe-west4-a"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true
@@ -123,7 +123,7 @@ module "quinary" {
   pods_range             = "172.18.64.0/19"
   services_range         = "172.18.96.0/19"
   region                 = "asia-east1"
-  zones                  = ["asia-east1-a", "asia-east1-b"]
+  zones                  = ["asia-east1-b"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = true

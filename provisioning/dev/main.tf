@@ -19,11 +19,11 @@ module "primary" {
   pods_range             = "172.16.64.0/19"
   services_range         = "172.16.96.0/19"
   region                 = "us-central1"
-  zones                  = ["us-central1-a", "us-central1-c", "us-central1-f"]
+  zones                  = ["us-central1-c"]
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
-  machine_type           = "e2-standard-4"
+  machine_type           = "e2-standard-8"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.primary
