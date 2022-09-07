@@ -134,8 +134,22 @@ deploy:
       setValues:
         deploymentStrategy.type: Recreate
         securityContext.fsGroup: "2000"
+        resources:
+          requests:
+            cpu: 250m
+            memory: 2Gi
+          limits:
+            cpu: 1
+            memory: 2Gi
         mysql.mysqlUser: isidro
         mysql.mysqlPassword: isidro
+        mysql.resources:
+          requests:
+            cpu: 250m
+            memory: 2Gi
+          limits:
+            cpu: 1
+            memory: 2Gi
 ---
 apiVersion: skaffold/v2beta26
 kind: Config
