@@ -49,7 +49,7 @@ module "config" {
   node_count             = 1
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
-  machine_type           = "e2-standard-2"
+  machine_type           = "e2-highcpu-4"
   binauthz_attestor_name = module.foundations.binauthz_attestor
   providers = {
     kubernetes = kubernetes.config
