@@ -1,6 +1,7 @@
 # Dev and lock files
 .idea/
 *.lock
+.vscode/
 
 # Chart dependencies
 **/charts/*.tgz
