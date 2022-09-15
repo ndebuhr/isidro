@@ -17,5 +17,5 @@ Configure `GOOGLE_APPLICATION_CREDENTIALS` and `GOOGLE_PROJECT` environment vari
 
 ```bash
 python3 -m build
-python3 -m twine upload --repository-url https://us-central1-python.pkg.dev/$GOOGLE_PROJECT/quickstart-python-repo/ dist/*
+python3 -m twine upload --repository-url https://us-python.pkg.dev/$GOOGLE_PROJECT/isidro-libs/ dist/*
 ```
