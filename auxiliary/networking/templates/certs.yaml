@@ -16,7 +16,7 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: isidro
+  name: api
   namespace: isidro
 spec:
   secretName: ingress-tls
@@ -24,7 +24,7 @@ spec:
     kind: ClusterIssuer
     name: cloud-dns-issuer
   dnsNames:
-  - {{ .Values.isidro.domain }}
+  - {{ .Values.api.domain }}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

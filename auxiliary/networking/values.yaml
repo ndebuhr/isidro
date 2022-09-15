@@ -1,7 +1,7 @@
 project: PROJECT
 
-isidro:
-  domain: isidro.example.com
+api:
+  domain: api.example.com
 
 mattermost:
   domain: mattermost.example.com

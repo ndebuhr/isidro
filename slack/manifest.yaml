@@ -17,7 +17,7 @@ oauth_config:
       - im:history
 settings:
   event_subscriptions:
-    request_url: https://isidro.example.com/isidro/api/v1/submit
+    request_url: https://api.example.com/v1/submit
     bot_events:
       - app_mention
   org_deploy_enabled: false

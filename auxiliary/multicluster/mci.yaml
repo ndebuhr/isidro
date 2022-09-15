@@ -5,7 +5,7 @@ metadata:
   name: isidro-ingress
   namespace: isidro
   annotations:
-    networking.gke.io/static-ip: global/addresses/isidro
+    networking.gke.io/static-ip: global/addresses/isidro-api
 spec:
   template:
     spec:
@@ -23,7 +23,7 @@ metadata:
   name: mattermost-ingress
   namespace: mattermost
   annotations:
-    networking.gke.io/static-ip: global/addresses/mattermost
+    networking.gke.io/static-ip: global/addresses/isidro-mattermost
 spec:
   template:
     spec:

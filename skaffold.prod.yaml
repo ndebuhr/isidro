@@ -361,7 +361,7 @@ deploy:
     - name: isidro-configconnector
       chartPath: auxiliary/configconnector
       setValues:
-        configconnector.project: GOOGLE_PROJECT
+        project: GOOGLE_PROJECT
     hooks:
       after:
       # Ensure required CRDs are available
@@ -385,7 +385,7 @@ deploy:
       skipBuildDependencies: true
       setValues:
         project: GOOGLE_PROJECT
-        isidro.domain: ISIDRO_DOMAIN
+        api.domain: API_DOMAIN
         mattermost.domain: MATTERMOST_DOMAIN
         dns.zone: DNS_ZONE_NAME
 ---

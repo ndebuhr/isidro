@@ -139,7 +139,7 @@ class Gatekeeper:
         return ""
 
 
-@app.route("/isidro/api/v1/submit", methods=["POST"])
+@app.route("/v1/submit", methods=["POST"])
 def submission():
     gatekeeper = Gatekeeper(request)
     gatekeeper.validate_verification_token_correct()

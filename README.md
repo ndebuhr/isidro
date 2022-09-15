@@ -51,10 +51,10 @@ _While installation is possible using non-Linux clients, it's not a well-establi
 
 ### Provision with Terraform
 
-Set the `GOOGLE_PROJECT`, `ISIDRO_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NAME` environment variables, with something like:
+Set the `GOOGLE_PROJECT`, `API_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NAME` environment variables, with something like:
 ```bash
 export GOOGLE_PROJECT=example
-export ISIDRO_DOMAIN=isidro.example.com
+export API_DOMAIN=api.example.com
 export MATTERMOST_DOMAIN=mattermost.example.com
 export DNS_ZONE_NAME="example-com"
 ```
@@ -141,7 +141,7 @@ Hydrate configurations:
 cp skaffold.dev.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/API_DOMAIN/$API_DOMAIN/g" skaffold.yaml
 sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
 ```
 
@@ -157,7 +157,7 @@ Hydrate confiigurations:
 cp skaffold.prod.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/API_DOMAIN/$API_DOMAIN/g" skaffold.yaml
 sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
 ```
 
@@ -203,7 +203,7 @@ _Relevant if you are using Mattermost as your chat tool_
     1. Recommended description is "Push notification enabling the Isidro chatbot to respond to @mentions"
     1. Application type is "application/json"
     1. Trigger word is "@isidro"
-    1. Callback URL is https://isidro.example.com/isidro/api/v1/submit (replace isidro.example.com with your Isidro domain)
+    1. Callback URL is https://api.example.com/v1/submit (replace api.example.com with your Isidro API domain)
     1. Leave the remaining values as the defaults
 1. Copy the verification token to the Helm values (or Skaffold overrides) as `mattermost.verificationToken`
 1. Upgrade the Helm installation
@@ -219,7 +219,7 @@ Mention @isidro in Slack messages, and get a response.  Use separate message thr
 
 ### Test payload
 ```bash
-curl -X POST https://isidro.example.com/api/v1/submit \
+curl -X POST https://api.example.com/v1/submit \
     -H "Content-Type: application/json" \
     -d '{"token": "1234567890", "event": {"channel": "quality", "ts": "1234567890", "user": "me", "text": "Hello"}}'
 ```
