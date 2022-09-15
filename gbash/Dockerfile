@@ -1,7 +1,7 @@
 FROM almir/webhook:2.8.0
 
 # apk install system prerequisite packages
-RUN apk add --no-cache bash curl jq python
+RUN apk add --no-cache bash curl jq python3
 
 # install gcloud cli
 RUN curl -sSL https://sdk.cloud.google.com | bash
