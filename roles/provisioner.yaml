@@ -2,6 +2,13 @@ title: "Isidro Provisioner"
 description: "Role for automated Terraform provisioning of Isidro chatbot systems"
 stage: Beta
 includedPermissions:
+- artifactregistry.repositories.create
+- artifactregistry.repositories.delete
+- artifactregistry.repositories.get
+- artifactregistry.repositories.getIamPolicy
+- artifactregistry.repositories.list
+- artifactregistry.repositories.setIamPolicy
+- artifactregistry.repositories.update
 - binaryauthorization.attestors.create
 - binaryauthorization.attestors.delete
 - binaryauthorization.attestors.get
