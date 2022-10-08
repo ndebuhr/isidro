@@ -52,7 +52,7 @@ spec:
         - name: GBASH_ASYNC_HOST
           value: gbash-async.{{ .Release.Namespace }}.svc.clusterset.local
         - name: GBASH_SYNC_HOST
-          value: gbash-async.{{ .Release.Namespace }}.svc.clusterset.local
+          value: gbash-sync.{{ .Release.Namespace }}.svc.clusterset.local
         - name: KEYWORDS_HOST
           value: keywords.{{ .Release.Namespace }}.svc.clusterset.local
         - name: KUBEBASH_HOST
