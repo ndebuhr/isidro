@@ -29,17 +29,30 @@ gatekeeper:
       memory: 1Gi
 
 gbash:
-  enabled: true
-  image:
-    repository: us.gcr.io/PROJECT/isidro/gbash
-    tag: latest
-  resources:
-    requests:
-      cpu: 125m
-      memory: 1Gi
-    limits:
-      cpu: 1
-      memory: 1Gi
+  async:
+    enabled: true
+    image:
+      repository: us.gcr.io/PROJECT/isidro/gbash
+      tag: latest
+    resources:
+      requests:
+        cpu: 125m
+        memory: 1Gi
+      limits:
+        cpu: 1
+        memory: 1Gi
+  sync:
+    enabled: true
+    image:
+      repository: us.gcr.io/PROJECT/isidro/gbash
+      tag: latest
+    resources:
+      requests:
+        cpu: 125m
+        memory: 1Gi
+      limits:
+        cpu: 1
+        memory: 1Gi
 
 keywords:
   enabled: true

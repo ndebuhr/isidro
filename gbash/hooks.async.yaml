@@ -1,0 +1,7 @@
+- id: gbash
+  execute-command: "/var/webhook/pass.sh"
+  command-working-directory: "/var/webhook"
+  include-command-output-in-response: true
+  pass-arguments-to-command:
+  - source: payload
+    name: command

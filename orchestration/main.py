@@ -25,7 +25,8 @@ CONFIRMATION_WORDS = [
 GREETING = os.environ.get("GREETING")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
 KEYWORDS_HOST = os.environ.get("KEYWORDS_HOST")
-GBASH_HOST = os.environ.get("GBASH_HOST")
+GBASH_ASYNC_HOST = os.environ.get("GBASH_ASYNC_HOST")
+GBASH_SYNC_HOST = os.environ.get("GBASH_SYNC_HOST")
 KUBEBASH_HOST = os.environ.get("KUBEBASH_HOST")
 POLICY_AGENT_HOST = os.environ.get("POLICY_AGENT_HOST")
 TASKS_HOST = os.environ.get("TASKS_HOST")
@@ -37,8 +38,10 @@ if not RESPONDER_HOST:
     raise ValueError("No RESPONDER_HOST environment variable set")
 if not KEYWORDS_HOST:
     raise ValueError("No KEYWORDS_HOST environment variable set")
-if not GBASH_HOST:
-    raise ValueError("No GBASH_HOST environment variable set")
+if not GBASH_ASYNC_HOST:
+    raise ValueError("No GBASH_ASYNC_HOST environment variable set")
+if not GBASH_SYNC_HOST:
+    raise ValueError("No GBASH_SYNC_HOST environment variable set")
 if not KUBEBASH_HOST:
     raise ValueError("No KUBEBASH_HOST environment variable set")
 if not POLICY_AGENT_HOST:
@@ -197,10 +200,10 @@ class Orchestration:
         ).raise_for_status()
         self.send_completion()
 
-    def is_gbash(self):
-        return self.action["category"] == "gbash"
+    def is_gbash_async(self):
+        return self.action["category"] == "gbash" and self.action["async"]
 
-    def send_gbash(self):
+    def send_gbash_async(self):
         self.send_initialization()
         if "interpolations" in self.action.keys():
             command = self.interpolate(
@@ -209,8 +212,30 @@ class Orchestration:
         else:
             command = self.action["command"]
         requests.post(
-            f"http://{GBASH_HOST}/hooks/gbash", json={"command": command}
+            f"http://{GBASH_ASYNC_HOST}/hooks/gbash", json={"command": command}
         ).raise_for_status()
+        self.send_completion()
+
+    def is_gbash_sync(self):
+        return self.action["category"] == "gbash" and not self.action["async"]
+
+    def send_gbash_sync(self):
+        self.send_initialization()
+        if "interpolations" in self.action.keys():
+            command = self.interpolate(
+                self.text, self.action["command"], self.action["interpolations"]
+            )
+        else:
+            command = self.action["command"]
+        response = requests.post(
+            f"http://{GBASH_SYNC_HOST}/hooks/gbash", json={"command": command}
+        )
+        response.raise_for_status()
+        response_lines = response.text.split("\n")
+        for lines in self.action["command"].split("\n"):
+            # Remove the original command from the output
+            response_lines.pop(0)
+        self.send_message("\n".join([""] + response_lines))
         self.send_completion()
 
     def send_confirmation(self):
@@ -283,16 +308,19 @@ def orchestrate():
         return ""
     elif orchestration.user_is_confirming():
         orchestration.get_action()
-        if orchestration.is_async():
-            orchestration.send_task()
+        if orchestration.is_gbash_async():
+            orchestration.send_gbash_async()
+        elif orchestration.is_gbash_sync():
+            orchestration.send_gbash_sync()
         elif orchestration.is_link():
             orchestration.send_link()
         elif orchestration.is_repeater():
             orchestration.send_repeater()
         elif orchestration.is_kubebash():
             orchestration.send_kubebash()
-        elif orchestration.is_gbash():
-            orchestration.send_gbash()
+        # Fallback is to defer to async task system
+        elif orchestration.is_async():
+            orchestration.send_task()
         return ""
     elif not orchestration.user_is_confirming():
         orchestration.send_rejection()

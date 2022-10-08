@@ -1,10 +1,10 @@
-{{ if eq .Values.gbash.enabled true }}
+{{ if eq .Values.gbash.async.enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: gbash
+  name: gbash-async
   labels:
-    app: gbash
+    app: gbash-async
 spec:
   type: ClusterIP
   ports:
@@ -12,50 +12,51 @@ spec:
     port: 80
     targetPort: 9000
   selector:
-    app: gbash
+    app: gbash-async
 ---
 kind: ServiceExport
 apiVersion: net.gke.io/v1
 metadata:
- name: gbash
+ name: gbash-async
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gbash
+  name: gbash-async
   labels:
-    app: gbash
+    app: gbash-async
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gbash
+      app: gbash-async
   template:
     metadata:
       labels:
-        app: gbash
+        app: gbash-async
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed-rapid"
     spec:
       serviceAccountName: gbash-microservice
       containers:
       - name: gbash
-        image: {{ .Values.gbash.image.repository }}:{{ .Values.gbash.image.tag }}
+        image: {{ .Values.gbash.async.image.repository }}:{{ .Values.gbash.async.image.tag }}
         imagePullPolicy: Always
+        command: ["webhook", "-verbose", "-hooks", "/etc/webhook/hooks.async.yaml"]
         env:
         - name: RESPONDER_HOST
           value: responder.{{ .Release.Namespace }}.svc.clusterset.local
-        resources: {{ toYaml .Values.gbash.resources | nindent 10 }}
+        resources: {{ toYaml .Values.gbash.async.resources | nindent 10 }}
       restartPolicy: Always
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: gbash
+  name: gbash-async
 spec:
   podSelector:
     matchLabels:
-      app: gbash
+      app: gbash-async
   policyTypes:
   - Ingress
   - Egress
