@@ -98,7 +98,7 @@ policyAgent:
   enabled: true
   image:
     repository: openpolicyagent/opa
-    tag: 0.33.1
+    tag: 0.44.0
   resources:
     requests:
       cpu: 125m
