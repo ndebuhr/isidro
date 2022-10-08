@@ -53,7 +53,7 @@ if not REPEATER_HOST:
 
 app = Flask(__name__)
 trace = observability.setup(flask_app=app, requests_enabled=True)
-
+db = database()
 
 class Orchestration:
     def __init__(self, request):
@@ -66,10 +66,9 @@ class Orchestration:
         self.confirmed = False
         self.confirmation_text = None
         self.action = None
-        self.database = database()
 
     def confirmation(self):
-        with self.database.snapshot() as snapshot:
+        with db.snapshot() as snapshot:
             thread = snapshot.execute_sql(
                 f"""
                 SELECT * FROM posts
@@ -105,7 +104,7 @@ class Orchestration:
         return False
 
     def insert_post(self):
-        self.database.run_in_transaction(
+        db.run_in_transaction(
             insert_post, self.channel, self.thread_ts, self.user, self.text
         )
 
