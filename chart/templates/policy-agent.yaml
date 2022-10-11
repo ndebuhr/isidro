@@ -9,6 +9,7 @@ spec:
   - "policy-agent"
   http:
   - route:
+    {{ if and (eq .Values.policyAgent.sympathetic.enabled true) (eq .Values.policyAgent.succinct.enabled true) }}
     - destination:
         host: policy-agent
         subset: sympathetic
@@ -17,6 +18,17 @@ spec:
         host: policy-agent
         subset: succinct
       weight: 50
+    {{ else if eq .Values.policyAgent.sympathetic.enabled true }}
+    - destination:
+        host: policy-agent
+        subset: sympathetic
+      weight: 100
+    {{ else if eq .Values.policyAgent.succinct.enabled true }}
+    - destination:
+        host: policy-agent
+        subset: succinct
+      weight: 100
+    {{ end }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -25,12 +37,16 @@ metadata:
 spec:
   host: policy-agent
   subsets:
+  {{ if eq .Values.policyAgent.sympathetic.enabled true }}
   - name: sympathetic
     labels:
       version: sympathetic
+  {{ end }}
+  {{ if eq .Values.policyAgent.succinct.enabled true }}
   - name: succinct
     labels:
       version: succinct
+  {{ end }}
 ---
 apiVersion: v1
 kind: Service
@@ -52,6 +68,7 @@ apiVersion: net.gke.io/v1
 metadata:
  name: policy-agent
 ---
+{{ if eq .Values.policyAgent.sympathetic.enabled true }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -100,6 +117,8 @@ metadata:
 data:
   routing.rego: |
   {{ .Values.policyAgent.sympathetic.config | nindent 4 }}
+{{ end }}
+{{ if eq .Values.policyAgent.succinct.enabled true }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -149,6 +168,7 @@ metadata:
 data:
   routing.rego: |
   {{ .Values.policyAgent.succinct.config | nindent 4 }}
+{{ end }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
