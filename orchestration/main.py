@@ -3,12 +3,10 @@ import os
 import re
 import requests
 
-import metrics
 import observability
 
-from flask import Flask, abort, request
+from google.cloud import pubsub_v1
 from spanner import database, insert_post
-from prometheus_client import generate_latest
 
 CONFIRMATION_WORDS = [
     "yes",
@@ -22,6 +20,7 @@ CONFIRMATION_WORDS = [
     "sure",
 ]
 
+PUBSUB_PROJECT = os.environ.get("PUBSUB_PROJECT")
 GREETING = os.environ.get("GREETING")
 RESPONDER_HOST = os.environ.get("RESPONDER_HOST")
 KEYWORDS_HOST = os.environ.get("KEYWORDS_HOST")
@@ -32,6 +31,8 @@ POLICY_AGENT_HOST = os.environ.get("POLICY_AGENT_HOST")
 TASKS_HOST = os.environ.get("TASKS_HOST")
 REPEATER_HOST = os.environ.get("REPEATER_HOST")
 
+if not PUBSUB_PROJECT:
+    raise ValueError("No PUBSUB_PROJECT environment variable set")
 if not GREETING:
     raise ValueError("No GREETING environment variable set")
 if not RESPONDER_HOST:
@@ -51,18 +52,19 @@ if not TASKS_HOST:
 if not REPEATER_HOST:
     raise ValueError("No REPEATER_HOST environment variable set")
 
-app = Flask(__name__)
-trace = observability.setup(flask_app=app, requests_enabled=True)
+trace = observability.setup(requests_enabled=True)
 db = database()
+subscriber = pubsub_v1.SubscriberClient()
+
 
 class Orchestration:
-    def __init__(self, request):
-        request = request.get_json()
-        self.platform = request["platform"]
-        self.channel = request["channel"]
-        self.thread_ts = request["thread_ts"]
-        self.user = request["user"]
-        self.text = request["text"]
+    def __init__(self, message):
+        message = json.loads(message.data)
+        self.platform = message["platform"]
+        self.channel = message["channel"]
+        self.thread_ts = message["thread_ts"]
+        self.user = message["user"]
+        self.text = message["text"]
         self.confirmed = False
         self.confirmation_text = None
         self.action = None
@@ -296,15 +298,13 @@ class Orchestration:
         abort(400)
 
 
-@app.route("/v1/orchestrate", methods=["POST"])
-def orchestrate():
-    orchestration = Orchestration(request)
+def callback(message):
+    orchestration = Orchestration(message)
     orchestration.insert_post()
     orchestration.confirmation()
     if not orchestration.confirmed:
         orchestration.get_action()
         orchestration.send_confirmation()
-        return ""
     elif orchestration.user_is_confirming():
         orchestration.get_action()
         if orchestration.is_gbash_async():
@@ -320,19 +320,15 @@ def orchestrate():
         # Fallback is to defer to async task system
         elif orchestration.is_async():
             orchestration.send_task()
-        return ""
     elif not orchestration.user_is_confirming():
         orchestration.send_rejection()
-        return ""
-    else:
-        abort(400)
+    message.ack()
 
 
-@app.route("/metrics")
-def metrics():
-    return generate_latest()
+streaming_pull_future = subscriber.subscribe(
+    f"projects/{PUBSUB_PROJECT}/subscriptions/isidro-requests-orchestration",
+    callback=callback,
+)
 
-
-@app.route("/", methods=["GET"])
-def health():
-    return ""
+with subscriber:
+    streaming_pull_future.result()

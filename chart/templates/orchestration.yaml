@@ -1,24 +1,4 @@
 {{ if eq .Values.orchestration.enabled true }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: orchestration
-  labels:
-    app: orchestration
-spec:
-  type: ClusterIP
-  ports:
-  - name: http
-    port: 80
-    targetPort: 80
-  selector:
-    app: orchestration
----
-kind: ServiceExport
-apiVersion: net.gke.io/v1
-metadata:
- name: orchestration
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -37,12 +17,14 @@ spec:
         sidecar.istio.io/inject: "true"
         istio.io/rev: "asm-managed-rapid"
     spec:
-      serviceAccountName: db-client-microservice
+      serviceAccountName: orchestration-microservice
       containers:
       - name: orchestration
         image: {{ .Values.orchestration.image.repository }}:{{ .Values.orchestration.image.tag }}
         imagePullPolicy: Always
         env:
+        - name: PUBSUB_PROJECT
+          value: {{ .Values.project }}
         - name: SPANNER_INSTANCE_ID
           value: "isidro"
         - name: SPANNER_DATABASE_ID
@@ -68,19 +50,6 @@ spec:
         resources: {{ toYaml .Values.orchestration.resources | nindent 10 }}
       restartPolicy: Always
 ---
-apiVersion: monitoring.googleapis.com/v1alpha1
-kind: PodMonitoring
-metadata:
-  name: orchestration
-spec:
-  selector:
-    matchLabels:
-      app: orchestration
-  endpoints:
-  - port: 80
-    interval: 30s
-    timeout: 10s
----
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -92,27 +61,6 @@ spec:
   policyTypes:
   - Egress
   - Ingress
-  ingress:
-  - from:
-    # GCP Health Check IPs
-    - ipBlock:
-        cidr: 35.191.0.0/16
-    - ipBlock:
-        cidr: 130.211.0.0/22
-    # RFC1918 (overkill, but enables multi-cluster and multi-region)
-    - ipBlock:
-        cidr: 10.0.0.0/8
-    - ipBlock:
-        cidr: 172.16.0.0/12
-    - ipBlock:
-        cidr: 192.168.0.0/16
-    # In-cluster services (failover for non-RFC1918 topologies)
-    - podSelector:
-        matchLabels:
-          app: gatekeeper
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: gmp-system
   egress:
   - {}
 {{ end }}

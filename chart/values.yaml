@@ -251,6 +251,19 @@ policyAgent:
     enabled: false
     config: {}
 
+queuer:
+  enabled: true
+  image:
+    repository: us.gcr.io/PROJECT/isidro/queuer
+    tag: latest
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 1Gi
+
 repeater:
   enabled: true
   image:

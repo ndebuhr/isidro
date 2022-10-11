@@ -49,6 +49,15 @@ build:
     hooks:
       after:
       - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
+  - image: us.gcr.io/GOOGLE_PROJECT/isidro/queuer
+    context: queuer
+    kaniko:
+      cache: {}
+      buildArgs:
+        REGISTRY_PROJECT: GOOGLE_PROJECT
+    hooks:
+      after:
+      - command: ["bash", "-c", "./skaffold-binauthz.sh dev $SKAFFOLD_IMAGE"]
   - image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
     context: repeater
     kaniko:
@@ -182,6 +191,7 @@ deploy:
         keywords.image: us.gcr.io/GOOGLE_PROJECT/isidro/keywords
         kubebash.image: us.gcr.io/GOOGLE_PROJECT/isidro/kubebash
         orchestration.image: us.gcr.io/GOOGLE_PROJECT/isidro/orchestration
+        queuer.image: us.gcr.io/GOOGLE_PROJECT/isidro/queuer
         repeater.image: us.gcr.io/GOOGLE_PROJECT/isidro/repeater
         responder.image: us.gcr.io/GOOGLE_PROJECT/isidro/responder
         tasks.image: us.gcr.io/GOOGLE_PROJECT/isidro/tasks

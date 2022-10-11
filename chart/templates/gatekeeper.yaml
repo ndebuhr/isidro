@@ -46,8 +46,8 @@ spec:
           value: "{{ .Values.mattermost.verificationToken }}"
         - name: MATTERMOST_DOMAIN
           value: "{{ .Values.mattermost.domain }}"
-        - name: ORCHESTRATION_HOST
-          value: orchestration.{{ .Release.Namespace }}.svc.clusterset.local
+        - name: QUEUER_HOST
+          value: queuer.{{ .Release.Namespace }}.svc.clusterset.local
         resources: {{ toYaml .Values.gatekeeper.resources | nindent 10 }}
       restartPolicy: Always
 ---

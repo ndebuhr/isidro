@@ -1,0 +1,98 @@
+{{ if eq .Values.queuer.enabled true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: queuer
+  labels:
+    app: queuer
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: queuer
+---
+kind: ServiceExport
+apiVersion: net.gke.io/v1
+metadata:
+ name: queuer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queuer
+  labels:
+    app: queuer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queuer
+  template:
+    metadata:
+      labels:
+        app: queuer
+        sidecar.istio.io/inject: "true"
+        istio.io/rev: "asm-managed-rapid"
+    spec:
+      serviceAccountName: orchestration-microservice
+      containers:
+      - name: queuer
+        image: {{ .Values.queuer.image.repository }}:{{ .Values.queuer.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: PUBSUB_PROJECT
+          value: {{ .Values.project }}
+        resources: {{ toYaml .Values.queuer.resources | nindent 10 }}
+      restartPolicy: Always
+---
+apiVersion: monitoring.googleapis.com/v1alpha1
+kind: PodMonitoring
+metadata:
+  name: queuer
+spec:
+  selector:
+    matchLabels:
+      app: queuer
+  endpoints:
+  - port: 80
+    interval: 30s
+    timeout: 10s
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: queuer
+spec:
+  podSelector:
+    matchLabels:
+      app: queuer
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+  - from:
+    # GCP Health Check IPs
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
+    # RFC1918 (overkill, but enables multi-cluster and multi-region)
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+    # In-cluster services (failover for non-RFC1918 topologies)
+    - podSelector:
+        matchLabels:
+          app: gatekeeper
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: gmp-system
+  egress:
+  - {}
+{{ end }}

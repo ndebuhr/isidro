@@ -8,7 +8,7 @@ SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFICATION_TOKEN")
 MATTERMOST_ACCESS_TOKEN = os.environ.get("MATTERMOST_ACCESS_TOKEN")
 MATTERMOST_VERIFICATION_TOKEN = os.environ.get("MATTERMOST_VERIFICATION_TOKEN")
 MATTERMOST_DOMAIN = os.environ.get("MATTERMOST_DOMAIN")
-ORCHESTRATION_HOST = os.environ.get("ORCHESTRATION_HOST")
+QUEUER_HOST = os.environ.get("QUEUER_HOST")
 
 if not SLACK_VERIFICATION_TOKEN:
     raise ValueError("No SLACK_VERIFICATION_TOKEN environment variable set")
@@ -18,8 +18,8 @@ if not MATTERMOST_VERIFICATION_TOKEN:
     raise ValueError("No MATTERMOST_VERIFICATION_TOKEN environment variable set")
 if not MATTERMOST_DOMAIN:
     raise ValueError("No MATTERMOST_DOMAIN environment variable set")
-if not ORCHESTRATION_HOST:
-    raise ValueError("No ORCHESTRATION_HOST environment variable set")
+if not QUEUER_HOST:
+    raise ValueError("No QUEUER_HOST environment variable set")
 
 app = Flask(__name__)
 
@@ -127,7 +127,7 @@ class Gatekeeper:
     def general_response(self):
         # Pass data to the orchestration service
         requests.post(
-            f"http://{ORCHESTRATION_HOST}/v1/orchestrate",
+            f"http://{QUEUER_HOST}/v1/queue",
             json={
                 "platform": self.get_platform(),
                 "channel": self.get_channel(),
