@@ -150,7 +150,8 @@ module "config" {
   services_range         = "172.18.224.0/19"
   region                 = "northamerica-northeast1"
   zones                  = ["northamerica-northeast1-b", "northamerica-northeast1-c"]
-  node_count             = 1
+  node_count             = 0
+  autoprovisioning       = true
   nodes_service_account  = module.foundations.nodes_sa_email
   spot                   = false
   machine_type           = "e2-standard-2"

@@ -20,6 +20,15 @@ module "gke" {
   enable_binary_authorization          = true
   gce_pd_csi_driver                    = true
   cluster_resource_labels              = { "mesh_id" : "proj-${data.google_project.project.number}" }
+  cluster_autoscaling = {
+    autoscaling_profile: "OPTIMIZE_UTILIZATION",
+    enabled: var.autoprovisioning ? true : false,
+    gpu_resources: [],
+    max_cpu_cores: 32,
+    max_memory_gb: 128,
+    min_cpu_cores: 0,
+    min_memory_gb: 0
+  }
   node_pools = [
     {
       name         = "core"
