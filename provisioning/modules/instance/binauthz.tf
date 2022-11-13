@@ -6,6 +6,18 @@ resource "google_binary_authorization_policy" "isidro" {
     enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"
   }
 
+  # Foundations
+  admission_whitelist_patterns {
+    name_pattern = "gcr.io/gke-release/*"
+  }
+  admission_whitelist_patterns {
+    name_pattern = "quay.io/jetstack/*"
+  }
+  admission_whitelist_patterns {
+    name_pattern = "k8s.gcr.io/ingress-nginx/controller:*"
+  }
+
+  # Applications
   admission_whitelist_patterns {
     name_pattern = "mysql:*"
   }
@@ -16,10 +28,19 @@ resource "google_binary_authorization_policy" "isidro" {
     name_pattern = "openpolicyagent/opa:*"
   }
   admission_whitelist_patterns {
+    name_pattern = "docker.io/bitnami/bitnami-shell:*"
+  }
+  admission_whitelist_patterns {
+    name_pattern = "docker.io/bitnami/jenkins:*"
+  }
+  admission_whitelist_patterns {
     name_pattern = "docker.io/bitnami/kubectl:*"
   }
   admission_whitelist_patterns {
     name_pattern = "docker.io/bitnami/mongodb:*"
+  }
+  admission_whitelist_patterns {
+    name_pattern = "docker.io/bitnami/postgresql:*"
   }
   admission_whitelist_patterns {
     name_pattern = "docker.io/bitnami/rabbitmq:*"
@@ -28,7 +49,7 @@ resource "google_binary_authorization_policy" "isidro" {
     name_pattern = "docker.io/bitnami/redis:*"
   }
   admission_whitelist_patterns {
-    name_pattern = "quay.io/jetstack/*"
+    name_pattern = "docker.io/bitnami/sonarqube:*"
   }
 
   cluster_admission_rules {
