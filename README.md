@@ -71,14 +71,10 @@ gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
     --role="projects/$GOOGLE_PROJECT/roles/isidro_provisioner"
 gcloud iam service-accounts keys create isidro-provisioner.json \
     --iam-account="isidro-provisioner@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+export GOOGLE_APPLICATION_CREDENTIALS=$PWD/isidro-provisioner.json
 ```
 
-Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=../../isidro-provisioner.json
-```
-
-Run Terraform provisioning, with something like:
+Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory and run Terraform provisioning, with something like:
 ```bash
 gcloud init
 terraform init
@@ -121,17 +117,13 @@ gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
     --role="roles/cloudbuild.builds.builder"
 gcloud iam service-accounts keys create isidro-skaffold.json \
     --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+export GOOGLE_APPLICATION_CREDENTIALS=$PWD/isidro-skaffold.json
 ```
 
 Add helm repositories:
 ```bash
 helm repo add mattermost https://helm.mattermost.com
 helm repo add jetstack https://charts.jetstack.io
-```
-
-Setup skaffold credentials:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 ```
 
 ### Development environments
