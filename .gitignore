@@ -16,6 +16,7 @@
 provisioning/install_asm_1.9
 
 # Key files
+isidro-analytics.json
 isidro-certbot.json
 isidro-provisioner.json
 isidro-skaffold.json
