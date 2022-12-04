@@ -114,7 +114,6 @@ with beam.Pipeline(options=options) as pipeline:
         | 'GetPagePath' >> beam.Map(lambda event: event["page_path"]) \
         | 'SlidingWindow24h' >> beam.WindowInto(
             SlidingWindows(24*60*60, 60*60),
-            trigger=Repeatedly(AfterWatermark(late=AfterProcessingTime(0))),
             allowed_lateness=60*60,
             accumulation_mode=AccumulationMode.ACCUMULATING
         ) \
