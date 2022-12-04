@@ -86,7 +86,7 @@ Create a Custom HTML tag in Google Tag Manager.  Replace "WEBSITE_STREAM_ENDPOIN
     "user_agent": navigator.userAgent,
     "scroll_x": window.scrollX,
     "scroll_y": window.scrollY,
-    "timestamp": Date.now()
+    "timestamp": (new Date).toISOString()
   };
   var options = {
     method: "POST",
