@@ -38,7 +38,7 @@ cd ..
 WEBSITE_STREAM_ENDPOINT=$(gcloud beta functions describe isidro-gtm-stream --gen2 --region us-central1 --format="value(serviceConfig.uri)")
 cd gtm-stream-dataflow
 python3 main.py \
-  --requirements_file requirements.txt \
+  --setup_file $PWD/setup.py \
   --project "$GOOGLE_PROJECT" \
   --service_account_email "isidro-analytics@$GOOGLE_PROJECT.iam.gserviceaccount.com" \
   --temp_location="gs://$ANALYTICS_BUCKET/dataflow/temp" \
