@@ -1,6 +1,6 @@
 ---
 title: "Setup"
-date: 2022-05-25T16:55:46+03:00
+date: 2023-01-09T22:55:46+03:00
 draft: false
 menu:
   main:
@@ -30,6 +30,7 @@ menu:
         cloudresourcemanager.googleapis.com \
         container.googleapis.com \
         gkehub.googleapis.com \
+        redis.googleapis.com \
         meshca.googleapis.com \
         multiclusteringress.googleapis.com \
         multiclusterservicediscovery.googleapis.com \
@@ -45,10 +46,10 @@ _While installation is possible using non-Linux clients, it's not a well-establi
 
 ### Provision with Terraform
 
-Set the `GOOGLE_PROJECT`, `ISIDRO_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NAME` environment variables, with something like:
+Set the `GOOGLE_PROJECT`, `API_DOMAIN`, `MATTERMOST_DOMAIN`, and `DNS_ZONE_NAME` environment variables, with something like:
 ```bash
 export GOOGLE_PROJECT=example
-export ISIDRO_DOMAIN=isidro.example.com
+export API_DOMAIN=api.example.com
 export MATTERMOST_DOMAIN=mattermost.example.com
 export DNS_ZONE_NAME="example-com"
 ```
@@ -65,14 +66,10 @@ gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
     --role="projects/$GOOGLE_PROJECT/roles/isidro_provisioner"
 gcloud iam service-accounts keys create isidro-provisioner.json \
     --iam-account="isidro-provisioner@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+export GOOGLE_APPLICATION_CREDENTIALS=$PWD/isidro-provisioner.json
 ```
 
-Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory, then set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, with something like:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=../../isidro-provisioner.json
-```
-
-Run Terraform provisioning, with something like:
+Navigate to the [development](provisioning/dev/) or [production](provisioning/prod/) directory and run Terraform provisioning, with something like:
 ```bash
 gcloud init
 terraform init
@@ -115,17 +112,13 @@ gcloud projects add-iam-policy-binding $GOOGLE_PROJECT \
     --role="roles/cloudbuild.builds.builder"
 gcloud iam service-accounts keys create isidro-skaffold.json \
     --iam-account="isidro-skaffold@$GOOGLE_PROJECT.iam.gserviceaccount.com"
+export GOOGLE_APPLICATION_CREDENTIALS=$PWD/isidro-skaffold.json
 ```
 
 Add helm repositories:
 ```bash
 helm repo add mattermost https://helm.mattermost.com
 helm repo add jetstack https://charts.jetstack.io
-```
-
-Setup skaffold credentials:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=isidro-skaffold.json
 ```
 
 ### Development environments
@@ -135,11 +128,8 @@ Hydrate configurations:
 cp skaffold.dev.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/API_DOMAIN/$API_DOMAIN/g" skaffold.yaml
 sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
-
-cp vendor/configconnector-setup.dev.yaml vendor/configconnector-setup.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" vendor/configconnector-setup.yaml
 ```
 
 Make any required `skaffold.yaml` configuration changes, then run skaffold:
@@ -154,11 +144,8 @@ Hydrate confiigurations:
 cp skaffold.prod.yaml skaffold.yaml
 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" skaffold.yaml
 sed -i "s/MATTERMOST_DOMAIN/$MATTERMOST_DOMAIN/g" skaffold.yaml
-sed -i "s/ISIDRO_DOMAIN/$ISIDRO_DOMAIN/g" skaffold.yaml
+sed -i "s/API_DOMAIN/$API_DOMAIN/g" skaffold.yaml
 sed -i "s/DNS_ZONE_NAME/$DNS_ZONE_NAME/g" skaffold.yaml
-
-cp vendor/configconnector-setup.dev.yaml vendor/configconnector-setup.yaml
-sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" vendor/configconnector-setup.yaml
 ```
 
 Make any required `skaffold.yaml` configuration changes, then run skaffold:
@@ -169,4 +156,12 @@ skaffold run
 To teardown:
 ```bash
 skaffold delete
+```
+
+## Deprovisioning
+
+In the Terraform provisioning directory, run:
+```bash
+gcloud init
+terraform destroy
 ```
