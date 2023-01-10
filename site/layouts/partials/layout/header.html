@@ -1,8 +1,7 @@
-
 <header class="header" id="header">
   <div class="container">
     <div class="header--inner">
-      <a href="" class="header__logo header--over_menu">
+      <a href="{{ site.Home.Permalink }}" class="header__logo header--over_menu">
         Isidro
       </a>
       <nav id="menu">
@@ -23,7 +22,6 @@
       
       {{ partial "elements/button-link" (dict
         "title" "Source code"
-        "id" "github-nav"
         "href" $.Site.Params.resources.git.link
         "external" true
         "icon" $.Site.Params.resources.git.icon

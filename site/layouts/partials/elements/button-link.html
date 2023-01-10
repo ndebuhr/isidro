@@ -3,7 +3,6 @@
 {{- with .title -}}
   <a 
     href="{{ $.href }}" 
-    id="{{ $.id }}" 
     class="btn {{ $.classes }}" 
     {{ with $.external }}
       target="blank"
@@ -13,5 +12,8 @@
       {{ partial "image_process/svg-icon" . }}
     {{ end }}
     {{ . }}
+    {{ with $.iconAfter }}
+      {{ partial "image_process/svg-icon" . }}
+    {{ end }}
   </a>
 {{- end -}}

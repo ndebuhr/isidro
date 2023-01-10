@@ -1,7 +1,0 @@
-{{- $opts := dict "minify" true "target" "es2015" -}}
-{{- if eq hugo.Environment "development" -}}
-  {{- $opts = dict "sourceMap" "inline" "target" "es2015" -}}
-{{- end -}}
-
-{{ $built := resources.Get . | js.Build $opts | fingerprint }}
-<script src="{{ $built.RelPermalink }}" integrity="{{ $built.Data.Integrity }}" defer></script>

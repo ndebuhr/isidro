@@ -9,6 +9,11 @@ enableRobotsTXT: true
 # alternate copyright company text
 copyright: Copyright
 
+module:
+  mounts:
+    - source: assets/img
+      target: static/img
+
 
 markup: 
   goldmark:
@@ -34,6 +39,8 @@ markup:
 
 
 params:
+  SetupSection: setup
+  UsageSection: usage
   resources:
     git:
       icon: /icons/github-icon.svg
@@ -49,5 +56,9 @@ params:
     # densities: [1, 2]
     class: img
 
-  gtmContainerID: "GTM-1234567890"
-  recaptchaKey: "1234567890__1234567890"
+  google_tag_manager:
+    enable: false
+    container_id: "GTM-1234567890"
+
+  recaptcha:
+    site_key: ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890

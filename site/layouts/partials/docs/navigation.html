@@ -12,7 +12,10 @@
 {{- define "docs-section-children" }}
   <ul class="docs__nav--list">
     {{ range .Section.Pages }}
-      {{ if .IsSection }}
+
+      {{ $countSub := len .Pages }}
+
+      {{ if gt $countSub 0 }}
         <li class="docs__nav--item">
           {{ template "doc-link" (dict "Page" . "CurrentPage" $.CurrentPage "Collapse" true) }}
           <div class="docs__nav--sub">
@@ -25,7 +28,7 @@
             </ul>
           </div>
         </li>
-      {{ else if and .IsPage .Content }}
+      {{ else }}
         <li class="docs__nav--item">
           {{ template "doc-link" (dict "Page" . "CurrentPage" $.CurrentPage) }}
         </li>
@@ -48,5 +51,4 @@
   {{ else }}
     <a href="{{ .Page.RelPermalink }}" class="{{ if $current }} active{{ end }}">{{ .Page.Title }}</a> 
   {{ end }}
-
 {{- end }}

@@ -6,8 +6,8 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
   ],
   safelist: {
     // standard: [],
-    // deep: [],
-    greedy: []
+    deep: [/toc__nav$/],
+    greedy: [/menu_show/]
   }
 });
 

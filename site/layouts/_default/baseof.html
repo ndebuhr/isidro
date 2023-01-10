@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="{{ .Language.Lang }}" class="no-js">
+
 <head>
-    {{- partial "head.html" . -}}
+  {{- partial "template/head.html" . -}}
 </head>
+
 <body>
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{- .Site.Params.gtmContainerID -}}"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+  {{- partial "layout/header.html" . -}}
 
-    {{- partial "header.html" . -}}
-    <main>
-        {{- block "main" . }}{{- end }}
-    </main>
-    {{- partial "footer.html" . -}}
-    
+  <main>
+    {{- block "main" . }}{{- end }}
+  </main>
+  
+  {{- partial "layout/footer.html" . -}}
+  
+  {{- block "scripts" . }}{{- end }}
+
 </body>
 </html>

@@ -1,0 +1,6 @@
+{{ if .Site.Params.google_tag_manager.enable }}
+<noscript>
+  <iframe src="https://www.googletagmanager.com/ns.html?id={{ .Site.Params.google_tag_manager.container_id  | safeHTML }}"
+ height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+{{ end }}

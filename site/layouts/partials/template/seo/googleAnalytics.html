@@ -1,0 +1,16 @@
+
+{{ $enable := .Params.google_analytics.enable | default  .Site.Params.google_analytics.enable }}
+{{ $trackingId := .Params.google_analytics.tracking_id | default .Site.Params.google_analytics.tracking_id }}
+
+
+{{ if $enable }}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ $trackingId }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ $trackingId }}');
+  </script>
+{{ end }}

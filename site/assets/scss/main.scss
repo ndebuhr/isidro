@@ -2,7 +2,7 @@
 .no-js img.lazyload {
   display: none;
 }
-// work around for width: auto
+// workaround for width: auto
 // use !important on both properties if you have issues
 img[data-sizes="auto"] {
   display: block;
@@ -22,10 +22,11 @@ img[data-sizes="auto"] {
 @import "bootstrap/scss/mixins";
 
 // 4. Include any optional Bootstrap components as you like
-// Configuration
+
+// configuration
 @import "bootstrap/scss/utilities";
 
-// Layout & components
+// layout & components
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";
 @import "bootstrap/scss/type";
@@ -58,10 +59,10 @@ img[data-sizes="auto"] {
 // @import "bootstrap/scss/offcanvas";
 // @import "bootstrap/scss/placeholders";
 
-// Helpers
+// helpers
 @import "bootstrap/scss/helpers";
 
-// Utilities
+// utilities
 @import "bootstrap/scss/utilities/api";
 
 
@@ -82,12 +83,12 @@ img[data-sizes="auto"] {
 @import "template/footer";
 @import "template/content";
 
-//pages
+// pages
 @import "pages/home.scss";
 @import "pages/docs.scss";
 @import "pages/feedback.scss";
 
-// Custom
+// custom
 @import "custom-scss";
 
 

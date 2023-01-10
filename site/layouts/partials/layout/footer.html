@@ -11,12 +11,13 @@
         <div class="footer__block--action">
           {{ partial "elements/button-link" (dict
               "title" "Star the repository"
-              "id" "github-star-repo"
               "href" $.Site.Params.resources.git.link
               "external" true
-              "icon" $.Site.Params.resources.git.icon
-              "classes" "btn-primary"
+              "icon" "images/svg/star.svg"
+              
+              "classes" "btn-primary btn-outline"
             ) }}
+            {{/*  "iconAfter" $.Site.Params.resources.git.icon  */}}
         </div>
       </div>
 
@@ -29,12 +30,12 @@
         <div class="footer__block--action">
           {{ partial "elements/button-link" (dict
               "title" "Open an issue"
-              "id" "github-open-issue"
               "href" "https://github.com/ndebuhr/isidro/issues/new"
               "external" true
-              "icon" $.Site.Params.resources.git.icon
-              "classes" "btn-primary"
+              "icon" "images/svg/issue.svg"
+              "classes" "btn-primary  btn-issue"
             ) }}
+            {{/*  "iconAfter" $.Site.Params.resources.git.icon  */}}
         </div>
       </div>
 

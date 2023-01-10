@@ -1,12 +1,5 @@
 @import "bootstrap-icons/font/bootstrap-icons.scss";
 
-// params
-// $headerHeight: 65px;
-
-// body {
-//   padding-top: $headerHeight;
-// }
-
 .header {
   position: fixed;
   top: 0;
@@ -17,9 +10,6 @@
   background-color: #1A2A45;
   box-shadow: 0px 7px 9px rgba(0, 0, 0, 0.13);
   padding: 10px 0;
-  // .container {
-  //   max-width: 1610px;
-  // }
   &--inner {
     display: flex;
     justify-content: flex-start;

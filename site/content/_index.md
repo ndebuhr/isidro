@@ -1,5 +1,6 @@
 ---
-title: "Some title here"
+title: "Isidro"
+description: "A policy-based chatbot that orchestrates software engineering workflows and runs on Kubernetes"
 date: 2022-05-17T14:22:03+03:00
 draft: false
 menu: 
@@ -12,7 +13,3 @@ images:
 - test.png
 private: true
 ---
-
-
-
-<!-- ![Alt text (.PlainText)](test2.jpg "Title (.Title)") -->

@@ -10,20 +10,8 @@ body {
   background-color: #1A2A45;
 }
 
-main {
-  // overflow: hidden;
-  // margin-top: 65px;
-  // @include res(tablet) {
-  //   padding-left: 40px;
-  //   padding-right: 40px;
-  // }
-}
-
 .container {
   max-width: 1280px;
-  // @include res(xlarge) {
-  //   max-width: 1610px;
-  // }
 }
 
 .btn {
@@ -49,10 +37,6 @@ main {
 }
 
 
-.nav--item:nth-of-type(4) a {
-  color: #E33F5D;
-}
-
 
 // highlight code 
 .highlight {
@@ -76,3 +60,52 @@ main {
 
 
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Nanum+Pen+Script&display=swap');
+
+
+
+
+.section {
+  padding: 80px 0;
+  &--header {
+    max-width: 550px;
+    margin: 0 auto 20px;
+    @include res(desktop) {
+      margin-bottom: 50px;
+    }
+  }
+  &--title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.7em;
+    @include res(tablet) {
+      font-size: 32px;
+    }
+    @include res(desktop) {
+      font-size: 32px;
+    }
+  }
+  @include res(tablet) {
+    padding: 200px 0;
+  }
+  &--text {
+    p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.7em;
+      letter-spacing: 0.04em;
+      opacity: 0.8;
+      text-align: center;
+      margin-bottom: 15px;
+      @include res(tablet) {
+        text-align: left;
+      }
+      @include res(desktop) {
+        font-size: 22px;
+        margin-bottom: 40px;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

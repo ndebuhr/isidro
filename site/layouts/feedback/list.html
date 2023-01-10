@@ -1,21 +1,140 @@
 {{- define "main" -}}
 
-<div class="docs">
-  <div class="docs__pageNav">
-  </div>
-  <div class="docs__nav">
-    <div class="docs_control">
-    </div>
-    <div class="docs__nav--menu" id="menuDocs">
-    </div>
-  </div>
-  <div class="docs__content js-toc-content" id="doc_content">
-    <div class="content">
-    <h1 class="docs__content--title">Share Feedback</h1><br>
-    <div>Drive the development of Isidro by sharing requests, recommendations, and concerns</div><br>
-    </div>
-    {{ partial "feedback/form" }}
-  </div>
-</div>
+<section class="feedback">
+  <div class="container">
+    <div class="feedback--inner">
+      <h2 class="feedback--title">
+        Share Feedback
+      </h2>
+      <div class="feedback--text">
+        <p>Drive the development of Isidro by sharing requests, recommendations, and concerns</p>
+      </div>
+      <div class="feedback--form">
+        <form action="" class="feedback__form" id="feedback__form">
+          <div class="feedback__form--group feedback__form--group__radio">
+            
+            <label for="" class="feedback__form--label">
+              Chatbot User Type:
+            </label>
 
+            <label class="feedback__form--radio">
+              <input type="radio" checked name="user_type" value="User">
+              <span class="feedback__form--radio__inner">
+                User
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="user_type" value="Power User">
+              <span class="feedback__form--radio__inner">
+                Power User
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="user_type" value="Developer">
+              <span class="feedback__form--radio__inner">
+                Developer
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="user_type" value="Operations">
+              <span class="feedback__form--radio__inner">
+                Operations
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="user_type">
+              <span class="feedback__form--radio__inner" value="Management">
+                Management
+              </span>
+            </label>
+
+            <label class="feedback__form--radio feedback__form--radio__custom">
+              <input type="radio" name="user_type">
+              <span class="feedback__form--radio__inner">
+                <input class="feedback__form--radio__custom--input" type="text" size="12" placeholder="Other...">
+              </span>
+            </label>
+          </div>
+
+
+
+          <div class="feedback__form--group feedback__form--group__radio">
+            <label for="" class="feedback__form--label">
+              Job or Role:
+            </label>
+
+            <label class="feedback__form--radio">
+              <input type="radio" checked name="role" value="Engineer">
+              <span class="feedback__form--radio__inner">
+                Engineer
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="role" value="Manager">
+              <span class="feedback__form--radio__inner">
+                Manager
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="role" value="Executive">
+              <span class="feedback__form--radio__inner">
+                Executive
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="role" value="Student">
+              <span class="feedback__form--radio__inner">
+                Student
+              </span>
+            </label>
+            <label class="feedback__form--radio">
+              <input type="radio" name="role" value="Hobbyist">
+              <span class="feedback__form--radio__inner">
+                Hobbyist
+              </span>
+            </label>
+
+            <label class="feedback__form--radio feedback__form--radio__custom">
+              <input type="radio" name="role">
+              <span class="feedback__form--radio__inner">
+                <input class="feedback__form--radio__custom--input" type="text" size="12" placeholder="Other..." onInput="this.parentNode.dataset.value = this.value">
+              </span>
+            </label>
+          </div>
+         
+          <div class="feedback__form--group feedback__form--textarea">
+            <label for="" class="feedback__form--label">
+              Feedback:
+            </label>
+            <textarea name="feedbackMessage" cols="20" rows="10" required ></textarea>
+          </div>
+
+          <div class="feedback__form--submit__wrapper">
+            <button 
+            type="submit"
+            class="feedback__form--submit g-recaptcha" 
+            data-callback="submitFeedback"
+            data-sitekey="{{ .Site.Params.recaptcha.site_key }}">
+              Submit
+            </button>
+            <div class="feedback__form--submit__alert">
+              Error! Contact us via <a href="#">Email</a>.
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{- end -}} 
+
+
+
+{{- define "scripts" -}}
+
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+  {{ partial "template/esbuild" "js/forms/feedback.js" }}
+ 
 {{- end -}}

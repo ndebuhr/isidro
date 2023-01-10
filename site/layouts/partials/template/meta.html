@@ -1,0 +1,48 @@
+{{- $title := .Title -}}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Accept-CH" content="DPR,Width,Viewport-Width" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+{{ hugo.Generator }}
+<meta name="apple-mobile-web-app-title" content="{{ $title }}" />
+<meta name="application-name" content="{{ $title }}" />
+<meta name="msapplication-config" content="/favicons/browserconfig.xml" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- with .Keywords -}}
+<meta name="keywords" content="{{ . }}" />
+{{- end -}}
+
+<meta name="robots" content="index, follow" />
+
+<!-- end done -->
+{{- partial "template/seo/gtagHead" . -}}
+{{- partial "template/seo/schema" . -}}
+{{- partial "template/seo/opengraph" . -}}
+{{- partial "template/seo/googleNews" . -}}
+{{- partial "template/seo/twitterCards" . }}
+
+{{- if .IsHome -}}
+{{- range .Site.AllPages -}}
+{{- $section := .Section -}}
+{{- with .OutputFormats.Get "opensearch" -}}
+<link rel="search" type="application/opensearchdescription+xml" title="{{ $title }}{{ with $section }} {{ . }}{{ end }} search" href="{{ .RelPermalink | safeURL }}" />
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*  {{ partial "template/seo/favicons.html" . }}  */}}
+
+{{- with .OutputFormats.Get "RSS" -}}
+  <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $title }}" />
+  <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $title }}" />
+{{- end -}}
+
+{{/* TODO: canonical + multilingual meta */}}
+
+{{- partial "template/seo/json-ld/organization.html" . }}
+
+{{- partial "template/seo/googleAnalytics" . -}}

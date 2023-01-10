@@ -1,0 +1,55 @@
+{{- define "main" -}}
+
+<div class="docs">
+  <div class="docs__col--right">
+    <div class="docs__pageNav">
+      <h3 class="docs__pageNav--title">
+        Whats on this page:
+      </h3>    
+      <div class="docs__pageNav--inner" id="toc_nav"></div>
+    </div>
+  </div>
+  <div class="docs__col--left">
+    {{/*  
+
+    add it later 
+    <div class="docs__nav">
+      <div class="docs_control">
+        <div class="docs_control--holder">
+          {{ $subMenu := len .Pages }}
+          {{ with $subMenu }}
+            <div class="docs_control--holder__action show" id="action__docs">
+              <button class="docs_control--btn_menu" id="btnDocs">
+                Docs menu
+              </button>
+            </div>
+          {{ end }}
+          <div class="docs_control--holder__action {{ with eq $subMenu 0 }}show{{ end }}" id="action__search">
+            <input type="text" class="docs_control--search__input" placeholder="Search...">
+          </div>
+        </div>
+        <button class="docs_control--btn_control" {{ with $subMenu }}id="btnControlToggle"{{ end }}></button>
+      </div>
+
+      <div class="docs__nav--menu" id="menuDocs">
+        {{- partial "docs/navigation" . }}
+      </div>
+    </div>  */}}
+
+    
+  </div>
+  <div class="docs__content content js-toc-content" id="doc_content">
+    <h1 class="docs__content--title">{{ .Title }}</h1>
+    {{ .Content }}
+  </div>
+</div>
+
+{{- end -}}
+
+
+{{- define "scripts" -}}
+
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+  {{ partial "template/esbuild" "js/docs.js" }}
+ 
+{{- end -}}

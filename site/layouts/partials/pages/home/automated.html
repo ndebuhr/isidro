@@ -1,71 +1,126 @@
 {{ $title := .Title}}
-{{ $step1 := .step_1}}
-{{ $step2 := .step_2}}
-{{ $step3 := .step_3}}
-{{ $mirror := "" }}
+{{ $steps := .steps}}
 
+<div class="animation">
+  <h4 class="animation--title">
+    <span>
+      {{ $title }}
+    </span>
+  </h4>
+  <div class="animation--scroller">
+  
+    <div class="animation--inner">
 
-{{ with .mirror }}
-  {{ $mirror = "animation--right" }}
-{{ end  }}
+      {{ range $steps }}
+        <div class="animation__item">
+          <div class="animation__item--title">
+            <div class="text__progress">
+              <span>
+                {{ .title }}
+              </span>
+            </div>
+            <div class="text__current">
+              <span>
+                {{ .title }}
+              </span>
+            </div>
+          </div>
+          <div class="animation__item--description">
+            <p>
+             {{ .text }}
+            </p>
+          </div>
+        </div>
+      {{ end }}
 
-
-
-<div class="animation {{ $mirror | default "animation--left" }}">
-  <div class="animation--title">
-    <h4>{{ $title }}</h4>
-  </div>
-  <div class="animation--inner">
-    <div class="animation--text animation--text__1">
-      <div class="text__progress">
-        <span>
-          {{ $step1 }}
-        </span>
+      {{/*  <div class="animation__item">
+        <div class="animation__item--title">
+          <div class="text__progress">
+            <span>
+              {{ $step1 }}
+            </span>
+          </div>
+          <div class="text__current">
+            <span>
+              {{ $step1 }}
+            </span>
+          </div>
+        </div>
+        <div class="animation__item--description">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+          </p>
+        </div>
       </div>
-      <div class="text__current">
-        <span>
-          {{ $step1 }}
-        </span>
+
+      <div class="animation__item">
+        <div class="animation__item--title">
+          <div class="text__progress">
+            <span>
+              {{ $step2 }}
+            </span>
+          </div>
+          <div class="text__current">
+            <span>
+              {{ $step2 }}
+            </span>
+          </div>
+        </div>
+        <div class="animation__item--description">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+          </p>
+        </div>
       </div>
+
+      <div class="animation__item">
+        <div class="animation__item--title">
+          <div class="text__progress">
+            <span>
+              {{ $step3 }}
+            </span>
+          </div>
+          <div class="text__current">
+            <span>
+              {{ $step3 }}
+            </span>
+          </div>
+        </div>
+        <div class="animation__item--description">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, quos.
+          </p>
+        </div>
+      </div>  */}}
+
+      {{/*  <div class="animation--text">
+        <div class="text__progress">
+          <span>
+            {{ $step2 }}
+          </span>
+        </div>
+        <div class="text__current">
+          <span>
+            {{ $step2 }}
+          </span>
+        </div>
+      </div>
+
+      <div class="animation--text">
+        <div class="text__progress">
+          <span>
+            {{ $step3 }}
+          </span>
+        </div>
+        <div class="text__current">
+          <span>
+            {{ $step3 }}
+          </span>
+        </div>
+      </div>  */}}
     </div>
-
-    <div class="animation--text animation--text__2">
-      <div class="text__progress">
-        <span>
-          {{ $step2 }}
-        </span>
-      </div>
-      <div class="text__current">
-        <span>
-          {{ $step2 }}
-        </span>
-      </div>
-    </div>
-
-    <div class="animation--text animation--text__3">
-      <div class="text__progress">
-        <span>
-          {{ $step3 }}
-        </span>
-      </div>
-      <div class="text__current">
-        <span>
-          {{ $step3 }}
-        </span>
-      </div>
-    </div>
-
-    <svg width="428" height="259" viewBox="0 0 428 259" fill="none" xmlns="http://www.w3.org/2000/svg">
-    
-      <path d="M428 130H214.5H13C6.37259 130 1 124.627 1 118V13C1 6.37258 6.37259 1 13 1H202.5C209.127 1 214.5 6.37258 214.5 13V89.6174V259" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3" stroke-dasharray="12 12"/>
-      <defs>
-        <mask id="theMask" maskUnits="userSpaceOnUse">
-          <path id="maskPath"  d="M428 130H214.5H13C6.37259 130 1 124.627 1 118V13C1 6.37258 6.37259 1 13 1H202.5C209.127 1 214.5 6.37258 214.5 13V89.6174V259" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3"/>
-        </mask>
-      </defs>
-      <g id="maskReveal" mask="url(#theMask)">
-        <path id="dashedPath" d="M428 130H214.5H13C6.37259 130 1 124.627 1 118V13C1 6.37258 6.37259 1 13 1H202.5C209.127 1 214.5 6.37258 214.5 13V89.6174V259" stroke="#4AB976" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3" stroke-dasharray="12 12"/>
-      </g>
-    </svg>
   </div>
 </div>

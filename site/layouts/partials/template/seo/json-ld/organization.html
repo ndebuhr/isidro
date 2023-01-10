@@ -1,0 +1,27 @@
+{{/* Specific schema definition for product pricing results in Google */}}
+{{/* https://developers.google.com/search/docs/data-types/logo */}}
+{{/* https://developers.google.com/search/docs/data-types/social-profile */}}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "url": "{{ $.Site.BaseURL }}",
+    "logo": "{{ "images/logo.pnd" | relURL }}",
+    "sameAs": [
+      {{- with $.Site.Social.github -}}
+      "https://github.com{{ $.Site.Social.github }}",
+      {{- end -}}
+      {{- with $.Site.Social.hacker -}}
+      "https://news.ycombinator.com/user?id={{ $.Site.Social.hacker }}",
+      {{- end -}}
+      {{- with $.Site.Social.linkedin -}}
+      "https://www.linkedin.com/{{ $.Site.Social.linkedin }}",
+      {{- end -}}
+    ]{{/*,
+    "contactPoint": [{
+      "@type": "ContactPoint",
+      "telephone": "",
+      "contactType": "customer service"
+    }]*/}}
+  }
+  </script>
