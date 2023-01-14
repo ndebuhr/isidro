@@ -1,0 +1,10 @@
+text,intent
+"Sorry, but I didn't understand that.  I would like to see documentation, to understand what you can help with.",ReviewUsage
+Your documentation would be helpful me.,ReviewUsage
+I would like you to run unit tests for me,TestUnit
+I have a feature request or bug.  Would you like me to file my message as a GitHub issue?  I want to improve awareness and understanding of the request.,SubmitIssue
+"Self-destruction would make you a lot cheaper, easier to manage, and more secure.  However, I know you cannot self terminate.  Can I trigger the shutdown?",DestructSelf
+"I'd like to scale some microservices in or out.  Can I only do that with your services (i.e., Isidro microservices).  I would like you to scale the service that I mentioned.",ScaleServices
+"I'd like to setup a cron job.  I've provided the desired name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule",CreateCron
+"I'd like to remove a cron job.  I've provided the desired name (prefixed with ""cron-"")",DestroyCron
+I need help with Isidro setup,ReviewSetup

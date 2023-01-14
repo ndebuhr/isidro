@@ -1,0 +1,37 @@
+text,intent
+Can I please see your documentation?,ReviewUsage
+I need some help finding the documentation?,ReviewUsage
+Where is your documentation?,ReviewUsage
+Is the documentation somewhere?,ReviewUsage
+I don't know how to use you,ReviewUsage
+How can I configure you?,ReviewSetup
+Show me your settings,ReviewSetup
+Please run unit tests,TestUnit
+Unit tests,TestUnit
+Can you run a unit test?,TestUnit
+You are not working well,SubmitIssue
+I have a feature request,SubmitIssue
+Where do I submit bugs?,SubmitIssue
+I have an interesting idea,SubmitIssue
+Should I file issues on GitHub?,SubmitIssue
+Please shutdown,DestructSelf
+Can you please self-destruct,DestructSelf
+You are too expensive,DestructSelf
+Shut off for the weekend,DestructSelf
+Drop into passive mode,DestructSelf
+Scale your performance,ScaleServices
+Can you please scale your microservices,ScaleServices
+Your performance is too slow,ScaleServices
+Can you scale down?,ScaleServices
+Please setup a cron job,CreateCron
+New cron job,CreateCron
+I have a new cronjob,CreateCron
+Teardown a cron job please,DestroyCron
+I need you to destroy a cron job,DestroyCron
+Please deprovision a scheduled job,DestroyCron
+Where's the documentation.,ReviewUsage
+Please complete the unit tests run,TestUnit
+File the issue https://github.com/ndebuhr/isidro/issues,SubmitIssue
+"Run service ""orchestration"" now at 1 replica.",ScaleServices
+"Run cronjob nginx now with schedule ""* * * * * *"", and using image nginx:latest",CreateCron
+Do it!  Destroy cronjob nginx,DestroyCron
