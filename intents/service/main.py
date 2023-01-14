@@ -22,7 +22,7 @@ binarizer.fit_transform([
 ])
 
 classifier_model = tf.keras.models.load_model(
-    'isidro.keras',
+    'intents.keras',
     custom_objects={'KerasLayer': hub.KerasLayer}
 )
 
