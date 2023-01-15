@@ -1,0 +1,512 @@
+text,intent
+Can I please see your documentation?,documentation
+I need some help finding the documentation?,documentation
+Where is your documentation?,documentation
+Is the documentation somewhere?,documentation
+I don't know how to use you,documentation
+You are not working well,report issue
+I have a feature request,report issue
+Where do I submit bugs?,report issue
+I have an interesting idea,report issue
+Should I file issues on GitHub?,report issue
+Please shutdown,self destruct
+Can you please self-destruct,self destruct
+You are too expensive,self destruct
+Shut off for the weekend,self destruct
+Drop into passive mode,self destruct
+Scale your performance,self scale
+Can you please scale your microservices,self scale
+Your performance is too slow,self scale
+Can you scale down?,self scale
+Please setup a cron job,create cron
+New cron job,create cron
+I have a new cronjob,create cron
+Teardown a cron job please,destroy cron
+I need you to destroy a cron job,destroy cron
+Please deprovision a scheduled job,destroy cron
+Where's the documentation.,documentation
+File the issue https://github.com/ndebuhr/isidro/issues,report issue
+"Run service ""orchestration"" now at 1 replica.",self scale
+"Run cronjob nginx now with schedule ""* * * * * *"", and using image nginx:latest",create cron
+Do it!  Destroy cronjob nginx,destroy cron
+"Sorry, but I didn't understand that.  I would like to see documentation, to understand what you can help with.",documentation
+Your documentation would be helpful me.,documentation
+I have a feature request or bug.  Would you like me to file my message as a GitHub issue?  I want to improve awareness and understanding of the request.,report issue
+"Self-destruction would make you a lot cheaper, easier to manage, and more secure.  However, I know you cannot self terminate.  Can I trigger the shutdown?",self destruct
+"I'd like to scale some microservices in or out.  Can I only do that with your services (i.e., Isidro microservices).  I would like you to scale the service that I mentioned.",self scale
+"I'd like to setup a cron job.  I've provided the desired name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule",create cron
+"I'd like to remove a cron job.  I've provided the desired name (prefixed with ""cron-"")",destroy cron
+I didn't understand that.  I would like to see your documentation.,documentation
+I would like to see your documentation.,documentation
+I'm describing a feature request or bug and need your to file it as such.,report issue
+I would like you to self-destruct,self destruct
+"I would like you to scale Isidro services in/out, based on the provided configuration",self scale
+"I'd like to setup a cron job and have provided the desired name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule",create cron
+"I'd like to remove a cron job and have provided the desired name (prefixed with ""cron-"")",destroy cron
+Please setup a cron for 1 1 1 1 1 and use the image nginx:latest and call it cron-nginx,create cron
+I have an issue with the recipe - specifically it is way too fast                ,report issue
+I need some help,documentation
+Random,documentation
+Create a Windows VM with the name qa-windows-demo,create windows
+Scale deployer-github-workers service to 1 replica,self scale
+Please create a cronjob with image nginx:latest and the schedule of 1 1 1 1 1.  Name it cron-nginx.,create cron
+Please scale your gatekeeper service to 2 replicas,self scale
+Need some help,documentation
+Please remove cron-nginx cronjob,destroy cron
+I have an issue with your use of contractions (it breaks you),report issue
+"The keywords service is running slowly, please scale to 2 replicas",self scale
+Please create a cronjob with image nginx:latest and the schedule of 1 1 1 1 1.,create cron
+How about a workstation?,create workstation
+I need some help,documentation
+Please scale your deployer-github-workers service to 2 replicas,self scale
+Please setup a cron for * * * * * and use the image nginx:latest,create cron
+Please scale the gatekeeper microservice to 2 replicas,self scale
+Please create a QA workstation,create workstation
+Hey I need a quality assurance workstation,create workstation
+Please create a windows box for testing,create windows
+Please remove the cronjob cron-nginx,destroy cron
+Please self-destruct,self destruct
+Can you provide me with the documentation?,documentation
+Where can I find the documentation?,documentation
+Can you help me locate the documentation?,documentation
+Can you tell me where the documentation is?,documentation
+I am having trouble using you,documentation
+I am experiencing issues with your performance,report issue
+I have a suggestion for a new feature,report issue
+Where should I report bugs?,report issue
+I have a new idea,report issue
+Is GitHub the correct place to file issues?,report issue
+Please shut down,self destruct
+Can you initiate self-destruction?,self destruct
+You are too costly,report issue
+Can you shut down for the weekend?,self destruct
+Can you enter passive mode?,self scale
+Can you improve your performance?,report issue
+Can you scale your microservices?,self scale
+I am experiencing slow performance,self scale
+Can you reduce your scale?,self scale
+Can you create a new cron job?,create cron
+Can you set up a new cron job?,create cron
+I have a new cron job to set up,create cron
+Can you delete a cron job?,destroy cron
+I need you to remove a cron job,destroy cron
+Can you delete a scheduled job?,destroy cron
+Where can I find the documentation?,documentation
+Can you file my issue on https://github.com/ndebuhr/isidro/issues?,report issue
+"Can you run the service ""orchestration"" at 1 replica now?",self scale
+"Can you run cronjob nginx with schedule ""* * * * * *"" and image nginx:latest now?",create cron
+Can you destroy cronjob nginx now?,destroy cron
+"I am sorry, but I did not understand. Can you provide me with the documentation so I can understand how you can help?",documentation
+Can you provide me with your documentation?,documentation
+"I have a feature request or bug, Can you file it as a GitHub issue to improve awareness and understanding of the request?",report issue
+"Self-destruction would make you more cost-effective, manageable, and secure. However, I know you cannot self-destruct. Can I trigger the shutdown?",self destruct
+Can I scale Isidro services in/out with your services only? I would like you to scale the service I mentioned.,self scale
+"Can you set up a cron job with the provided name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule?",create cron
+"Can you remove a cron job with the provided name (prefixed with ""cron-"")?",destroy cron
+I did not understand that. Can you provide me with the documentation?,documentation
+Can you provide me with the documentation?,documentation
+I am describing a feature request or bug and would like you to file it as such.,report issue
+Can you self-destruct?,self destruct
+Can you scale Isidro services in/out based on the provided configuration?,self scale
+"Can you set up a cron job with the provided name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule?",create cron
+"Can you remove a cron job with the provided name (prefixed with ""cron-"")?",destroy cron
+Can you set up a cron for 1 1 1 1 1 and use the image nginx:latest and call it cron-nginx?,create cron
+I have an issue with the system - specifically it is running too fast,report issue
+Can you help me?,documentation
+Can you create a Windows VM with the name qa-windows-demo?,create windows
+Can you scale the deployer-github-workers service to 1 replica?,self scale
+Can you create a cronjob with image nginx:latest and the schedule of 1 1 1 1 1. Name it cron-nginx?,create cron
+Can you scale your gatekeeper service to 2 replicas?,self scale
+Can you help me?,documentation
+Can you remove cron-nginx cronjob?,destroy cron
+I have an issue with your use of contractions (it's causing problems),report issue
+"Can you show me documentation, please?",documentation
+"I am having trouble finding documentation, can you help?",documentation
+Where can I find documentation?,documentation
+Is documentation available?,documentation
+I am not understanding how to use you,documentation
+Your performance is not good,report issue
+I have idea for new feature,report issue
+Where should I report problem?,report issue
+Is GitHub correct place for report issue?,report issue
+Can you please shut down,self destruct
+Can you please self-destruct,self destruct
+Your cost is too much,self destruct
+Can you please shut down for weekend,self destruct
+Can you please go into passive mode,self destruct
+Can you please improve performance,self scale
+Can you please scale microservices,self scale
+Performance is too slow for me,self scale
+Can you please reduce scale,self scale
+Can you please create new cron job,create cron
+"I have new cron job, can you create",create cron
+Can you please delete cron job,destroy cron
+I need cron job to be deleted,destroy cron
+Can you please delete scheduled job,destroy cron
+"Documentation, where can I find?",documentation
+Can you please file issue on https://github.com/ndebuhr/isidro/issues?,report issue
+"Can you please run service ""orchestration"" at 1 replica now?",self scale
+"Can you please run cronjob nginx with schedule ""* * * * * *"" and image nginx:latest now?",create cron
+Can you please destroy cronjob nginx now?,destroy cron
+"I am sorry, I do not understand. Can you please show me documentation so I can understand what you can help with?",documentation
+Can you please show me documentation?,documentation
+"I have request for new feature or problem, can you please file as GitHub issue to improve awareness and understanding?",report issue
+"Self-destructing would make you more affordable, easy to manage, and secure. However, I know you cannot self-destruct. Can I please trigger shut down?",self destruct
+Can I only scale Isidro services in/out with your services? Can you please scale service I mention?,self scale
+"Can you please create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided?",create cron
+"Can you please delete cron job with name (prefixed with ""cron-"") provided?",destroy cron
+I do not understand. Can you please show me documentation?,documentation
+Can you please show me documentation?,documentation
+"I have request for new feature or problem, can you please file as such?",report issue
+Can you please self-destruct?,self destruct
+Can you please scale Isidro services in/out according to provided configuration?,self scale
+"Can you please create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided?",create cron
+"Can you please delete cron job with name (prefixed with ""cron-"") provided?",destroy cron
+Can you please create cron for 1 1 1 1 1 with image nginx:latest and call it cron-nginx?,create cron
+"I have issue with platform, it is running too slow. Can you help?",report issue
+Can you please help me?,documentation
+Can you please create Windows VM with name qa-windows-demo?,create windows
+Can you please scale deployer-github-workers service to 1 replica?,self scale
+"Can you please create cronjob with image nginx:latest and schedule of 1 1 1 1 1, and name it cron-nginx?",create cron
+Can you please scale gatekeeper service to 2 replicas?,self scale
+Can you please help me?,documentation
+Can you please delete cron-nginx cronjob?,destroy cron
+"I have issue with how you use contractions, it is causing problem.",report issue
+"Keywords service is too slow, can you please scale to 2 replicas?",self scale
+Can you please create cronjob with image nginx:latest and schedule of 1 1 1 1 1,create cron
+Can you please create a QA workstation?,create workstation
+"I am having difficult to understand your documentations, can you show me more clear?",documentation
+"I am not able to find documentation, can you help me to locate?",documentation
+Where I can find the documentation?,documentation
+Is there any documentation available?,documentation
+"I am having trouble to use you, can you assist me?",documentation
+"Your performance is not meet my expectations, can you improve it?",self scale
+"I have idea for new feature, can you consider?",report issue
+"Where should I report problem, can you guide me?",report issue
+"Is GitHub correct place for reporting issue, can you confirm?",report issue
+Can you please shut down your system?,self destruct
+Can you please initiate self-destruct sequence?,self destruct
+"Your cost is too high, can you lower it?",self destruct
+"Can you please shut down for weekend, I need break.",self destruct
+"Can you please go into passive mode, I am not ready to use.",self destruct
+"Can you please improve performance, it is slow.",self scale
+"Can you please scale microservices, I need more capacity.",self scale
+"Performance is too slow for me, can you speed up?",self scale
+"Can you please reduce scale, I have too many resources.",self scale
+Can you please create new cron job for me?,create cron
+"I have new cron job, can you create for me?",create cron
+Can you please delete cron job for me?,destroy cron
+"I need cron job to be deleted, can you do it?",destroy cron
+Can you please delete scheduled job for me?,destroy cron
+"Documentation, where can I find? Can you guide me?",documentation
+Can you please file issue on https://github.com/ndebuhr/isidro/issues? I found a bug.,report issue
+"Can you please run service ""orchestration"" at 1 replica now? I need it.",self scale
+"Can you please run cronjob nginx with schedule ""* * * * * *"" and image nginx:latest now? I need it.",create cron
+Can you please destroy cronjob nginx now? I don't need it anymore.,destroy cron
+"I am sorry, I do not understand. Can you please show me documentation so I can understand what you can help with? I need more information.",documentation
+Can you please show me documentation? I need to know more about you.,documentation
+"I have request for new feature or problem, can you please file as GitHub issue to improve awareness and understanding? I want to contribute.",report issue
+"Self-destructing would make you more affordable, easy to manage, and secure. However, I know you cannot self-destruct. Can I please trigger shut down? I want to save money.",self destruct
+Can I only scale Isidro services in/out with your services? Can you please scale service I mention? I want to adjust resources.,self scale
+"Can you please create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided? I need it.",create cron
+"Can you please delete cron job with name (prefixed with ""cron-"") provided? I don't need it anymore.",destroy cron
+I do not understand. Can you please show me documentation? I need more information.,documentation
+Can you please show me documentation? I need to know more about you.,documentation
+"I have request for new feature or problem, can you please file as such? I want to contribute.",report issue
+Can you please self-destruct? I want to save money.,self destruct
+Can you please scale Isidro services in/out according to provided configuration? I want to adjust resources.,self scale
+"Can you please create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided? I need it.",create cron
+"Can you please delete cron job with name (prefixed with ""cron-"") provided? I don't need it anymore.",destroy cron
+Provide documentation for reference,documentation
+Assist in locating documentation,documentation
+Documentation can be found where?,documentation
+A documentation is available,documentation
+Assistance needed in using the service,documentation
+Improve performance to meet expectations,self scale
+Consideration for new feature request,report issue
+Report problems where?,report issue
+Confirmation that GitHub is the correct place for reporting issues,report issue
+Initiate system shut down,self destruct
+Initiate self-destruction sequence,self destruct
+Lower cost,self scale
+System shut down for the weekend,self destruct
+Enter passive mode,self destruct
+Improve performance,self scale
+Scale microservices,self scale
+Speeding up performance,self scale
+Reduce resource allocation,self scale
+Create new cron job,create cron
+Creating new cron job,create cron
+Deleting cron job,destroy cron
+Delete scheduled job,destroy cron
+Guide to documentation location,documentation
+File issue on https://github.com/ndebuhr/isidro/issues,report issue
+"Run service ""orchestration"" at 1 replica now",self scale
+"Run cronjob nginx with schedule ""* * * * * *"" and image nginx:latest now",create cron
+Destroy cronjob nginx now,destroy cron
+Provide documentation for better understanding,documentation
+Provide documentation,documentation
+File new feature or problem as GitHub issue to improve awareness and understanding,report issue
+Trigger shut down to save money,self destruct
+Scale Isidro services in/out with provided configuration,self scale
+"Create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided",create cron
+"Delete cron job with name (prefixed with ""cron-"") provided",destroy cron
+Provide documentation for better understanding,documentation
+File new feature or problem as such,report issue
+Self-destruct to save money,self destruct
+Scale Isidro services in/out according to provided configuration,self scale
+"Create cron job with name (prefixed with ""cron-""), image (image:tag format), and schedule provided",create cron
+"Delete cron job with name (prefixed with ""cron-"") provided",destroy cron
+Create cron for 1 1 1 1 1 with image nginx:latest and call it cron-nginx,create cron
+"Fix recipe, it is running too fast",report issue
+Provide help,documentation
+Create Windows VM with name qa-windows-demo,create windows
+Scale deployer-github-workers service to 1 replica,self scale
+"Create cronjob with image nginx:latest and schedule of 1 1 1 1 1, and name it cron-nginx",create cron
+Scale gatekeeper service to 2 replicas,self scale
+Remove cron-nginx cronjob,destroy cron
+"Fix use of contractions, it is causing problem",report issue
+Scale keywords service to 2 replicas,self scale
+Create cronjob with image nginx:latest and schedule of 1 1 1 1 1,create cron
+Create a QA workstation,create workstation
+Create a Windows box for testing,create windows
+Remove cronjob cron-nginx,destroy cron
+Initiate self-destruction sequence,self destruct
+Can you provide me with documentation?,documentation
+Where can I find the documentation?,documentation
+Is there a manual or documentation I can refer to?,documentation
+Can you point me in the direction of the documentation?,documentation
+Can you give me more information about the product through documentation?,documentation
+Can you guide me through the documentation?,documentation
+Can you share the documentation with me?,documentation
+Can you direct me to any documentation resources?,documentation
+Can you provide me with a link to the documentation?,documentation
+Can you help me understand the product better through documentation?,documentation
+Is there a user guide or documentation I can read?,documentation
+Can you show me the documentation for this product?,documentation
+Can you explain the product to me through documentation?,documentation
+Can you give me access to the documentation?,documentation
+Can you help me navigate the documentation?,documentation
+Can you provide me with any documentation to better understand how to use this product?,documentation
+Can you direct me to the documentation for this product?,documentation
+Can you provide me with any additional documentation?,documentation
+Can you give me a documentation that I can refer to while using the product?,documentation
+Can you provide me with a documentation that will help me understand the features and capabilities of the product?,documentation
+How do I report a bug or issue with the software?,report issue
+Is there a specific process for reporting software bugs?,report issue
+How can I report a problem with the software?,report issue
+Can you tell me how to report a software issue?,report issue
+What is the procedure for reporting software bugs?,report issue
+Can you explain the process for reporting software issues?,report issue
+How do I submit a bug report for the software?,report issue
+Can you guide me on how to report a software problem?,report issue
+How can I let you know about an issue with the software?,report issue
+Can you tell me the steps to report a software bug?,report issue
+What is the best way to report a software issue?,report issue
+Can you provide me with instructions on how to report a software bug?,report issue
+How do I bring attention to a problem with the software?,report issue
+What is the correct way to report a software bug or issue?,report issue
+Can you give me more information on how to report a software issue?,report issue
+How can I make you aware of a software bug?,report issue
+Can you inform me about the process for reporting software bugs or issues?,report issue
+How do I file a bug report for the software?,report issue
+Can you show me how to report a software problem?,report issue
+How can I contact you about a software issue?,report issue
+How can I trigger a self-destruction in the software system?,self destruct
+Is there a way to initiate a self-destruct sequence in the software?,self destruct
+Can you tell me how to activate the self-destruct feature in the software system?,self destruct
+How do I safely decommission the software system?,self destruct
+What is the process for triggering a self-destruction in the software system?,self destruct
+Can you guide me on how to initiate a self-destruct sequence in the software system?,self destruct
+Is there a command or button to trigger a self-destruction in the software system?,self destruct
+How can I initiate the self-destruct function in the software system?,self destruct
+Can you provide me with instructions on how to trigger a self-destruction in the software system?,self destruct
+How do I safely remove the software system?,self destruct
+Can you explain the steps to trigger a self-destruction in the software system?,self destruct
+What is the correct way to initiate a self-destruct sequence in the software system?,self destruct
+Can you tell me more about the self-destruct feature in the software system?,self destruct
+How can I decommission the software system?,self destruct
+Can you inform me about the process for triggering a self-destruction in the software system?,self destruct
+How do I activate the self-destruct option in the software system?,self destruct
+Can you show me how to trigger a self-destruction in the software system?,self destruct
+How can I initiate the self-destruct protocol in the software system?,self destruct
+How can I scale in or out one of your microservices?,self scale
+Is there a way to adjust the resources of one of your microservices?,self scale
+Can you tell me how to change the scale of one of your microservices?,self scale
+How do I increase or decrease the capacity of one of your microservices?,self scale
+What is the process for scaling one of your microservices?,self scale
+Can you guide me on how to scale one of your microservices?,self scale
+Is there a command or button to adjust the scale of one of your microservices?,self scale
+How can I set the scale of one of your microservices?,self scale
+Can you provide me with instructions on how to scale one of your microservices?,documentation
+How do I manage the resources of one of your microservices?,self scale
+Can you explain the steps to scale one of your microservices?,self scale
+What is the correct way to scale one of your microservices?,self scale
+Can you tell me more about the scaling options for one of your microservices?,documentation
+How can I adjust the scale of one of your microservices?,self scale
+Can you inform me about the process for scaling one of your microservices?,self scale
+How do I change the number of replicas for one of your microservices?,self scale
+Can you show me how to scale one of your microservices?,self scale
+How can I set the desired number of replicas for one of your microservices?,self scale
+Can you give me more information about how to scale one of your microservices?,self scale
+How can I change the resources allocated to one of your microservices?,self scale
+How can I create a cron job?,create cron
+Is there a way to set up a scheduled task using cron?,create cron
+Can you tell me how to create a cron job?,create cron
+How do I schedule a task using cron?,create cron
+What is the process for creating a cron job?,create cron
+Can you guide me on how to create a cron job?,create cron
+Is there a command or button to create a cron job?,create cron
+How can I set up a cron job?,create cron
+Can you provide me with instructions on how to create a cron job?,create cron
+How do I schedule a recurring task using cron?,create cron
+Can you explain the steps to create a cron job?,create cron
+What is the correct way to create a cron job?,create cron
+Can you tell me more about the options for creating a cron job?,create cron
+How can I schedule a task to run automatically using cron?,create cron
+Can you inform me about the process for creating a cron job?,create cron
+How do I set up a cron job with a specific schedule?,create cron
+Can you show me how to create a cron job?,create cron
+How can I set up a scheduled task using cron with a specified command?,create cron
+Can you give me more information about how to create a cron job?,create cron
+How can I schedule a task to run periodically using cron?,create cron
+How can I delete a cron job?,destroy cron
+Is there a way to cancel a scheduled task using cron?,destroy cron
+Can you tell me how to destroy a cron job?,destroy cron
+How do I stop a scheduled task from running using cron?,destroy cron
+What is the process for removing a cron job?,destroy cron
+Can you guide me on how to delete a cron job?,destroy cron
+Is there a command or button to destroy a cron job?,destroy cron
+How can I cancel a cron job?,destroy cron
+Can you provide me with instructions on how to remove a cron job?,destroy cron
+How do I stop a recurring task from running using cron?,destroy cron
+Can you explain the steps to delete a cron job?,destroy cron
+What is the correct way to destroy a cron job?,destroy cron
+Can you tell me more about the options for removing a cron job?,destroy cron
+How can I stop a scheduled task from running automatically using cron?,destroy cron
+Can you inform me about the process for deleting a cron job?,destroy cron
+How do I cancel a cron job with a specific schedule?,destroy cron
+Can you show me how to destroy a cron job?,destroy cron
+How can I stop a scheduled task using cron with a specified command?,destroy cron
+Can you give me more information about how to remove a cron job?,destroy cron
+How can I cancel a scheduled task to run periodically using cron?,destroy cron
+Can I have a Microsoft Windows VM for quality assurance?,create windows
+How can I request a Windows VM for quality assurance?,create windows
+Is there a way to get a Windows Server for quality assurance?,create windows
+Can you tell me how to request a Microsoft Windows for quality assurance?,create windows
+How do I set up a Windows box for quality assurance?,create windows
+What is the process for requesting a Microsoft Windows machine for quality assurance?,create windows
+Can you guide me on how to request a Windows virtual machine for quality assurance?,create windows
+Is there a command or button to request a Windows instnace for quality assurance?,create windows
+How can I set up Microsoft Windows for quality assurance?,create windows
+Can you provide me with instructions on how to request a Windows VM for quality assurance?,create windows
+How do I create a Microsoft Windows virtual machine for quality assurance?,create windows
+Can you explain the steps to request a Microsoft Windows box for quality assurance?,create windows
+What is the correct way to request a Microsoft Windows virtual machine for quality assurance?,create windows
+Can you tell me more about the options for requesting a Windows machine for quality assurance?,create windows
+How can I get a Windows box for quality assurance?,create windows
+Can you inform me about the process for requesting a Microsoft Windows VM for quality assurance?,create windows
+How do I request a Windows VM for quality assurance?,create windows
+Can you show me how to request a Microsoft Windows virtual machine for quality assurance?,create windows
+How can I get a Microsoft Windows instance for quality assurance testing?,create windows
+Can you give me more information about how to request a Windows instance for quality assurance?,create windows
+Can I have a workstation?,create workstation
+How can I request a workstation?,create workstation
+Is there a way to get a workstation?,create workstation
+Can you tell me how to request a workstation?,create workstation
+How do I set up a workstation?,create workstation
+What is the process for requesting a workstation?,create workstation
+Can you guide me on how to request a workstation?,create workstation
+Is there a command or button to request a workstation?,create workstation
+How can I set up a workstation?,create workstation
+Can you provide me with instructions on how to request a workstation?,create workstation
+How do I create a workstation?,create workstation
+Can you explain the steps to request a workstation?,create workstation
+What is the correct way to request a workstation?,create workstation
+Can you tell me more about the options for requesting a workstation?,create workstation
+How can I get a workstation?,create workstation
+Can you inform me about the process for requesting a workstation?,create workstation
+How do I request a workstation?,create workstation
+Can you show me how to request a workstation?,create workstation
+How can I get a workstation for my team?,create workstation
+Can you give me more information about how to request a workstation?,create workstation
+Can you set up a Windows virtual machine for me?,create windows
+I need a quality assurance workstation. Can you help with that?,create workstation
+Can you assist me with setting up a cron job?,create cron
+Can you create a Windows virtual machine for my team?,create windows
+I require a quality assurance workstation for my project. Can you provide one?,create workstation
+Can you help me set up a cron schedule for my script?,create cron
+Can you set up a Windows virtual machine for my development work?,create windows
+I need a quality assurance workstation for my software testing. Can you assist?,create workstation
+Can you help me with a cron setup for my data pipeline?,create cron
+Can you create a Windows virtual machine for my application deployment?,create windows
+I need a quality assurance workstation for my QA team. Can you provide one?,create workstation
+Can you assist me with a cron setup for my server maintenance tasks?,create cron
+Can you set up a Windows virtual machine for my remote work?,create windows
+I need a quality assurance workstation for my website testing. Can you help?,create workstation
+Can you help me set up a cron job for my backups?,create cron
+Can you create a Windows virtual machine for my team's use?,create windows
+I require a quality assurance workstation for my mobile application testing. Can you provide one?,create workstation
+Can you assist me with a cron setup for my automation tasks?,create cron
+Can you set up a Windows virtual machine for my database server?,create windows
+I need a quality assurance workstation for my performance testing. Can you help?,create workstation
+Can you set up a virtualized Windows environment for me?,create windows
+I need a workstation for quality control. Can you help with that?,create workstation
+Can you assist me with configuring a scheduled task?,create cron
+Can you create a virtual machine with Windows for my team?,create windows
+I require a workstation for my project's quality assurance. Can you provide one?,create workstation
+Can you help me establish a schedule for my script using a time-based job scheduler?,create cron
+Can you set up a virtualized Windows environment for my development work?,create windows
+I need a workstation for software testing and validation. Can you assist?,create workstation
+Can you help me with scheduling tasks for my data pipeline?,create cron
+Can you create a virtual machine running Windows for my application deployment?,create windows
+I need a workstation for QA team. Can you provide one?,create workstation
+Can you assist me with a time-based task scheduler for my server maintenance tasks?,create cron
+Can you set up a virtualized Windows environment for my remote work?,create windows
+I need a workstation for testing of website. Can you help?,create workstation
+Can you help me schedule a job for my backups?,create cron
+Can you create a virtual machine with Windows for my team's use?,create windows
+I require a workstation for testing of mobile application. Can you provide one?,create workstation
+Can you assist me with scheduling tasks for my automation tasks?,create cron
+Can you set up a virtualized Windows environment for my database server?,create windows
+I need a workstation for performance testing. Can you help?,create workstation
+Delete cron job,destroy cron
+Report issue with functionality,report issue
+Initiate system self-destruction protocol,self destruct
+Scale microservice to handle increased traffic,self scale
+Delete cron job,destroy cron
+Report issue with a service,report issue
+Initiate system self-destruction protocol,self destruct
+Scale microservice to handle increased data volume,self scale
+Delete a cron job,destroy cron
+Report issue with the chatbot,report issue
+Initiate system self-destruction protocol,self destruct
+Scale microservice to handle increased user base,self scale
+Delete the cron job,destroy cron
+Report issue with chatbot system,report issue
+Initiate system self-destruction protocol,self destruct
+Scale microservice to handle increased queries,self scale
+Delete cron job,destroy cron
+Report issue with notification service,report issue
+Initiate system self-destruction protocol,self destruct
+Scale microservice to handle increased number of users.,self scale
+Remove scheduled task,destroy cron
+File a complaint regarding this feature,report issue
+Activate system termination sequence,self destruct
+Increase capacity of a microservice to handle higher traffic,self scale
+Eliminate scheduled task,destroy cron
+Lodge a report about a service,report issue
+Activate system termination sequence,self destruct
+Expand microservice to cope with increased data volume,self scale
+Abolish scheduled task,destroy cron
+Submit a bug report about this chatbot,report issue
+Activate system termination sequence,self destruct
+Amplify microservice to handle larger user base,self scale
+Get rid of scheduled task,destroy cron
+Notify of an error with the system,report issue
+Activate system termination sequence,self destruct
+Boost microservice to handle more queries,self scale
+Delete scheduled task,destroy cron
+Report a problem with the service,report issue
+Activate system termination sequence,self destruct
+Scale up microservice to handle increased number of users.,self scale
