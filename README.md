@@ -4,7 +4,8 @@
 
 Isidro includes:
 * Prebuilt connectors to Slack and Mattermost for event subscription and response
-* Policy- and NLP-based workflow planning
+* Flexible, policy-based workflow planning
+* Layered intent classification: BERT → ngrams-based regression → non-ML NLP techniques
 * Easy delegation of build and deploy workflows to Jenkins, Cloud Build, and GitHub Actions
 * Automated execution of workflows (e.g., provisioning, deployments, and test execution)
 * Automated presentation of data (e.g., deployment metrics, performance testing results, and spam trends)
