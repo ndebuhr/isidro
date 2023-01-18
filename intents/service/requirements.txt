@@ -1,4 +1,5 @@
 flask==2.2.2
+google-cloud-aiplatform==1.18.3
 gunicorn==20.1.0
 tensorflow==2.8.4
 tensorflow_hub==0.12.0
