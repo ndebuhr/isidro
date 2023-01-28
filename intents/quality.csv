@@ -44,7 +44,7 @@ I would like you to self-destruct,self destruct
 "I'd like to setup a cron job and have provided the desired name (prefixed with ""cron-""), the docker image (image:tag format), and the schedule",create cron
 "I'd like to remove a cron job and have provided the desired name (prefixed with ""cron-"")",destroy cron
 Please setup a cron for 1 1 1 1 1 and use the image nginx:latest and call it cron-nginx,create cron
-I have an issue with the recipe - specifically it is way too fast                ,report issue
+I have an issue with the recipe - specifically it is way too fast,report issue
 I need some help,documentation
 Random,documentation
 Create a Windows VM with the name qa-windows-demo,create windows
@@ -510,3 +510,59 @@ Delete scheduled task,destroy cron
 Report a problem with the service,report issue
 Activate system termination sequence,self destruct
 Scale up microservice to handle increased number of users.,self scale
+Can you point me in the direction of some help documentation?,documentation
+Where can I find documentation to assist me?,documentation
+Can you provide me with some guidance on how to use this?,documentation
+Can you show me how to access the help documentation?,documentation
+Can you direct me to the user manual?,documentation
+Can you tell me where to find the instructions?,documentation
+Can you give me some help on how to operate this?,documentation
+Can you help me understand how to use this?,documentation
+Can you help me find the documentation I need?,documentation
+Can you assist me in locating the help documentation?,documentation
+Can you help me navigate the documentation?,documentation
+Can you provide me with some documentation to help me?,documentation
+Can you direct me to the help files?,documentation
+Can you show me how to use the documentation?,documentation
+Can you provide me with some documentation on how to use this?,documentation
+Can you help me understand the documentation?,documentation
+Can you give me some guidance on how to access the help documentation?,documentation
+Can you help me find the user manual?,documentation
+Can you assist me in locating the instructions?,documentation
+Can you help me navigate the user guide?,documentation
+Can you provide me with some help on how to operate this?,documentation
+Can you direct me to the help section?,documentation
+Can you show me where to find the documentation?,documentation
+Can you provide me with some documentation to assist me?,documentation
+Can you help me understand how to access the help documentation?,documentation
+Can you give me some guidance on how to use the documentation?,documentation
+Can you help me find the user guide?,documentation
+Can you assist me in locating the help files?,documentation
+Can you help me navigate the help section?,documentation
+Can you provide me with some help on how to navigate the documentation?,documentation
+Can you direct me to the manual?,documentation
+Can you show me how to access the instructions?,documentation
+Can you provide me with some documentation to help me understand this?,documentation
+Can you help me understand how to use the user guide?,documentation
+Can you give me some guidance on how to find the documentation?,documentation
+Can you help me find the help section?,documentation
+Can you assist me in locating the user manual?,documentation
+Can you help me navigate the instructions?,documentation
+Can you provide me with some help on how to access the user guide?,documentation
+Can you direct me to the documentation?,documentation
+Can you show me where to find the user manual?,documentation
+Can you provide me with some documentation to assist me in using this?,documentation
+Can you help me understand how to find the help documentation?,documentation
+Can you give me some guidance on how to use the help files?,documentation
+Can you help me find the manual?,documentation
+Can you assist me in locating the help section?,documentation
+Can you help me navigate the user manual?,documentation
+Can you provide me with some help on how to find the documentation?,documentation
+Can you direct me to the user guide?,documentation
+Can you show me how to access the help files?,documentation
+Can you provide me with some documentation to help me navigate this?,documentation
+Can you help me understand how to use the manual?,documentation
+Can you give me some guidance on how to find the user manual?,documentation
+Can you help me find the instructions?,documentation
+Can you assist me in locating the user guide?,documentation
+Can you help me navigate the help files?,documentation
