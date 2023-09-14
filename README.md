@@ -2,6 +2,8 @@
 
 > Isidro is an Anthos- and GKE-based microservices chatbot
 
+_Note that further unification of GKE and Anthos, via GKE Enterprise (announced at Next '23), may provide an easier way to run the full, multi-continental chatbot configuration_
+
 Isidro includes:
 * Prebuilt connectors to Slack and Mattermost for event subscription and response
 * Flexible, policy-based workflow planning
